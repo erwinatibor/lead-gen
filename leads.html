@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B2B Lead Tracker — Paid Media Prospects</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0a0c0f;
+    --surface:   #111418;
+    --border:    #1e2530;
+    --border2:   #252d3a;
+    --green:     #22c55e;
+    --green-glow:rgba(34,197,94,0.12);
+    --text:      #e2e8f0;
+    --muted:     #64748b;
+    --muted2:    #94a3b8;
+    --yellow:    #f59e0b;
+    --blue:      #3b82f6;
+    --red:       #ef4444;
+    --purple:    #a855f7;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,12,15,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+  }
+  .header-inner {
+    max-width: 1900px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px; gap: 16px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .brand-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--green); box-shadow: 0 0 10px var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+  .brand-title { font-family:'Syne',sans-serif; font-size:14px; font-weight:700; letter-spacing:.02em; white-space:nowrap; }
+  .brand-title span { color: var(--green); }
+
+  .header-controls { display:flex; align-items:center; gap:8px; flex:1; justify-content:flex-end; flex-wrap:wrap; }
+
+  .search-wrap { position:relative; flex:1; max-width:280px; }
+  .search-wrap svg { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
+
+  input[type="search"], select {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    border-radius: 7px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  input[type="search"]:focus, select:focus { border-color:var(--green); box-shadow:0 0 0 3px var(--green-glow); }
+  input[type="search"] { width:100%; height:36px; padding:0 10px 0 34px; }
+  select {
+    height:36px; padding:0 28px 0 10px; cursor:pointer; appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 8px center; min-width:130px;
+  }
+  select option { background:#1e2530; }
+
+  .btn {
+    display:flex; align-items:center; gap:6px; height:36px; padding:0 14px;
+    border-radius:7px; font-family:'DM Mono',monospace; font-size:11px; font-weight:500;
+    cursor:pointer; border:none; transition:all .15s; white-space:nowrap; letter-spacing:.03em;
+  }
+  .btn-primary { background:var(--green); color:#000; }
+  .btn-primary:hover { background:#16a34a; box-shadow:0 0 20px rgba(34,197,94,.3); }
+  .btn-ghost { background:var(--surface); color:var(--muted2); border:1px solid var(--border2); }
+  .btn-ghost:hover { border-color:var(--muted2); color:var(--text); }
+
+  /* SAVE INDICATOR */
+  #saveIndicator {
+    display:flex; align-items:center; gap:5px;
+    font-size:10px; color:var(--muted); transition:color .3s; white-space:nowrap;
+    flex-shrink:0;
+  }
+  #saveIndicator.saved { color:var(--green); }
+  #saveIndicator .save-dot {
+    width:6px; height:6px; border-radius:50%;
+    background:var(--muted); transition:background .3s;
+  }
+  #saveIndicator.saved .save-dot { background:var(--green); box-shadow:0 0 6px var(--green); }
+
+  /* STATS */
+  .stats-bar { background:var(--surface); border-bottom:1px solid var(--border); padding:0 24px; }
+  .stats-inner { max-width:1900px; margin:0 auto; display:flex; align-items:center; height:44px; gap:0; }
+  .stat-item { display:flex; align-items:center; gap:7px; padding:0 18px; border-right:1px solid var(--border); font-size:11px; }
+  .stat-item:first-child { padding-left:0; }
+  .stat-label { color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
+  .stat-value { color:var(--text); font-weight:500; }
+  .stat-value.green { color:var(--green); }
+  .stat-value.yellow { color:var(--yellow); }
+  .stat-value.blue { color:var(--blue); }
+  .progress-wrap { height:3px; background:var(--border); border-radius:2px; overflow:hidden; width:100px; }
+  .progress-fill { height:100%; background:var(--green); border-radius:2px; transition:width .4s ease; }
+
+  /* TABLE */
+  .table-wrap { max-width:1900px; margin:0 auto; padding:16px 24px 60px; overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; min-width:1400px; }
+  thead tr { border-bottom:2px solid var(--border2); }
+  th {
+    font-family:'Syne',sans-serif; font-size:10px; font-weight:600;
+    text-transform:uppercase; letter-spacing:.1em; color:var(--muted);
+    padding:9px 12px; text-align:left; white-space:nowrap;
+    cursor:pointer; user-select:none;
+  }
+  th:hover { color:var(--text); }
+  th.sorted { color:var(--green); }
+  th .si { display:inline-block; margin-left:3px; opacity:.35; font-size:9px; }
+  th.sorted .si { opacity:1; color:var(--green); }
+
+  tbody tr { border-bottom:1px solid var(--border); transition:background .1s; }
+  tbody tr:hover { background:rgba(255,255,255,.018); }
+  tbody tr.done-row { opacity:.4; }
+  tbody tr.done-row td:not(.td-done) { text-decoration:line-through; }
+
+  td { padding:9px 12px; vertical-align:middle; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  td.td-num { color:var(--muted); font-size:11px; width:36px; min-width:36px; max-width:36px; }
+  td.td-done { text-align:center; }
+
+  /* Row status accent */
+  tr.row-new       { border-left:2px solid transparent; }
+  tr.row-contacted { border-left:2px solid var(--yellow); }
+  tr.row-replied   { border-left:2px solid var(--green); }
+  tr.row-notint    { border-left:2px solid var(--red); opacity:.7; }
+
+  .company-link {
+    color:var(--text); text-decoration:none; font-weight:500;
+    display:flex; align-items:center; gap:5px; transition:color .15s;
+    font-family:'Syne',sans-serif; font-size:13px;
+  }
+  .company-link:hover { color:var(--green); }
+  .ext-icon { opacity:0; transition:opacity .15s; flex-shrink:0; }
+  td:hover .ext-icon { opacity:.45; }
+
+  .tag {
+    display:inline-flex; align-items:center; padding:2px 8px;
+    border-radius:4px; font-size:10px; font-weight:500; letter-spacing:.04em; white-space:nowrap;
+  }
+  .tag-dental     { background:rgba(168,85,247,.15); color:#c084fc; border:1px solid rgba(168,85,247,.3); }
+  .tag-medspa     { background:rgba(236,72,153,.12); color:#f472b6; border:1px solid rgba(236,72,153,.25); }
+  .tag-agency     { background:rgba(59,130,246,.12); color:#60a5fa; border:1px solid rgba(59,130,246,.25); }
+  .tag-realestate { background:rgba(245,158,11,.12); color:#fbbf24; border:1px solid rgba(245,158,11,.25); }
+  .tag-ecommerce  { background:rgba(16,185,129,.12); color:#34d399; border:1px solid rgba(16,185,129,.25); }
+
+  .flag { font-size:14px; line-height:1; }
+
+  .li-link, .mail-link {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:6px; border:1px solid var(--border2);
+    color:var(--muted); text-decoration:none; transition:all .15s; flex-shrink:0;
+  }
+  .li-link:hover { background:rgba(10,102,194,.2); border-color:#0a66c2; color:#0a66c2; }
+  .mail-link:hover { background:rgba(34,197,94,.1); border-color:var(--green); color:var(--green); }
+  .no-data { color:var(--border2); font-size:11px; }
+
+  /* STATUS SELECT */
+  .status-sel {
+    appearance:none; border:none; border-radius:5px; padding:3px 22px 3px 8px;
+    font-family:'DM Mono',monospace; font-size:10px; font-weight:500;
+    cursor:pointer; outline:none; transition:all .15s; letter-spacing:.03em;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='currentColor' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 6px center;
+  }
+  .s-new       { background-color:rgba(59,130,246,.18); color:#93c5fd; }
+  .s-contacted { background-color:rgba(245,158,11,.18); color:#fcd34d; }
+  .s-replied   { background-color:rgba(34,197,94,.18);  color:#86efac; }
+  .s-notint    { background-color:rgba(239,68,68,.13);  color:#fca5a5; }
+  .status-sel option { background:#1e2530; color:var(--text); }
+
+  /* NOTES */
+  .notes-inp {
+    background:transparent; border:1px solid transparent; border-radius:5px;
+    color:var(--muted2); font-family:'DM Mono',monospace; font-size:11px;
+    padding:3px 7px; width:150px; transition:all .15s; outline:none;
+  }
+  .notes-inp:hover { background:var(--surface); border-color:var(--border2); color:var(--text); }
+  .notes-inp:focus { background:var(--surface); border-color:var(--green); color:var(--text); }
+
+  /* CHECKBOX */
+  .done-chk {
+    appearance:none; width:17px; height:17px; border:1.5px solid var(--border2);
+    border-radius:4px; cursor:pointer; background:transparent; transition:all .15s; position:relative;
+  }
+  .done-chk:checked { background:var(--green); border-color:var(--green); }
+  .done-chk:checked::after {
+    content:''; position:absolute; top:2px; left:5px;
+    width:5px; height:9px; border:2px solid #000;
+    border-top:none; border-left:none; transform:rotate(45deg);
+  }
+  .done-chk:hover:not(:checked) { border-color:var(--green); }
+
+  .phone-val { color:var(--muted2); font-size:11px; white-space:nowrap; }
+
+  /* EMPTY */
+  .empty-state { text-align:center; padding:60px 20px; color:var(--muted); }
+  .empty-state p { font-size:13px; margin-top:10px; }
+
+  /* TOAST */
+  #toast {
+    position:fixed; bottom:22px; right:22px;
+    background:var(--surface); border:1px solid var(--green);
+    border-radius:10px; padding:10px 18px; font-size:12px; color:var(--green);
+    box-shadow:0 8px 32px rgba(0,0,0,.4);
+    transform:translateY(80px); opacity:0;
+    transition:all .3s cubic-bezier(.34,1.56,.64,1);
+    z-index:200; pointer-events:none;
+  }
+  #toast.show { transform:translateY(0); opacity:1; }
+
+  ::-webkit-scrollbar { width:5px; height:5px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+  ::-webkit-scrollbar-thumb:hover { background:var(--muted); }
+
+  /* ── STRATEGY NOTICE ───────────────────────────────── */
+  .notice-wrap {
+    max-width:1900px; margin:0 auto; padding:0 24px 60px;
+  }
+
+  .notice-banner {
+    border:1.5px solid #f59e0b;
+    border-radius:16px;
+    background: linear-gradient(135deg, rgba(245,158,11,.07) 0%, rgba(245,158,11,.03) 100%);
+    overflow:hidden;
+    animation: fadeUp .5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(16px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  .notice-header {
+    display:flex; align-items:center; gap:14px;
+    padding:20px 28px;
+    border-bottom:1px solid rgba(245,158,11,.25);
+    background:rgba(245,158,11,.06);
+    cursor:pointer;
+    user-select:none;
+  }
+
+  .notice-header:hover { background:rgba(245,158,11,.1); }
+
+  .notice-icon {
+    width:38px; height:38px; border-radius:10px;
+    background:rgba(245,158,11,.2); border:1px solid rgba(245,158,11,.4);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; font-size:18px;
+  }
+
+  .notice-title-block { flex:1; }
+
+  .notice-eyebrow {
+    font-family:'Syne',sans-serif; font-size:9px; font-weight:700;
+    text-transform:uppercase; letter-spacing:.18em; color:#f59e0b;
+    margin-bottom:3px;
+  }
+
+  .notice-title {
+    font-family:'Syne',sans-serif; font-size:16px; font-weight:800;
+    color:#fef3c7; letter-spacing:.01em;
+  }
+
+  .notice-subtitle {
+    font-size:11px; color:var(--muted2); margin-top:2px;
+  }
+
+  .notice-chevron {
+    color:#f59e0b; transition:transform .3s ease; flex-shrink:0;
+  }
+
+  .notice-chevron.open { transform:rotate(180deg); }
+
+  .notice-body {
+    padding:28px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+  }
+
+  @media(max-width:900px) { .notice-body { grid-template-columns:1fr; } }
+
+  .group-card {
+    background:var(--surface);
+    border:1px solid var(--border2);
+    border-radius:12px;
+    padding:20px;
+    transition:border-color .2s, transform .2s;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .group-card::before {
+    content:'';
+    position:absolute; top:0; left:0; right:0; height:3px;
+    border-radius:12px 12px 0 0;
+  }
+
+  .group-card:nth-child(1)::before { background:linear-gradient(90deg,#a855f7,#ec4899); }
+  .group-card:nth-child(2)::before { background:linear-gradient(90deg,#3b82f6,#06b6d4); }
+  .group-card:nth-child(3)::before { background:linear-gradient(90deg,#22c55e,#10b981); }
+
+  .group-card:hover { border-color:var(--muted); transform:translateY(-2px); }
+
+  .group-num {
+    font-family:'Syne',sans-serif; font-size:10px; font-weight:700;
+    text-transform:uppercase; letter-spacing:.14em;
+    margin-bottom:8px;
+  }
+  .group-card:nth-child(1) .group-num { color:#c084fc; }
+  .group-card:nth-child(2) .group-num { color:#60a5fa; }
+  .group-card:nth-child(3) .group-num { color:#4ade80; }
+
+  .group-title {
+    font-family:'Syne',sans-serif; font-size:14px; font-weight:700;
+    color:var(--text); margin-bottom:10px; line-height:1.3;
+  }
+
+  .group-what {
+    font-size:11px; color:var(--muted2); margin-bottom:14px; line-height:1.6;
+  }
+
+  .group-what strong { color:var(--text); font-weight:500; }
+
+  .angle-box {
+    background:rgba(245,158,11,.08);
+    border:1px solid rgba(245,158,11,.2);
+    border-radius:8px; padding:12px 14px;
+  }
+
+  .angle-label {
+    font-size:9px; font-weight:700; text-transform:uppercase;
+    letter-spacing:.12em; color:#f59e0b; margin-bottom:5px;
+  }
+
+  .angle-text {
+    font-size:11px; color:#fef3c7; line-height:1.6;
+    font-style:italic;
+  }
+
+  /* ACTION TABLE */
+  .action-section {
+    padding:0 28px 28px;
+    border-top:1px solid rgba(245,158,11,.15);
+  }
+
+  .action-label {
+    font-family:'Syne',sans-serif; font-size:11px; font-weight:700;
+    text-transform:uppercase; letter-spacing:.14em; color:#f59e0b;
+    padding:18px 0 12px; display:flex; align-items:center; gap:8px;
+  }
+
+  .action-label svg { flex-shrink:0; }
+
+  .action-grid {
+    display:grid; grid-template-columns:1fr 1fr; gap:10px;
+  }
+
+  @media(max-width:700px) { .action-grid { grid-template-columns:1fr; } }
+
+  .action-row {
+    display:flex; align-items:flex-start; gap:12px;
+    background:var(--surface); border:1px solid var(--border2);
+    border-radius:10px; padding:14px 16px;
+    transition:border-color .2s;
+  }
+
+  .action-row:hover { border-color:var(--muted); }
+
+  .action-row-icon {
+    width:30px; height:30px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; font-size:14px;
+  }
+
+  .action-row-body { flex:1; }
+
+  .action-row-title {
+    font-family:'Syne',sans-serif; font-size:12px; font-weight:700;
+    color:var(--text); margin-bottom:4px;
+  }
+
+  .action-row-desc { font-size:11px; color:var(--muted2); line-height:1.5; }
+
+  .action-row-desc .pill {
+    display:inline-block; padding:1px 7px; border-radius:4px;
+    font-size:10px; background:rgba(255,255,255,.06);
+    border:1px solid var(--border2); color:var(--muted2);
+    margin:2px 2px 0 0; white-space:nowrap;
+  }
+
+  /* BOTTOM LINE */
+  .bottom-line {
+    margin:0 28px 28px;
+    padding:16px 20px;
+    border-radius:10px;
+    background:rgba(34,197,94,.07);
+    border:1px solid rgba(34,197,94,.25);
+    display:flex; align-items:flex-start; gap:12px;
+  }
+
+  .bottom-line-icon { font-size:18px; flex-shrink:0; margin-top:1px; }
+
+  .bottom-line-text { font-size:12px; color:var(--muted2); line-height:1.7; }
+  .bottom-line-text strong { color:var(--green); font-weight:600; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <div class="brand-title">B2B Lead Tracker <span>— Paid Media Prospects</span></div>
+    </div>
+    <div class="header-controls">
+      <div class="search-wrap">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="search" id="searchInput" placeholder="Search company, contact…">
+      </div>
+
+      <select id="filterIndustry">
+        <option value="">All Industries</option>
+        <option>Dental</option>
+        <option>MedSpa</option>
+        <option>Marketing Agency</option>
+        <option>Real Estate Tech</option>
+        <option>Ecommerce / DTC</option>
+      </select>
+
+      <select id="filterCountry">
+        <option value="">All Countries</option>
+        <option>US</option>
+        <option>Australia</option>
+        <option>Canada</option>
+        <option>Philippines</option>
+      </select>
+
+      <select id="filterStatus">
+        <option value="">All Statuses</option>
+        <option value="new">New</option>
+        <option value="contacted">Contacted</option>
+        <option value="replied">Replied</option>
+        <option value="notint">Not Interested</option>
+      </select>
+
+      <button class="btn btn-ghost" id="btnReset">
+        <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
+        </svg>
+        Reset
+      </button>
+
+      <button class="btn btn-primary" id="btnExport">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7,10 12,15 17,10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Export CSV
+      </button>
+
+      <div id="saveIndicator">
+        <div class="save-dot"></div>
+        <span id="saveText">Not saved yet</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <span class="stat-label">Total</span>
+      <span class="stat-value" id="statTotal">51</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Showing</span>
+      <span class="stat-value" id="statShowing">51</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Contacted</span>
+      <span class="stat-value yellow" id="statContacted">0</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Replied</span>
+      <span class="stat-value green" id="statReplied">0</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Done</span>
+      <span class="stat-value blue" id="statDone">0</span>
+    </div>
+    <div class="stat-item" style="border-right:none;gap:10px;">
+      <span class="stat-label">Progress</span>
+      <div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <span class="stat-value" id="statPct" style="font-size:11px">0%</span>
+    </div>
+  </div>
+</div>
+
+<!-- TABLE -->
+<div class="table-wrap">
+  <table id="leadsTable">
+    <thead>
+      <tr>
+        <th data-col="id">#<span class="si">↕</span></th>
+        <th data-col="company">Company<span class="si">↕</span></th>
+        <th data-col="industry">Industry<span class="si">↕</span></th>
+        <th data-col="country">Country<span class="si">↕</span></th>
+        <th data-col="contact">Contact Name<span class="si">↕</span></th>
+        <th>Position</th>
+        <th>Phone</th>
+        <th>LinkedIn</th>
+        <th>Email</th>
+        <th data-col="status">Status<span class="si">↕</span></th>
+        <th>Notes</th>
+        <th>Done</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  <div id="emptyState" class="empty-state" style="display:none">
+    <svg width="44" height="44" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <p>No leads match your filters.</p>
+  </div>
+</div>
+
+<!-- STRATEGY NOTICE -->
+<div class="notice-wrap">
+  <div class="notice-banner">
+
+    <!-- Collapsible Header -->
+    <div class="notice-header" onclick="toggleNotice()" id="noticeHeader">
+      <div class="notice-icon">⚠️</div>
+      <div class="notice-title-block">
+        <div class="notice-eyebrow">Important — Read Before Outreach</div>
+        <div class="notice-title">These are NOT Job Listings — They are Prospecting Targets</div>
+        <div class="notice-subtitle">Strategy guide on how to approach each lead group correctly</div>
+      </div>
+      <svg class="notice-chevron open" id="noticeChevron" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </div>
+
+    <!-- Body (collapsible) -->
+    <div id="noticeBody">
+
+      <!-- 3 Group Cards -->
+      <div class="notice-body">
+
+        <!-- Group 1 -->
+        <div class="group-card">
+          <div class="group-num">Group 1</div>
+          <div class="group-title">🦷 Dental Clinics &amp; MedSpas</div>
+          <div class="group-what">
+            <strong>What they are:</strong> Business owners who likely run their own ads poorly (or not at all), or pay an expensive agency. They have high-ticket services and real urgency to fill appointment slots.
+          </div>
+          <div class="angle-box">
+            <div class="angle-label">💬 Your Pitch Angle</div>
+            <div class="angle-text">"I can run your Meta/Google ads and get you more booked appointments at better ROAS than what you're doing now."</div>
+          </div>
+        </div>
+
+        <!-- Group 2 -->
+        <div class="group-card">
+          <div class="group-num">Group 2</div>
+          <div class="group-title">📊 Marketing Agencies (US/CA/AU)</div>
+          <div class="group-what">
+            <strong>What they are:</strong> Agencies that manage ads for many clients and often need extra media buying capacity. SmartSites, Brill Media, Anderson Collaborative, Power Digital, MuteSix, etc.
+          </div>
+          <div class="angle-box">
+            <div class="angle-label">💬 Your Pitch Angle</div>
+            <div class="angle-text">Offer white-label media buying — you run the ads under their brand. This is a very common and scalable model. Some may also have open roles on their careers pages.</div>
+          </div>
+        </div>
+
+        <!-- Group 3 -->
+        <div class="group-card">
+          <div class="group-num">Group 3</div>
+          <div class="group-title">🇵🇭 Philippines Agencies</div>
+          <div class="group-what">
+            <strong>What they are:</strong> Local PH agencies growing fast — SwingUp, Spiralytics, LeapOut, Huskee Digital, Gatchi — many serving US/AU clients and actively expanding their teams.
+          </div>
+          <div class="angle-box">
+            <div class="angle-label">💬 Your Pitch Angle</div>
+            <div class="angle-text">Pitch as a contractor/white-label partner OR apply directly. PH agencies often hire media buyers locally and are a strong employment target.</div>
+          </div>
+        </div>
+
+      </div><!-- /.notice-body -->
+
+      <!-- Action Table -->
+      <div class="action-section">
+        <div class="action-label">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+          What You Should Do — Action Plan
+        </div>
+
+        <div class="action-grid">
+          <div class="action-row">
+            <div class="action-row-icon" style="background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);">📩</div>
+            <div class="action-row-body">
+              <div class="action-row-title">Cold Outreach / DM / Email Pitch</div>
+              <div class="action-row-desc">
+                <span class="pill">🦷 Dental</span>
+                <span class="pill">💆 MedSpa</span>
+                <span class="pill">🏠 RealtyAds</span>
+                <span class="pill">💚 Feel Goods</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="action-row">
+            <div class="action-row-icon" style="background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25);">🤝</div>
+            <div class="action-row-body">
+              <div class="action-row-title">Offer White-Label Media Buying</div>
+              <div class="action-row-desc">
+                <span class="pill">All Marketing Agencies</span>
+                <span class="pill">US / AU / CA</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="action-row">
+            <div class="action-row-icon" style="background:rgba(10,102,194,.12);border:1px solid rgba(10,102,194,.25);">💼</div>
+            <div class="action-row-body">
+              <div class="action-row-title">Check Their LinkedIn Jobs Page</div>
+              <div class="action-row-desc">
+                <span class="pill">SmartSites</span>
+                <span class="pill">Power Digital</span>
+                <span class="pill">MuteSix</span>
+                <span class="pill">SwingUp</span>
+                <span class="pill">Spiralytics</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="action-row">
+            <div class="action-row-icon" style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);">🇵🇭</div>
+            <div class="action-row-body">
+              <div class="action-row-title">Apply Directly for Employment</div>
+              <div class="action-row-desc">
+                <span class="pill">Philippines Agencies</span>
+                <span class="pill">LeapOut</span>
+                <span class="pill">Huskee Digital</span>
+                <span class="pill">Gatchi</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Line -->
+      <div class="bottom-line">
+        <div class="bottom-line-icon">✅</div>
+        <div class="bottom-line-text">
+          <strong>Bottom line:</strong> These are leads to <strong>sell your services to</strong>, not job boards. Dental/MedSpa/Real Estate = pitch as their ads manager. Agencies = offer white-label capacity. PH agencies = dual-purpose (white-label pitch <em>or</em> direct employment). Approach each lead with the right angle above and your conversion rate will be significantly higher.
+        </div>
+      </div>
+
+    </div><!-- /#noticeBody -->
+  </div><!-- /.notice-banner -->
+</div><!-- /.notice-wrap -->
+
+<div id="toast"></div>
+
+<script>
+/* ─────────────── DATA ─────────────── */
+const LEADS = [
+  {id:1,company:"Smile LA Downtown Modern Dentistry",industry:"Dental",country:"US",contact:"Dr. Kourosh Yousefzadeh",title:"Practice Owner",website:"https://smilela.com",phone:"+1 (213) 570-8775",linkedin:"https://www.linkedin.com/in/kourosh-yousefzadeh-333121a5/",email:"office@smilela.com",address:"523 W 6th St, Ste 202, Los Angeles, CA"},
+  {id:2,company:"Restore Dental Centers",industry:"Dental",country:"US",contact:"Dr. Arash Hakhamian",title:"Founder / Practice Owner",website:"https://restoredentalcenters.com",phone:"+1 (310) 858-7373",linkedin:"",email:"",address:"Los Angeles, CA"},
+  {id:3,company:"LA Dental Clinic",industry:"Dental",country:"US",contact:"",title:"Practice Owner",website:"",phone:"+1 (213) 385-9710",linkedin:"",email:"",address:"3377 Wilshire Blvd, Ste 202, Los Angeles, CA 90010"},
+  {id:4,company:"Premier Hollywood Dental Clinic",industry:"Dental",country:"US",contact:"",title:"Practice Owner",website:"https://hollywooddentist.cc",phone:"+1 (323) 856-1512",linkedin:"",email:"",address:"6646 Hollywood Blvd Suite, Hollywood, CA"},
+  {id:5,company:"Hollywood Dental Care",industry:"Dental",country:"US",contact:"",title:"Practice Owner",website:"",phone:"+1 (323) 461-4676",linkedin:"",email:"",address:"6464 Sunset Blvd Ste 1080, Hollywood, CA 90028"},
+  {id:6,company:"La Cienega Dental Group",industry:"Dental",country:"US",contact:"",title:"Practice Owner",website:"",phone:"+1 (310) 836-0300",linkedin:"",email:"",address:"1835 S La Cienega Blvd, Ste 200, Los Angeles, CA 90035"},
+  {id:7,company:"Kingwood Perfect Smiles",industry:"Dental",country:"US",contact:"Dr. Adam DiVincenzo",title:"Practice Owner",website:"https://www.kingwoodperfectsmiles.com",phone:"",linkedin:"",email:"",address:"Kingwood, TX"},
+  {id:8,company:"Dentist Pasadena TX",industry:"Dental",country:"US",contact:"Dr. Huy Phan Nguyen",title:"Practice Owner",website:"https://www.dentistpasadenatx.com",phone:"",linkedin:"",email:"",address:"Pasadena, TX"},
+  {id:9,company:"Dr. Robert B Tamaki DDS",industry:"Dental",country:"US",contact:"Dr. Robert B Tamaki",title:"Practice Owner",website:"",phone:"",linkedin:"",email:"",address:"Los Angeles, CA"},
+  {id:10,company:"Shane Patel DDS",industry:"Dental",country:"Canada",contact:"Dr. Shane Patel",title:"Practice Owner",website:"",phone:"",linkedin:"https://www.linkedin.com/in/shane-patel-dds-82403a127/",email:"",address:"Canada"},
+  {id:11,company:"SKINNEY Medspa",industry:"MedSpa",country:"US",contact:"Adriana Martino",title:"Founder / Owner",website:"https://skinneymedspa.com",phone:"+1 (212) 754-6639",linkedin:"https://www.linkedin.com/in/adriana-martino-25422842/",email:"",address:"37 W 57th St, New York, NY 10019"},
+  {id:12,company:"99 Medispa",industry:"MedSpa",country:"Australia",contact:"",title:"Medical Director",website:"https://www.99medispa.com.au",phone:"",linkedin:"",email:"",address:"Suite 1304, Level 13, 99 York St, Sydney NSW 2000"},
+  {id:13,company:"Le Grand Medispa",industry:"MedSpa",country:"Australia",contact:"Susi",title:"Owner",website:"https://legrandmedispa.com.au",phone:"+61 2 8590 5140",linkedin:"",email:"",address:"Concord, Sydney NSW, Australia"},
+  {id:14,company:"Star Medispa",industry:"MedSpa",country:"Australia",contact:"",title:"Owner / Manager",website:"https://www.starmedispa.com.au",phone:"",linkedin:"",email:"",address:"Pyrmont & Sydney CBD, NSW, Australia"},
+  {id:15,company:"The Medispa by Matty",industry:"MedSpa",country:"Australia",contact:"Matty",title:"Owner",website:"https://www.themedispa.com.au",phone:"",linkedin:"",email:"",address:"Double Bay, Sydney NSW, Australia"},
+  {id:16,company:"Pellis Medispa",industry:"MedSpa",country:"Australia",contact:"",title:"Owner",website:"https://pellismedispa.com.au",phone:"",linkedin:"",email:"",address:"Bondi Junction, Sydney NSW, Australia"},
+  {id:17,company:"Zen Medispa",industry:"MedSpa",country:"Australia",contact:"",title:"Owner",website:"https://zenmedispa.com.au",phone:"",linkedin:"",email:"",address:"Sydney NSW, Australia"},
+  {id:18,company:"Australian Cosmetic Institute",industry:"MedSpa",country:"Australia",contact:"",title:"Director",website:"https://australiancosmeticinstitute.com.au",phone:"1800 600 800",linkedin:"",email:"",address:"South Yarra, Melbourne VIC 3141, Australia"},
+  {id:19,company:"Melbourne Cosmetic Specialists",industry:"MedSpa",country:"Australia",contact:"",title:"Owner / Director",website:"https://melbcosmetic.com",phone:"",linkedin:"",email:"",address:"Melbourne VIC, Australia"},
+  {id:20,company:"Skin Temple Medispa",industry:"MedSpa",country:"Australia",contact:"",title:"Owner / Director",website:"https://www.skintemple.com.au",phone:"",linkedin:"",email:"",address:"Melbourne VIC, Australia"},
+  {id:21,company:"Melbourne Cosmetic Group",industry:"MedSpa",country:"Australia",contact:"",title:"Owner",website:"https://melbournecosmetic.com.au",phone:"",linkedin:"",email:"",address:"Melbourne VIC, Australia"},
+  {id:22,company:"The Medispa on Melville",industry:"MedSpa",country:"Australia",contact:"",title:"Owner",website:"https://www.themedispaonmelville.com.au",phone:"",linkedin:"",email:"",address:"Brunswick West, Melbourne VIC, Australia"},
+  {id:23,company:"Anderson Collaborative",industry:"Marketing Agency",country:"US",contact:"Trevor Anderson",title:"Founder / CEO",website:"https://www.andersoncollaborative.com",phone:"+1 (305) 777-0471",linkedin:"https://www.linkedin.com/in/trevor-anderson/",email:"info@andersoncollaborative.com",address:"4000 Ponce de Leon Suite 470, Miami, FL 33146"},
+  {id:24,company:"Brill Media",industry:"Marketing Agency",country:"US",contact:"Robert Brill",title:"Founder / CEO",website:"https://brillmedia.co",phone:"+1 (800) 488-1973",linkedin:"https://www.linkedin.com/in/robertbrill",email:"robert@brillmedia.co",address:"10880 Wilshire Blvd, Suite 1101, Los Angeles, CA 90024"},
+  {id:25,company:"SmartSites",industry:"Marketing Agency",country:"US",contact:"Michael Melen",title:"Co-CEO / COO",website:"https://www.smartsites.com",phone:"+1 (201) 870-6000",linkedin:"https://www.linkedin.com/in/michaelmelen",email:"contact@smartsites.com",address:"45 Eisenhower Dr, Suite 520, Paramus, NJ 07652"},
+  {id:26,company:"Power Digital Marketing",industry:"Marketing Agency",country:"US",contact:"Jeff Mason",title:"CEO",website:"https://powerdigitalmarketing.com",phone:"+1 (619) 501-1211",linkedin:"https://www.linkedin.com/in/jeff-mason-8619958",email:"contact@powerdigitalmarketing.com",address:"2251 San Diego Ave A250, San Diego, CA 92110"},
+  {id:27,company:"MuteSix",industry:"Marketing Agency",country:"US",contact:"Steve Weiss",title:"Founder / CEO",website:"https://mutesix.com",phone:"",linkedin:"https://www.linkedin.com/company/mutesix",email:"",address:"Culver City, CA"},
+  {id:28,company:"EmberTribe",industry:"Marketing Agency",country:"US",contact:"Josh Sturgeon",title:"Co-Founder",website:"https://embertribe.com",phone:"",linkedin:"https://www.linkedin.com/in/joshuasturgeon/",email:"",address:"Greensboro, NC"},
+  {id:29,company:"Medstar Media",industry:"Marketing Agency",country:"US",contact:"Chris Zelig",title:"Founder / CEO",website:"https://medstarmedia.com",phone:"",linkedin:"",email:"",address:""},
+  {id:30,company:"Pronk MedSpa Marketing",industry:"Marketing Agency",country:"US",contact:"Matt Watson",title:"Founder",website:"https://pronkmedspamarketing.com",phone:"",linkedin:"https://www.linkedin.com/company/pronkmedspamarketing",email:"",address:""},
+  {id:31,company:"SaasRise",industry:"Marketing Agency",country:"US",contact:"Ryan Allis",title:"Founder / CEO",website:"https://www.saasrise.com",phone:"",linkedin:"",email:"",address:""},
+  {id:32,company:"Growth Marketing Pro",industry:"Marketing Agency",country:"US",contact:"Hailey Friedman",title:"Founder",website:"https://www.growthmarketingpro.com",phone:"",linkedin:"",email:"",address:""},
+  {id:33,company:"Digital Rhinos",industry:"Marketing Agency",country:"US",contact:"Adrian Cordiner",title:"Founder / Director",website:"https://www.digitalrhinos.com",phone:"",linkedin:"",email:"",address:""},
+  {id:34,company:"MHI Growth Engine",industry:"Marketing Agency",country:"US",contact:"",title:"Founder / CEO",website:"https://mhigrowthengine.com",phone:"",linkedin:"",email:"",address:""},
+  {id:35,company:"Top Growth Marketing",industry:"Marketing Agency",country:"US",contact:"",title:"Founder / CEO",website:"https://topgrowthmarketing.com",phone:"",linkedin:"",email:"",address:""},
+  {id:36,company:"Stryde Agency",industry:"Marketing Agency",country:"US",contact:"Greg Shuey",title:"Founder / CEO",website:"https://www.stryde.com",phone:"",linkedin:"",email:"",address:"Utah, USA"},
+  {id:37,company:"99 Robots",industry:"Marketing Agency",country:"US",contact:"",title:"Founder / CEO",website:"https://99robots.com",phone:"",linkedin:"",email:"",address:""},
+  {id:38,company:"Digital HVAC Marketing",industry:"Marketing Agency",country:"US",contact:"Lori Gama",title:"Owner",website:"https://digitalhvacmarketing.com",phone:"",linkedin:"",email:"",address:""},
+  {id:39,company:"Avex E-Commerce Agency",industry:"Marketing Agency",country:"US",contact:"John Surdakowski",title:"Founder / CEO",website:"https://avexdesigns.com",phone:"",linkedin:"https://www.linkedin.com/in/jsurda/",email:"",address:"New York, NY"},
+  {id:40,company:"GrowthSpree",industry:"Marketing Agency",country:"US",contact:"",title:"Founder / CEO",website:"https://www.growthspreeofficial.com",phone:"",linkedin:"",email:"",address:""},
+  {id:41,company:"Get X Media",industry:"Marketing Agency",country:"Canada",contact:"Corey Hayes",title:"CEO / Head of Growth",website:"https://www.getxmedia.com",phone:"+1 (587) 600-8018",linkedin:"https://www.linkedin.com/in/coreyrhayes/",email:"",address:"Calgary, AB, Canada"},
+  {id:42,company:"Aspire Media Marketing",industry:"Marketing Agency",country:"Canada",contact:"Sukh Bains",title:"CEO / Owner",website:"https://aspiremediamarketing.ca",phone:"",linkedin:"",email:"",address:"Vancouver, BC, Canada"},
+  {id:43,company:"RealtyAds",industry:"Real Estate Tech",country:"US",contact:"Trevor Marticke",title:"Founder / President",website:"https://www.realtyads.com",phone:"+1 (312) 778-5504",linkedin:"https://www.linkedin.com/in/trevor-marticke-ab3b32a/",email:"support@realtyads.com",address:"Chicago, IL"},
+  {id:44,company:"Feel Goods (Wellness Brand)",industry:"Ecommerce / DTC",country:"Canada",contact:"Dustin Pourbaba",title:"Co-Founder",website:"",phone:"",linkedin:"",email:"",address:"Canada"},
+  {id:45,company:"SwingUp",industry:"Marketing Agency",country:"Philippines",contact:"Joshua Mafelix",title:"Founder / CEO",website:"https://www.swingup.ph",phone:"",linkedin:"",email:"",address:"Philippines"},
+  {id:46,company:"Gatchi Digital",industry:"Marketing Agency",country:"Philippines",contact:"Danielle Monica Velasquez",title:"Co-Founder",website:"https://gatchidigital.com",phone:"",linkedin:"https://www.linkedin.com/company/gatchi-digital",email:"hello@gatchidigital.com",address:"Level 6 Ayala Triangle Gardens Tower 2, Makati, Metro Manila 1226, Philippines"},
+  {id:47,company:"LeapOut Digital",industry:"Marketing Agency",country:"Philippines",contact:"Marvin Ortiz",title:"Founder / CEO",website:"https://leapoutdigital.com",phone:"+63 917 889 2800",linkedin:"https://www.linkedin.com/company/leapout-digital",email:"campaigns@leapoutdigital.com",address:"Emerald Ave, Ortigas Center, Pasig City, Philippines"},
+  {id:48,company:"Huskee Digital",industry:"Marketing Agency",country:"Philippines",contact:"Julio Miguel P. Azurin",title:"CEO",website:"https://www.huskeedigital.com",phone:"",linkedin:"https://www.linkedin.com/company/huskeedigital",email:"",address:"111 Paseo De Roxas Bldg, Legaspi Village, Makati City, Philippines"},
+  {id:49,company:"Spiralytics",industry:"Marketing Agency",country:"Philippines",contact:"Jimmy Cassells",title:"Co-Founder / CEO",website:"https://www.spiralytics.com",phone:"",linkedin:"https://www.linkedin.com/company/spiralytics-inc",email:"growth@spiralytics.com",address:"Makati, Manila, Philippines"},
+  {id:50,company:"New Age Digital PH",industry:"Marketing Agency",country:"Philippines",contact:"Erika Hocson",title:"VP",website:"https://newagedigital.ph",phone:"+63 961 086 5468",linkedin:"https://www.linkedin.com/company/new-age-digital-ph",email:"hello@newagedigital.ph",address:"Pasig, Philippines"},
+  {id:51,company:"Hustle Marketers",industry:"Marketing Agency",country:"Philippines",contact:"Ishant Sharma",title:"Founder / CEO",website:"https://hustlemarketers.com",phone:"+91 781 418 8707",linkedin:"https://www.linkedin.com/in/ishant-digital-marketing-specialist/",email:"info@hustlemarketers.com",address:"Philippines / US"}
+];
+
+/* ─────────────── CONSTANTS ─────────────── */
+const KEY = 'leadTracker_v2';
+const FLAGS = {US:'🇺🇸',Australia:'🇦🇺',Canada:'🇨🇦',Philippines:'🇵🇭'};
+const IND_CLS = {'Dental':'tag-dental','MedSpa':'tag-medspa','Marketing Agency':'tag-agency','Real Estate Tech':'tag-realestate','Ecommerce / DTC':'tag-ecommerce'};
+const STATUS_CLS = {new:'s-new',contacted:'s-contacted',replied:'s-replied',notint:'s-notint'};
+
+/* ─────────────── STATE ─────────────── */
+let state = {};   // keyed by String(id)
+let sortCol = 'id', sortDir = 1;
+let notesTimers = {};  // debounce timers per lead id
+
+/* ─────────────── STORAGE ─────────────── */
+function loadState() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) state = JSON.parse(raw);
+  } catch(e) { state = {}; }
+
+  // ensure every lead has an entry
+  LEADS.forEach(l => {
+    const k = String(l.id);
+    if (!state[k]) state[k] = {status:'new', notes:'', done:false};
+    // migrate older keys that might be missing fields
+    if (!state[k].status) state[k].status = 'new';
+    if (state[k].notes === undefined) state[k].notes = '';
+    if (state[k].done === undefined) state[k].done = false;
+  });
+}
+
+function persist() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(state));
+    showSaved();
+  } catch(e) {
+    console.warn('localStorage save failed', e);
+  }
+}
+
+// save on tab close / refresh
+window.addEventListener('beforeunload', persist);
+
+// auto-save every 15 s as safety net
+setInterval(persist, 15000);
+
+/* ─────────────── SAVE INDICATOR ─────────────── */
+let savedTimer;
+function showSaved() {
+  const el = document.getElementById('saveIndicator');
+  const txt = document.getElementById('saveText');
+  el.classList.add('saved');
+  const now = new Date();
+  txt.textContent = `Saved ${now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'})}`;
+  clearTimeout(savedTimer);
+  savedTimer = setTimeout(() => el.classList.remove('saved'), 3000);
+}
+
+/* ─────────────── STATS ─────────────── */
+function updateStats(visibleCount) {
+  const contacted = Object.values(state).filter(s => s.status === 'contacted').length;
+  const replied   = Object.values(state).filter(s => s.status === 'replied').length;
+  const done      = Object.values(state).filter(s => s.done).length;
+  const pct       = Math.round((done / LEADS.length) * 100);
+
+  document.getElementById('statTotal').textContent    = LEADS.length;
+  document.getElementById('statShowing').textContent  = visibleCount ?? LEADS.length;
+  document.getElementById('statContacted').textContent= contacted;
+  document.getElementById('statReplied').textContent  = replied;
+  document.getElementById('statDone').textContent     = done;
+  document.getElementById('statPct').textContent      = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+/* ─────────────── FILTER / SORT ─────────────── */
+function getFiltered() {
+  const q   = document.getElementById('searchInput').value.toLowerCase().trim();
+  const ind = document.getElementById('filterIndustry').value;
+  const ctr = document.getElementById('filterCountry').value;
+  const sta = document.getElementById('filterStatus').value;
+
+  return LEADS.filter(l => {
+    if (ind && l.industry !== ind) return false;
+    if (ctr && l.country !== ctr)  return false;
+    if (sta && state[String(l.id)].status !== sta) return false;
+    if (q) {
+      const hay = [l.company, l.contact, l.title, l.email, l.phone, l.address, l.country, l.industry,
+                   state[String(l.id)].notes].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  }).sort((a, b) => {
+    let av = sortCol === 'status' ? state[String(a.id)].status : (a[sortCol] ?? '');
+    let bv = sortCol === 'status' ? state[String(b.id)].status : (b[sortCol] ?? '');
+    if (typeof av === 'number') return (av - bv) * sortDir;
+    return String(av).localeCompare(String(bv)) * sortDir;
+  });
+}
+
+/* ─────────────── RENDER ─────────────── */
+function render() {
+  const leads = getFiltered();
+  const tbody = document.getElementById('tbody');
+  const empty = document.getElementById('emptyState');
+
+  tbody.innerHTML = '';
+  if (!leads.length) { empty.style.display = 'block'; updateStats(0); return; }
+  empty.style.display = 'none';
+
+  const frag = document.createDocumentFragment();
+
+  leads.forEach(l => {
+    const k  = String(l.id);
+    const s  = state[k];
+    const tr = document.createElement('tr');
+    tr.dataset.id = k;
+    tr.className  = `row-${s.status}${s.done ? ' done-row' : ''}`;
+
+    // company cell
+    const companyCellInner = l.website
+      ? `<a href="${l.website}" target="_blank" class="company-link" title="${l.company}">
+           ${esc(l.company)}
+           <svg class="ext-icon" width="9" height="9" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+             <polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/>
+           </svg>
+         </a>`
+      : `<span style="font-family:'Syne',sans-serif;font-size:13px;font-weight:500">${esc(l.company)}</span>`;
+
+    const liCell = l.linkedin
+      ? `<a href="${l.linkedin}" target="_blank" class="li-link" title="LinkedIn">
+           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+             <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+             <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
+           </svg>
+         </a>`
+      : `<span class="no-data">—</span>`;
+
+    const mailCell = l.email
+      ? `<a href="mailto:${l.email}" class="mail-link" title="${l.email}">
+           <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+             <polyline points="22,6 12,13 2,6"/>
+           </svg>
+         </a>`
+      : `<span class="no-data">—</span>`;
+
+    tr.innerHTML = `
+      <td class="td-num">${l.id}</td>
+      <td style="max-width:210px">${companyCellInner}</td>
+      <td><span class="tag ${IND_CLS[l.industry]||'tag-agency'}">${l.industry}</span></td>
+      <td><span class="flag">${FLAGS[l.country]||''}</span> <span style="font-size:11px;color:var(--muted2)">${l.country}</span></td>
+      <td style="max-width:150px;color:var(--text)" title="${esc(l.contact)}">${l.contact ? esc(l.contact) : '<span class="no-data">—</span>'}</td>
+      <td style="max-width:150px;color:var(--muted2);font-size:11px" title="${esc(l.title)}">${esc(l.title)}</td>
+      <td><span class="phone-val">${l.phone || '<span class="no-data">—</span>'}</span></td>
+      <td>${liCell}</td>
+      <td>${mailCell}</td>
+      <td>
+        <select class="status-sel ${STATUS_CLS[s.status]}" data-action="status" data-id="${k}">
+          <option value="new"       ${s.status==='new'       ?'selected':''}>● New</option>
+          <option value="contacted" ${s.status==='contacted' ?'selected':''}>◆ Contacted</option>
+          <option value="replied"   ${s.status==='replied'   ?'selected':''}>✓ Replied</option>
+          <option value="notint"    ${s.status==='notint'    ?'selected':''}>✕ Not Interested</option>
+        </select>
+      </td>
+      <td>
+        <input class="notes-inp" type="text"
+          value="${esc(s.notes)}"
+          placeholder="Add note…"
+          data-action="notes"
+          data-id="${k}"
+          title="${esc(s.notes)}">
+      </td>
+      <td class="td-done">
+        <input type="checkbox" class="done-chk"
+          data-action="done"
+          data-id="${k}"
+          ${s.done ? 'checked' : ''}>
+      </td>
+    `;
+
+    frag.appendChild(tr);
+  });
+
+  tbody.appendChild(frag);
+  updateStats(leads.length);
+}
+
+/* ─────────────── ESC HELPER ─────────────── */
+function esc(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* ─────────────── EVENT DELEGATION ─────────────── */
+document.getElementById('tbody').addEventListener('change', e => {
+  const el     = e.target;
+  const action = el.dataset.action;
+  const id     = el.dataset.id;
+  if (!action || !id) return;
+
+  if (action === 'status') {
+    state[id].status = el.value;
+    el.className = `status-sel ${STATUS_CLS[el.value]}`;
+    const tr = el.closest('tr');
+    tr.className = `row-${el.value}${state[id].done ? ' done-row' : ''}`;
+    updateStats(document.querySelectorAll('#tbody tr').length);
+    persist();
+  }
+
+  if (action === 'done') {
+    state[id].done = el.checked;
+    const tr = el.closest('tr');
+    if (el.checked) tr.classList.add('done-row');
+    else            tr.classList.remove('done-row');
+    updateStats(document.querySelectorAll('#tbody tr').length);
+    persist();
+  }
+});
+
+// notes: save on every keystroke (debounced 600ms)
+document.getElementById('tbody').addEventListener('input', e => {
+  const el = e.target;
+  if (el.dataset.action !== 'notes') return;
+  const id = el.dataset.id;
+  clearTimeout(notesTimers[id]);
+  notesTimers[id] = setTimeout(() => {
+    state[id].notes = el.value;
+    persist();
+  }, 600);
+});
+
+// also save notes immediately on blur (covers fast tab-close)
+document.getElementById('tbody').addEventListener('blur', e => {
+  const el = e.target;
+  if (el.dataset.action !== 'notes') return;
+  clearTimeout(notesTimers[el.dataset.id]);
+  state[el.dataset.id].notes = el.value;
+  persist();
+}, true);
+
+/* ─────────────── SORT ─────────────── */
+document.querySelectorAll('th[data-col]').forEach(th => {
+  th.addEventListener('click', () => {
+    const col = th.dataset.col;
+    if (sortCol === col) sortDir *= -1;
+    else { sortCol = col; sortDir = 1; }
+    document.querySelectorAll('th').forEach(t => t.classList.remove('sorted'));
+    th.classList.add('sorted');
+    const si = th.querySelector('.si');
+    if (si) si.textContent = sortDir === 1 ? '↑' : '↓';
+    render();
+  });
+});
+
+/* ─────────────── FILTERS ─────────────── */
+['searchInput','filterIndustry','filterCountry','filterStatus'].forEach(id => {
+  document.getElementById(id).addEventListener('input',  render);
+  document.getElementById(id).addEventListener('change', render);
+});
+
+document.getElementById('btnReset').addEventListener('click', () => {
+  document.getElementById('searchInput').value     = '';
+  document.getElementById('filterIndustry').value  = '';
+  document.getElementById('filterCountry').value   = '';
+  document.getElementById('filterStatus').value    = '';
+  render();
+});
+
+/* ─────────────── EXPORT CSV ─────────────── */
+document.getElementById('btnExport').addEventListener('click', () => {
+  const leads   = getFiltered();
+  const headers = ['ID','Company','Industry','Country','Contact Name','Position','Website','Phone','LinkedIn','Email','Address','Status','Notes','Done'];
+  const rows    = leads.map(l => {
+    const s = state[String(l.id)];
+    return [l.id, l.company, l.industry, l.country, l.contact, l.title,
+            l.website, l.phone, l.linkedin, l.email, l.address,
+            s.status, s.notes, s.done ? 'Yes' : 'No']
+      .map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(',');
+  });
+
+  const csv  = [headers.join(','), ...rows].join('\r\n');
+  const blob = new Blob(['﻿' + csv], {type:'text/csv;charset=utf-8;'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = `leads_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+
+  showToast('✓ CSV exported successfully');
+});
+
+/* ─────────────── TOAST ─────────────── */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ─────────────── NOTICE TOGGLE ─────────────── */
+function toggleNotice() {
+  const body    = document.getElementById('noticeBody');
+  const chevron = document.getElementById('noticeChevron');
+  const isOpen  = body.style.display !== 'none';
+  body.style.display    = isOpen ? 'none' : '';
+  chevron.classList.toggle('open', !isOpen);
+}
+
+/* ─────────────── INIT ─────────────── */
+loadState();
+render();
+showSaved();
+</script>
+</body>
+</html>
