@@ -164,6 +164,12 @@
   .tag-agency     { background:rgba(59,130,246,.12); color:#60a5fa; border:1px solid rgba(59,130,246,.25); }
   .tag-realestate { background:rgba(245,158,11,.12); color:#fbbf24; border:1px solid rgba(245,158,11,.25); }
   .tag-ecommerce  { background:rgba(16,185,129,.12); color:#34d399; border:1px solid rgba(16,185,129,.25); }
+  .tag-chiro        { background:rgba(20,184,166,.12); color:#2dd4bf; border:1px solid rgba(20,184,166,.25); }
+  .tag-wellness     { background:rgba(132,204,22,.12); color:#a3e635; border:1px solid rgba(132,204,22,.25); }
+  .tag-plastics     { background:rgba(251,146,60,.12); color:#fb923c; border:1px solid rgba(251,146,60,.25); }
+  .tag-cosmeticdent { background:rgba(192,132,252,.12); color:#c084fc; border:1px solid rgba(192,132,252,.25); }
+  .tag-ortho        { background:rgba(34,211,238,.12); color:#22d3ee; border:1px solid rgba(34,211,238,.25); }
+  .tag-aesthetics   { background:rgba(244,114,182,.12); color:#f472b6; border:1px solid rgba(244,114,182,.25); }
 
   .flag { font-size:14px; line-height:1; }
 
@@ -452,6 +458,12 @@
         <option>Marketing Agency</option>
         <option>Real Estate Tech</option>
         <option>Ecommerce / DTC</option>
+        <option>Chiropractic</option>
+        <option>Wellness</option>
+        <option>Plastic Surgery</option>
+        <option>Cosmetic Dentistry</option>
+        <option>Orthodontics</option>
+        <option>Aesthetics</option>
       </select>
 
       <select id="filterCountry">
@@ -746,13 +758,138 @@ const LEADS = [
   {id:48,company:"Huskee Digital",industry:"Marketing Agency",country:"Philippines",contact:"Julio Miguel P. Azurin",title:"CEO",website:"https://www.huskeedigital.com",phone:"",linkedin:"https://www.linkedin.com/company/huskeedigital",email:"",address:"111 Paseo De Roxas Bldg, Legaspi Village, Makati City, Philippines"},
   {id:49,company:"Spiralytics",industry:"Marketing Agency",country:"Philippines",contact:"Jimmy Cassells",title:"Co-Founder / CEO",website:"https://www.spiralytics.com",phone:"",linkedin:"https://www.linkedin.com/company/spiralytics-inc",email:"growth@spiralytics.com",address:"Makati, Manila, Philippines"},
   {id:50,company:"New Age Digital PH",industry:"Marketing Agency",country:"Philippines",contact:"Erika Hocson",title:"VP",website:"https://newagedigital.ph",phone:"+63 961 086 5468",linkedin:"https://www.linkedin.com/company/new-age-digital-ph",email:"hello@newagedigital.ph",address:"Pasig, Philippines"},
-  {id:51,company:"Hustle Marketers",industry:"Marketing Agency",country:"Philippines",contact:"Ishant Sharma",title:"Founder / CEO",website:"https://hustlemarketers.com",phone:"+91 781 418 8707",linkedin:"https://www.linkedin.com/in/ishant-digital-marketing-specialist/",email:"info@hustlemarketers.com",address:"Philippines / US"}
+  {id:51,company:"Hustle Marketers",industry:"Marketing Agency",country:"Philippines",contact:"Ishant Sharma",title:"Founder / CEO",website:"https://hustlemarketers.com",phone:"+91 781 418 8707",linkedin:"https://www.linkedin.com/in/ishant-digital-marketing-specialist/",email:"info@hustlemarketers.com",address:"Philippines / US"},
+  {id:52,company:"Lux MedSpa Brickell",industry:"MedSpa",country:"US",contact:"Alan Araujo",title:"Founder",website:"https://www.luxmedspabrickell.com/",phone:"",linkedin:"",email:"",address:"Miami, US"},
+  {id:53,company:"Natural Results in Expert Hands",industry:"MedSpa",country:"US",contact:"Lylliam Guimarais",title:"Lead Specialist",website:"https://www.beyondhealthmedspa.com/",phone:"",linkedin:"",email:"",address:"Miami, US"},
+  {id:54,company:"Med Spa Miami",industry:"MedSpa",country:"US",contact:"",title:"",website:"https://www.medaestheticsmiami.com/",phone:"",linkedin:"",email:"",address:"Miami, US"},
+  {id:55,company:"Monaco Medical Spa 's Miami Best Cosmetic Med Spa",industry:"MedSpa",country:"US",contact:"Dr. Jeannette Barrueta",title:"Doctor",website:"https://www.monacomedspa.com/",phone:"",linkedin:"",email:"",address:"Miami, US"},
+  {id:56,company:"Top Med Spa in Miami",industry:"MedSpa",country:"US",contact:"Dr. Constantino Mendieta",title:"Doctor",website:"https://4beautymedspa.com/",phone:"",linkedin:"",email:"",address:"Miami, US"},
+  {id:57,company:"Miami Medical Spa",industry:"MedSpa",country:"US",contact:"",title:"",website:"https://lavishlasermedspa.com/",phone:"",linkedin:"",email:"",address:"Miami, US"},
+  {id:58,company:"Med Spa Miami",industry:"MedSpa",country:"US",contact:"",title:"",website:"https://deluxemedspabeauty.com/",phone:"",linkedin:"",email:"",address:"Miami, US"},
+  {id:59,company:"Miami Elegance Medspa",industry:"MedSpa",country:"US",contact:"Annette Bode",title:"Owner",website:"https://www.miamielegance.com/",phone:"",linkedin:"",email:"",address:"Miami, US"},
+  {id:60,company:"Regenerative Aesthetics MedSpa",industry:"MedSpa",country:"US",contact:"",title:"",website:"https://bellavidaaesthetics.com/",phone:"",linkedin:"",email:"",address:"Miami, US"},
+  {id:61,company:"Rejuvaline Medspa",industry:"MedSpa",country:"US",contact:"Dr. Javi",title:"Doctor",website:"https://rejuvalinemedspa.com/",phone:"",linkedin:"",email:"",address:"Miami, US"},
+  {id:62,company:"Miami Medspa",industry:"MedSpa",country:"US",contact:"",title:"",website:"https://miamimed-spa.com/",phone:"",linkedin:"",email:"",address:"Miami, US"},
+  {id:63,company:"Aromas Med Spa #1 Advanced Aesthetic Laser Rejuvenation",industry:"MedSpa",country:"US",contact:"",title:"",website:"https://aromaslaser.com/",phone:"",linkedin:"",email:"",address:"Miami, US"},
+  {id:64,company:"Beiamed Medspa & Clinic - Experts in Surgical and Non-surgical cosmetic ...",industry:"MedSpa",country:"US",contact:"Wanda Fernandez",title:"Founder",website:"https://beiamedispa.com/",phone:"",linkedin:"",email:"",address:"Miami, US"},
+  {id:65,company:"LA Dental Clinic - Los Angeles Expert Cosmetic Dentist For Adults",industry:"Dental",country:"US",contact:"Dr. Azy Nasiry",title:"Owner",website:"https://ladentalclinic.com/",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:66,company:"Lasry Dental Clinic, your Los Angeles Dental Clinic with a French touch!",industry:"Dental",country:"US",contact:"Dr. Samuel Lasry",title:"Doctor",website:"https://lasrydentalclinic.com/",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:67,company:"27 Dental Clinics in Downtown Los Angeles, Los Angeles",industry:"Dental",country:"US",contact:"",title:"",website:"https://www.practo.com/los-angeles/clinics/dental-clinics/downtown-los-angeles",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:68,company:"Free Dental Clinics in Los Angeles CA",industry:"Dental",country:"US",contact:"",title:"",website:"https://www.dentalclinics.org/dcity/ca-los_angeles",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:69,company:"LA Dental Clinic - Comprehensive Dentistry in Los Angeles, CA",industry:"Dental",country:"US",contact:"Beverly Witham",title:"Doctor",website:"https://familydentistryonline.net/office/la-dental-clinic/",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:70,company:"APLA Health Dental Clinic, Downtown Los Angeles",industry:"Dental",country:"US",contact:"",title:"",website:"https://aplahealth.org/locations/apla-health-dental-clinic-downtown-los-angeles/",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:71,company:"USC Dental Clinic - Los Angeles Free Clinic",industry:"Dental",country:"US",contact:"",title:"",website:"https://freeclinicdirectory.org/detail/usc_school_of_dentistry8_los_angeles_ca.html",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:72,company:"Free and Low-Cost Dental Clinic in Los Angeles",industry:"Dental",country:"US",contact:"",title:"",website:"https://www.sjch.org/dental-services/",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:73,company:"Dentist in Los Angeles, CA",industry:"Dental",country:"US",contact:"",title:"",website:"https://www.personaldentaloffice.com/",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:74,company:"Best Dentists in Los Angeles, CA (2026) - WebMD",industry:"Dental",country:"US",contact:"",title:"",website:"https://doctor.webmd.com/providers/specialty/dentistry/california/los-angeles",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:75,company:"Home - La Plaza Dental - Dr. Ramezani",industry:"Dental",country:"US",contact:"",title:"",website:"https://laplazadental.com/",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:76,company:"Local Dentists & Orthodontics, Adults & Kids",industry:"Dental",country:"US",contact:"",title:"",website:"https://www.westcoastdental.com/locations/los-angeles/",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:77,company:"New York Chiropractic Life Center",industry:"Chiropractic",country:"US",contact:"",title:"",website:"https://www.newyorkchiropractic.com",phone:"",linkedin:"",email:"",address:"New York, US"},
+  {id:78,company:"Chiropractic Care and Wellness",industry:"Chiropractic",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"New York, US"},
+  {id:79,company:"NYC Chiropractic",industry:"Chiropractic",country:"US",contact:"",title:"",website:"https://www.nychiropractic.com",phone:"",linkedin:"",email:"",address:"New York, US"},
+  {id:80,company:"Chiropractic Wellness Center",industry:"Chiropractic",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"New York, US"},
+  {id:81,company:"The Chiropractic Office",industry:"Chiropractic",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"New York, US"},
+  {id:82,company:"Chiropractic Family Care",industry:"Chiropractic",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"New York, US"},
+  {id:83,company:"New York Sports Chiropractic",industry:"Chiropractic",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"New York, US"},
+  {id:84,company:"Chiropractic Health and Wellness",industry:"Chiropractic",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"New York, US"},
+  {id:85,company:"Advanced Chiropractic",industry:"Chiropractic",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"New York, US"},
+  {id:86,company:"Chiropractic Care of New York",industry:"Chiropractic",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"New York, US"},
+  {id:87,company:"Wellness Chiropractic",industry:"Chiropractic",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"New York, US"},
+  {id:88,company:"Chiropractic Solutions",industry:"Chiropractic",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"New York, US"},
+  {id:89,company:"New York Chiropractic and Physical Therapy",industry:"Chiropractic",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"New York, US"},
+  {id:90,company:"Chiropractic Center of New York",industry:"Chiropractic",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"New York, US"},
+  {id:91,company:"Spine Care Chiropractic",industry:"Chiropractic",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"New York, US"},
+  {id:92,company:"Cedars-Sinai Medical Center",industry:"Dental",country:"US",contact:"",title:"",website:"https://www.cedars-sinai.org/",phone:"(310) 423-3277",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:93,company:"UCLA Dental Clinic",industry:"Dental",country:"US",contact:"",title:"",website:"https://www.dentistry.ucla.edu/",phone:"(310) 206-3900",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:94,company:"Dentist Los Angeles - Dr. Arthur Glosman",industry:"Dental",country:"US",contact:"",title:"",website:"https://www.dentistlosangeles.com/",phone:"(310) 201-4085",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:95,company:"Los Angeles Institute of Clinical Dentistry",industry:"Dental",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:96,company:"Children's Hospital Los Angeles - Dentistry",industry:"Dental",country:"US",contact:"",title:"",website:"https://www.chla.org/",phone:"(323) 361-2471",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:97,company:"USC Dental Clinic",industry:"Dental",country:"US",contact:"",title:"",website:"",phone:"(213) 740-2800",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:98,company:"Downtown Dental",industry:"Dental",country:"US",contact:"",title:"",website:"",phone:"(213) 863-4427",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:99,company:"Beverly Hills Dental Arts",industry:"Dental",country:"US",contact:"",title:"",website:"https://www.beverlyhillsdentalarts.com/",phone:"(310) 652-7900",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:100,company:"West Coast Dental",industry:"Dental",country:"US",contact:"",title:"",website:"https://www.westcoastdental.com/",phone:"(866) 209-0999",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:101,company:"Western Dental",industry:"Dental",country:"US",contact:"",title:"",website:"https://www.westerndental.com/",phone:"(800) 579-3783",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:102,company:"The Aesthetic Institute",industry:"Aesthetics",country:"US",contact:"",title:"",website:"https://www.theaestheticinstitute.com",phone:"(312) 266-6240",linkedin:"",email:"",address:"Chicago, US"},
+  {id:103,company:"Chicago Aesthetic Surgery",industry:"Aesthetics",country:"US",contact:"",title:"",website:"",phone:"(312) 757-4500",linkedin:"",email:"",address:"Chicago, US"},
+  {id:104,company:"The Chicago Center for Aesthetic Surgery",industry:"Aesthetics",country:"US",contact:"",title:"",website:"",phone:"(773) 296-3636",linkedin:"",email:"",address:"Chicago, US"},
+  {id:105,company:"Northwestern Memorial Hospital - Department of Plastic Surgery",industry:"Aesthetics",country:"US",contact:"",title:"",website:"https://www.nm.org",phone:"(312) 926-0779",linkedin:"",email:"",address:"Chicago, US"},
+  {id:106,company:"The University of Chicago Medicine - Section of Plastic and Reconstructive Surgery",industry:"Aesthetics",country:"US",contact:"",title:"",website:"https://www.uchicagomedicine.org",phone:"(773) 702-2152",linkedin:"",email:"",address:"Chicago, US"},
+  {id:107,company:"Lakeshore Plastic Surgery",industry:"Aesthetics",country:"US",contact:"",title:"",website:"https://www.lakeshoreplasticsurgery.com",phone:"(312) 587-6444",linkedin:"",email:"",address:"Chicago, US"},
+  {id:108,company:"Lincoln Park Aesthetics",industry:"Aesthetics",country:"US",contact:"",title:"",website:"",phone:"(312) 981-5188",linkedin:"",email:"",address:"Chicago, US"},
+  {id:109,company:"Gold Coast Plastic Surgery",industry:"Aesthetics",country:"US",contact:"",title:"",website:"https://www.goldcoastplasticsurgery.com",phone:"(312) 661-8650",linkedin:"",email:"",address:"Chicago, US"},
+  {id:110,company:"Chicago Cosmetic Institute",industry:"Aesthetics",country:"US",contact:"",title:"",website:"",phone:"(773) 296-3636",linkedin:"",email:"",address:"Chicago, US"},
+  {id:111,company:"The Plastic Surgery Clinic of Chicago",industry:"Aesthetics",country:"US",contact:"",title:"",website:"",phone:"(773) 296-3636",linkedin:"",email:"",address:"Chicago, US"},
+  {id:112,company:"Northwestern Plastic Surgery",industry:"Aesthetics",country:"US",contact:"",title:"",website:"",phone:"(312) 695-2520",linkedin:"",email:"",address:"Chicago, US"},
+  {id:113,company:"Rush University Medical Center - Department of Plastic and Reconstructive Surgery",industry:"Aesthetics",country:"US",contact:"",title:"",website:"https://www.rush.edu",phone:"(312) 942-5875",linkedin:"",email:"",address:"Chicago, US"},
+  {id:114,company:"University of Illinois Hospital & Health Sciences System - Department of Plastic Surgery",industry:"Aesthetics",country:"US",contact:"",title:"",website:"https://hospital.uillinois.edu",phone:"(312) 996-3900",linkedin:"",email:"",address:"Chicago, US"},
+  {id:115,company:"Advocate Illinois Masonic Medical Center - Plastic and Reconstructive Surgery",industry:"Aesthetics",country:"US",contact:"",title:"",website:"https://www.advocatehealth.com",phone:"(773) 296-5311",linkedin:"",email:"",address:"Chicago, US"},
+  {id:116,company:"Swedish Covenant Health - Plastic and Reconstructive Surgery",industry:"Aesthetics",country:"US",contact:"",title:"",website:"",phone:"(773) 878-6888",linkedin:"",email:"",address:"Chicago, US"},
+  {id:117,company:"Lifetime Fitness",industry:"Wellness",country:"US",contact:"",title:"",website:"https://www.lifetime.life/",phone:"",linkedin:"",email:"",address:"Houston, US"},
+  {id:118,company:"24 Hour Fitness",industry:"Wellness",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Houston, US"},
+  {id:119,company:"YMCA of Greater Houston",industry:"Wellness",country:"US",contact:"",title:"",website:"https://www.ymcahouston.org/",phone:"",linkedin:"",email:"",address:"Houston, US"},
+  {id:120,company:"Houstonian Club",industry:"Wellness",country:"US",contact:"",title:"",website:"https://www.houstonian.com/",phone:"",linkedin:"",email:"",address:"Houston, US"},
+  {id:121,company:"Bay Area Houston YMCA",industry:"Wellness",country:"US",contact:"",title:"",website:"https://www.ymcahouston.org/locations/bay-area-houston/",phone:"",linkedin:"",email:"",address:"Houston, US"},
+  {id:122,company:"F45 Training",industry:"Wellness",country:"US",contact:"",title:"",website:"https://f45training.com/",phone:"",linkedin:"",email:"",address:"Houston, US"},
+  {id:123,company:"Orangetheory Fitness",industry:"Wellness",country:"US",contact:"",title:"",website:"https://www.orangetheory.com/",phone:"",linkedin:"",email:"",address:"Houston, US"},
+  {id:124,company:"SoulCycle",industry:"Wellness",country:"US",contact:"",title:"",website:"https://www.soul-cycle.com/",phone:"",linkedin:"",email:"",address:"Houston, US"},
+  {id:125,company:"Equinox",industry:"Wellness",country:"US",contact:"",title:"",website:"https://www.equinox.com/",phone:"",linkedin:"",email:"",address:"Houston, US"},
+  {id:126,company:"Club Pilates",industry:"Wellness",country:"US",contact:"",title:"",website:"https://www.clubpilates.com/",phone:"",linkedin:"",email:"",address:"Houston, US"},
+  {id:127,company:"Pure Barre",industry:"Wellness",country:"US",contact:"",title:"",website:"https://www.purebarre.com/",phone:"",linkedin:"",email:"",address:"Houston, US"},
+  {id:128,company:"CycleHouse",industry:"Wellness",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Houston, US"},
+  {id:129,company:"Houston Sports Park",industry:"Wellness",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Houston, US"},
+  {id:130,company:"Memorial Park Conservancy",industry:"Wellness",country:"US",contact:"",title:"",website:"https://www.memorialparkconservancy.org/",phone:"",linkedin:"",email:"",address:"Houston, US"},
+  {id:131,company:"The Houston Club",industry:"Wellness",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Houston, US"},
+  {id:132,company:"The Spa at The Ritz-Carlton, Los Angeles",industry:"MedSpa",country:"US",contact:"",title:"",website:"https://www.ritzcarlton.com/",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:133,company:"Spa Montage Beverly Hills",industry:"MedSpa",country:"US",contact:"",title:"",website:"https://www.montagehotels.com/",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:134,company:"The Peninsula Spa",industry:"MedSpa",country:"US",contact:"",title:"",website:"https://www.peninsula.com/",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:135,company:"Four Seasons Hotel Los Angeles at Beverly Hills Spa",industry:"MedSpa",country:"US",contact:"",title:"",website:"https://www.fourseasons.com/",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:136,company:"Beverly Hills Rejuvenation Center",industry:"MedSpa",country:"US",contact:"",title:"",website:"https://www.bhrcenter.com/",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:137,company:"Skin Laundry",industry:"MedSpa",country:"US",contact:"",title:"",website:"https://www.skinlaundry.com/",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:138,company:"The Med Spa at Beverly Hills",industry:"MedSpa",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:139,company:"RejuvaYou Medical Spa",industry:"MedSpa",country:"US",contact:"",title:"",website:"https://www.rejuvayou.com/",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:140,company:"Lasky Aesthetics & Laser Center",industry:"MedSpa",country:"US",contact:"",title:"",website:"https://www.laskyaesthetics.com/",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:141,company:"Beverly Hills Medical Spa",industry:"MedSpa",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:142,company:"Venus Medical Spa",industry:"MedSpa",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:143,company:"Sona MedSpa",industry:"MedSpa",country:"US",contact:"",title:"",website:"https://www.sonamedspa.com/",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:144,company:"Laser Away",industry:"MedSpa",country:"US",contact:"",title:"",website:"https://www.laseraway.net/",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:145,company:"Sevilla Med Spa",industry:"MedSpa",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:146,company:"Simply Skin Med Spa",industry:"MedSpa",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Los Angeles, US"},
+  {id:147,company:"Miami Plastic Surgery",industry:"Plastic Surgery",country:"US",contact:"",title:"",website:"https://www.miamiplasticsurgery.com",phone:"(305) 595-2969",linkedin:"",email:"",address:"Miami, US"},
+  {id:148,company:"The Plastic Surgery Institute",industry:"Plastic Surgery",country:"US",contact:"",title:"",website:"https://www.theplasticsurgeryinstitute.com",phone:"(305) 856-8886",linkedin:"",email:"",address:"Miami, US"},
+  {id:149,company:"Leonard M. Hochstein, MD",industry:"Plastic Surgery",country:"US",contact:"",title:"",website:"",phone:"(305) 931-3333",linkedin:"",email:"",address:"Miami, US"},
+  {id:150,company:"Michael Salzhauer, MD",industry:"Plastic Surgery",country:"US",contact:"",title:"",website:"",phone:"(305) 866-0177",linkedin:"",email:"",address:"Miami, US"},
+  {id:151,company:"Adam J. Rubinstein, MD",industry:"Plastic Surgery",country:"US",contact:"",title:"",website:"https://www.drrubinstein.com",phone:"(305) 595-0091",linkedin:"",email:"",address:"Miami, US"},
+  {id:152,company:"Jose Rodriguez-Feliz, MD",industry:"Plastic Surgery",country:"US",contact:"",title:"",website:"",phone:"(305) 443-3535",linkedin:"",email:"",address:"Miami, US"},
+  {id:153,company:"The Miami Center for Plastic Surgery",industry:"Plastic Surgery",country:"US",contact:"",title:"",website:"",phone:"(305) 596-9707",linkedin:"",email:"",address:"Miami, US"},
+  {id:154,company:"Sergio M. Zamora, MD",industry:"Plastic Surgery",country:"US",contact:"",title:"",website:"",phone:"(305) 856-3030",linkedin:"",email:"",address:"Miami, US"},
+  {id:155,company:"Jeffrey LaGrasso, MD",industry:"Plastic Surgery",country:"US",contact:"",title:"",website:"",phone:"(305) 503-4747",linkedin:"",email:"",address:"Miami, US"},
+  {id:156,company:"Gary J. Rosenbaum, MD",industry:"Plastic Surgery",country:"US",contact:"",title:"",website:"",phone:"(305) 861-8833",linkedin:"",email:"",address:"Miami, US"},
+  {id:157,company:"Dental Arts of Dallas",industry:"Cosmetic Dentistry",country:"US",contact:"",title:"",website:"",phone:"(214) 369-9136",linkedin:"",email:"",address:"Dallas, US"},
+  {id:158,company:"Dallas Cosmetic Dentistry",industry:"Cosmetic Dentistry",country:"US",contact:"",title:"",website:"https://www.dallascosmeticdentistry.com",phone:"(214) 521-3737",linkedin:"",email:"",address:"Dallas, US"},
+  {id:159,company:"Prescott Dentistry",industry:"Cosmetic Dentistry",country:"US",contact:"",title:"",website:"",phone:"(972) 386-8900",linkedin:"",email:"",address:"Dallas, US"},
+  {id:160,company:"Smile Dallas",industry:"Cosmetic Dentistry",country:"US",contact:"",title:"",website:"",phone:"(972) 458-5868",linkedin:"",email:"",address:"Dallas, US"},
+  {id:161,company:"Dental Studio",industry:"Cosmetic Dentistry",country:"US",contact:"",title:"",website:"",phone:"(214) 526-6595",linkedin:"",email:"",address:"Dallas, US"},
+  {id:162,company:"Lakewood Dental Group",industry:"Cosmetic Dentistry",country:"US",contact:"",title:"",website:"https://www.lakewooddentalgroup.com",phone:"(214) 827-1884",linkedin:"",email:"",address:"Dallas, US"},
+  {id:163,company:"Uptown Dental",industry:"Cosmetic Dentistry",country:"US",contact:"",title:"",website:"",phone:"(214) 522-4333",linkedin:"",email:"",address:"Dallas, US"},
+  {id:164,company:"Park Cities Dentistry",industry:"Cosmetic Dentistry",country:"US",contact:"",title:"",website:"https://www.parkcitiesdentistry.com",phone:"(214) 522-3333",linkedin:"",email:"",address:"Dallas, US"},
+  {id:165,company:"Creekwood Dental Arts",industry:"Cosmetic Dentistry",country:"US",contact:"",title:"",website:"https://www.creekwooddentalarts.com",phone:"(972) 235-7100",linkedin:"",email:"",address:"Dallas, US"},
+  {id:166,company:"Dallas Laser Dentistry",industry:"Cosmetic Dentistry",country:"US",contact:"",title:"",website:"",phone:"(214) 369-6141",linkedin:"",email:"",address:"Dallas, US"},
+  {id:167,company:"Orthodontic Specialists of Phoenix",industry:"Orthodontics",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Phoenix, US"},
+  {id:168,company:"Smile Straight Orthodontics",industry:"Orthodontics",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Phoenix, US"},
+  {id:169,company:"Dental Studio 101",industry:"Orthodontics",country:"US",contact:"",title:"",website:"https://www.dentalstudio101.com",phone:"",linkedin:"",email:"",address:"Phoenix, US"},
+  {id:170,company:"Phoenix Orthodontic Group",industry:"Orthodontics",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Phoenix, US"},
+  {id:171,company:"Gorman & Blichar Orthodontics",industry:"Orthodontics",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Phoenix, US"},
+  {id:172,company:"Drs. Kacer, Kacer & Kacer Orthodontics",industry:"Orthodontics",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Phoenix, US"},
+  {id:173,company:"Camelback Orthodontics",industry:"Orthodontics",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Phoenix, US"},
+  {id:174,company:"Desert Orthodontics",industry:"Orthodontics",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Phoenix, US"},
+  {id:175,company:"Arizona Orthodontic Specialists",industry:"Orthodontics",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Phoenix, US"},
+  {id:176,company:"Affordable Orthodontics",industry:"Orthodontics",country:"US",contact:"",title:"",website:"",phone:"",linkedin:"",email:"",address:"Phoenix, US"}
 ];
 
 /* ─────────────── CONSTANTS ─────────────── */
 const KEY = 'leadTracker_v2';
 const FLAGS = {US:'🇺🇸',Australia:'🇦🇺',Canada:'🇨🇦',Philippines:'🇵🇭'};
-const IND_CLS = {'Dental':'tag-dental','MedSpa':'tag-medspa','Marketing Agency':'tag-agency','Real Estate Tech':'tag-realestate','Ecommerce / DTC':'tag-ecommerce'};
+const IND_CLS = {'Dental':'tag-dental','MedSpa':'tag-medspa','Marketing Agency':'tag-agency','Real Estate Tech':'tag-realestate','Ecommerce / DTC':'tag-ecommerce','Chiropractic':'tag-chiro','Wellness':'tag-wellness','Plastic Surgery':'tag-plastics','Cosmetic Dentistry':'tag-cosmeticdent','Orthodontics':'tag-ortho','Aesthetics':'tag-aesthetics'};
 const STATUS_CLS = {new:'s-new',contacted:'s-contacted',replied:'s-replied',notint:'s-notint'};
 
 /* ─────────────── STATE ─────────────── */
