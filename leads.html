@@ -546,6 +546,7 @@
         <th data-col="company">Company<span class="si">↕</span></th>
         <th data-col="industry">Industry<span class="si">↕</span></th>
         <th data-col="country">Country<span class="si">↕</span></th>
+        <th data-col="address">Address<span class="si">↕</span></th>
         <th data-col="contact">Contact Name<span class="si">↕</span></th>
         <th>Position</th>
         <th>Phone</th>
@@ -1036,6 +1037,7 @@ function render() {
       <td style="max-width:210px">${companyCellInner}</td>
       <td><span class="tag ${IND_CLS[l.industry]||'tag-agency'}">${l.industry}</span></td>
       <td><span class="flag">${FLAGS[l.country]||''}</span> <span style="font-size:11px;color:var(--muted2)">${l.country}</span></td>
+      <td style="max-width:180px;color:var(--muted2);font-size:11px" title="${esc(l.address)}">${l.address ? esc(l.address) : '<span class="no-data">—</span>'}</td>
       <td style="max-width:150px;color:var(--text)" title="${esc(l.contact)}">${l.contact ? esc(l.contact) : '<span class="no-data">—</span>'}</td>
       <td style="max-width:150px;color:var(--muted2);font-size:11px" title="${esc(l.title)}">${esc(l.title)}</td>
       <td><span class="phone-val">${l.phone || '<span class="no-data">—</span>'}</span></td>
