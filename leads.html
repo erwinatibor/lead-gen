@@ -433,6 +433,41 @@
   .bottom-line-text { font-size:12px; color:var(--muted2); line-height:1.7; }
   .bottom-line-text strong { color:var(--green); font-weight:600; }
 
+  /* ── OUTREACH TEMPLATES ──────────────────────────────── */
+  .outreach-section { margin:0; padding:24px 28px 22px; border-top:1px solid var(--border); }
+  .outreach-tabs { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:18px; }
+  .outreach-tab {
+    padding:5px 13px; border-radius:20px; border:1px solid var(--border2);
+    background:transparent; color:var(--muted2); font-family:'DM Mono',monospace;
+    font-size:11px; cursor:pointer; transition:all .15s;
+  }
+  .outreach-tab:hover { border-color:rgba(34,197,94,.5); color:var(--text); }
+  .outreach-tab.active { background:rgba(34,197,94,.12); border-color:var(--green); color:var(--green); }
+  .outreach-panel { display:none; }
+  .outreach-panel.active { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media(max-width:800px) { .outreach-panel.active { grid-template-columns:1fr; } }
+  .tmpl-card { background:#070b0e; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  .tmpl-card-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 16px; background:rgba(255,255,255,.025); border-bottom:1px solid var(--border);
+  }
+  .tmpl-card-label { font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--muted2); }
+  .tmpl-copy {
+    background:rgba(34,197,94,.1); border:1px solid rgba(34,197,94,.25); color:var(--green);
+    font-family:'DM Mono',monospace; font-size:10px; padding:3px 10px; border-radius:6px;
+    cursor:pointer; transition:all .15s;
+  }
+  .tmpl-copy:hover { background:rgba(34,197,94,.2); }
+  .tmpl-copy.copied { color:#4ade80; border-color:#4ade80; background:rgba(74,222,128,.1); }
+  .tmpl-subject { padding:12px 16px 0; }
+  .tmpl-subject-label { font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin-bottom:4px; }
+  .tmpl-subject-value { font-size:12px; color:var(--yellow); }
+  .tmpl-body {
+    padding:12px 16px 16px; font-size:11.5px; color:var(--muted2); line-height:1.85;
+    white-space:pre-wrap; font-family:'DM Mono',monospace;
+  }
+  .tmpl-ph { color:var(--yellow); }
+
   /* ── SCRAPER COMMAND BLOCK ──────────────────────────── */
   .scraper-wrap {
     max-width:1900px; margin:0 auto; padding:0 24px 60px;
@@ -816,6 +851,311 @@
           <strong>Bottom line:</strong> These are leads to <strong>sell your services to</strong>, not job boards. Dental/MedSpa/Real Estate = pitch as their ads manager. Agencies = offer white-label capacity. PH agencies = dual-purpose (white-label pitch <em>or</em> direct employment). Approach each lead with the right angle above and your conversion rate will be significantly higher.
         </div>
       </div>
+
+      <!-- OUTREACH TEMPLATES -->
+      <div class="outreach-section">
+        <div class="action-label" style="margin-bottom:10px;">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Outreach Templates — LinkedIn &amp; Email by Industry
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin:6px 0 16px;">Copy-ready intros. Replace <span style="color:var(--yellow)">[bracketed]</span> fields with actual contact details before sending.</p>
+
+        <div class="outreach-tabs">
+          <button class="outreach-tab active" data-ind="medspa"      onclick="switchOutreachTab('medspa')">💆 MedSpa</button>
+          <button class="outreach-tab"        data-ind="dental"      onclick="switchOutreachTab('dental')">🦷 Dental</button>
+          <button class="outreach-tab"        data-ind="agency"      onclick="switchOutreachTab('agency')">📊 Marketing Agency</button>
+          <button class="outreach-tab"        data-ind="wellness"    onclick="switchOutreachTab('wellness')">💚 Wellness</button>
+          <button class="outreach-tab"        data-ind="chiro"       onclick="switchOutreachTab('chiro')">🦴 Chiropractic</button>
+          <button class="outreach-tab"        data-ind="aesthetics"  onclick="switchOutreachTab('aesthetics')">✨ Aesthetics</button>
+          <button class="outreach-tab"        data-ind="plastic"     onclick="switchOutreachTab('plastic')">🔬 Plastic Surgery</button>
+          <button class="outreach-tab"        data-ind="ortho"       onclick="switchOutreachTab('ortho')">😁 Orthodontics</button>
+          <button class="outreach-tab"        data-ind="cosmdental"  onclick="switchOutreachTab('cosmdental')">💎 Cosmetic Dentistry</button>
+        </div>
+
+        <!-- MedSpa -->
+        <div class="outreach-panel active" data-ind="medspa">
+          <div class="tmpl-card" data-raw="Hi [Name], came across [Company] — your treatment menu looks genuinely high-end. I help med spas fill bookings for injectables and body contouring through paid ads without resorting to Groupon. Would love to connect.">
+            <div class="tmpl-card-header"><span class="tmpl-card-label">🔗 LinkedIn Connection Note</span><button class="tmpl-copy" onclick="copyTmpl(this)">Copy</button></div>
+            <div class="tmpl-body">Hi <span class="tmpl-ph">[Name]</span>, came across <span class="tmpl-ph">[Company]</span> — your treatment menu looks genuinely high-end. I help med spas fill bookings for injectables and body contouring through paid ads without resorting to Groupon. Would love to connect.</div>
+          </div>
+          <div class="tmpl-card" data-raw="Subject: More Botox + filler bookings at [Company]
+
+Hi [Name],
+
+Most med spas I speak with are either stuck on Groupon deals or running ads that bring in price-shoppers instead of loyal, high-ticket clients.
+
+I'm a paid media strategist who specializes in med spas — I build Facebook and Instagram campaigns focused specifically on filling injectables, laser, and body contouring slots.
+
+One client went from 14 to 52 new bookings/month in under 90 days with zero discounts.
+
+Worth a 15-minute call to see what's working in your market?
+
+[Your Name]">
+            <div class="tmpl-card-header"><span class="tmpl-card-label">📩 Cold Email</span><button class="tmpl-copy" onclick="copyTmpl(this)">Copy</button></div>
+            <div class="tmpl-subject"><div class="tmpl-subject-label">Subject</div><div class="tmpl-subject-value">More Botox + filler bookings at <span class="tmpl-ph">[Company]</span></div></div>
+            <div class="tmpl-body">Hi <span class="tmpl-ph">[Name]</span>,
+
+Most med spas I speak with are either stuck on Groupon deals or running ads that bring in price-shoppers instead of loyal, high-ticket clients.
+
+I'm a paid media strategist who specializes in med spas — I build Facebook and Instagram campaigns focused specifically on filling injectables, laser, and body contouring slots.
+
+One client went from 14 to 52 new bookings/month in under 90 days with zero discounts.
+
+Worth a 15-minute call to see what's working in your market?
+
+<span class="tmpl-ph">[Your Name]</span></div>
+          </div>
+        </div>
+
+        <!-- Dental -->
+        <div class="outreach-panel" data-ind="dental">
+          <div class="tmpl-card" data-raw="Hi [Name], noticed [Practice] — impressive cosmetic focus. I work with dental practices to bring in more high-value cases — veneers, implants, full smile makeovers — through targeted paid ads. Would love to connect.">
+            <div class="tmpl-card-header"><span class="tmpl-card-label">🔗 LinkedIn Connection Note</span><button class="tmpl-copy" onclick="copyTmpl(this)">Copy</button></div>
+            <div class="tmpl-body">Hi <span class="tmpl-ph">[Name]</span>, noticed <span class="tmpl-ph">[Practice]</span> — impressive cosmetic focus. I work with dental practices to bring in more high-value cases — veneers, implants, full smile makeovers — through targeted paid ads. Would love to connect.</div>
+          </div>
+          <div class="tmpl-card" data-raw="Subject: More cosmetic cases for [Practice]
+
+Hi [Name],
+
+Most dental practices I talk to are running ads that attract cleaning patients when what they really want are veneer and implant cases.
+
+I specialize in paid media for dental practices — campaigns built around patient intent, not just clicks. The result is inquiries that are already sold on cosmetic work before they walk in.
+
+Happy to share what's been converting for similar practices. Worth a quick chat?
+
+[Your Name]">
+            <div class="tmpl-card-header"><span class="tmpl-card-label">📩 Cold Email</span><button class="tmpl-copy" onclick="copyTmpl(this)">Copy</button></div>
+            <div class="tmpl-subject"><div class="tmpl-subject-label">Subject</div><div class="tmpl-subject-value">More cosmetic cases for <span class="tmpl-ph">[Practice]</span></div></div>
+            <div class="tmpl-body">Hi <span class="tmpl-ph">[Name]</span>,
+
+Most dental practices I talk to are running ads that attract cleaning patients when what they really want are veneer and implant cases.
+
+I specialize in paid media for dental practices — campaigns built around patient intent, not just clicks. The result is inquiries that are already sold on cosmetic work before they walk in.
+
+Happy to share what's been converting for similar practices. Worth a quick chat?
+
+<span class="tmpl-ph">[Your Name]</span></div>
+          </div>
+        </div>
+
+        <!-- Marketing Agency -->
+        <div class="outreach-panel" data-ind="agency">
+          <div class="tmpl-card" data-raw="Hi [Name], strong work coming out of [Agency]. I'm a paid media strategist focused on high-ticket service verticals — always open to connecting with sharp agency people, whether there's a collaboration angle or just a good conversation.">
+            <div class="tmpl-card-header"><span class="tmpl-card-label">🔗 LinkedIn Connection Note</span><button class="tmpl-copy" onclick="copyTmpl(this)">Copy</button></div>
+            <div class="tmpl-body">Hi <span class="tmpl-ph">[Name]</span>, strong work coming out of <span class="tmpl-ph">[Agency]</span>. I'm a paid media strategist focused on high-ticket service verticals — always open to connecting with sharp agency people, whether there's a collaboration angle or just a good conversation.</div>
+          </div>
+          <div class="tmpl-card" data-raw="Subject: Paid media partnership — [Agency]
+
+Hi [Name],
+
+Came across [Agency] and was genuinely impressed by [specific niche/work]. I'm a paid media strategist specializing in health, aesthetics, and high-ticket service businesses.
+
+A lot of agencies I connect with are either looking to white-label paid media for overflow clients or bring in a specialist for specific verticals. I'm open to exploring whether there's a fit either way.
+
+No pressure — happy to start with a 15-minute call if it makes sense.
+
+[Your Name]">
+            <div class="tmpl-card-header"><span class="tmpl-card-label">📩 Cold Email</span><button class="tmpl-copy" onclick="copyTmpl(this)">Copy</button></div>
+            <div class="tmpl-subject"><div class="tmpl-subject-label">Subject</div><div class="tmpl-subject-value">Paid media partnership — <span class="tmpl-ph">[Agency]</span></div></div>
+            <div class="tmpl-body">Hi <span class="tmpl-ph">[Name]</span>,
+
+Came across <span class="tmpl-ph">[Agency]</span> and was genuinely impressed by <span class="tmpl-ph">[specific niche/work]</span>. I'm a paid media strategist specializing in health, aesthetics, and high-ticket service businesses.
+
+A lot of agencies I connect with are either looking to white-label paid media for overflow clients or bring in a specialist for specific verticals. I'm open to exploring whether there's a fit either way.
+
+No pressure — happy to start with a 15-minute call if it makes sense.
+
+<span class="tmpl-ph">[Your Name]</span></div>
+          </div>
+        </div>
+
+        <!-- Wellness -->
+        <div class="outreach-panel" data-ind="wellness">
+          <div class="tmpl-card" data-raw="Hi [Name], came across [Company] — really aligned with the direction you're taking it. I help wellness brands fill memberships and high-ticket programs through paid social without the usual churn. Would love to connect.">
+            <div class="tmpl-card-header"><span class="tmpl-card-label">🔗 LinkedIn Connection Note</span><button class="tmpl-copy" onclick="copyTmpl(this)">Copy</button></div>
+            <div class="tmpl-body">Hi <span class="tmpl-ph">[Name]</span>, came across <span class="tmpl-ph">[Company]</span> — really aligned with the direction you're taking it. I help wellness brands fill memberships and high-ticket programs through paid social without the usual churn. Would love to connect.</div>
+          </div>
+          <div class="tmpl-card" data-raw="Subject: Growing [Company]'s membership through paid ads
+
+Hi [Name],
+
+Most wellness businesses I work with have a strong product but hit a ceiling past referrals. The issue is usually that paid ads are driving traffic, not qualified members.
+
+I build paid social campaigns specifically for wellness brands — focused on memberships, retreats, and programs for clients who are already primed to invest in themselves.
+
+Would it be useful to walk through what's converting right now in this space?
+
+[Your Name]">
+            <div class="tmpl-card-header"><span class="tmpl-card-label">📩 Cold Email</span><button class="tmpl-copy" onclick="copyTmpl(this)">Copy</button></div>
+            <div class="tmpl-subject"><div class="tmpl-subject-label">Subject</div><div class="tmpl-subject-value">Growing <span class="tmpl-ph">[Company]</span>'s membership through paid ads</div></div>
+            <div class="tmpl-body">Hi <span class="tmpl-ph">[Name]</span>,
+
+Most wellness businesses I work with have a strong product but hit a ceiling past referrals. The issue is usually that paid ads are driving traffic, not qualified members.
+
+I build paid social campaigns specifically for wellness brands — focused on memberships, retreats, and programs for clients who are already primed to invest in themselves.
+
+Would it be useful to walk through what's converting right now in this space?
+
+<span class="tmpl-ph">[Your Name]</span></div>
+          </div>
+        </div>
+
+        <!-- Chiropractic -->
+        <div class="outreach-panel" data-ind="chiro">
+          <div class="tmpl-card" data-raw="Hi [Name], noticed [Practice] in [City]. I help chiropractors attract consistent cash-pay and wellness-focused patients through paid ads — not just insurance cases. Would love to connect.">
+            <div class="tmpl-card-header"><span class="tmpl-card-label">🔗 LinkedIn Connection Note</span><button class="tmpl-copy" onclick="copyTmpl(this)">Copy</button></div>
+            <div class="tmpl-body">Hi <span class="tmpl-ph">[Name]</span>, noticed <span class="tmpl-ph">[Practice]</span> in <span class="tmpl-ph">[City]</span>. I help chiropractors attract consistent cash-pay and wellness-focused patients through paid ads — not just insurance cases. Would love to connect.</div>
+          </div>
+          <div class="tmpl-card" data-raw="Subject: More cash-pay patients for [Practice]
+
+Hi [Name],
+
+Most chiro practices I speak with are either dependent on referrals or running ads that pull in insurance-heavy patients with short visit windows.
+
+I specialize in paid media for chiropractors — campaigns that target cash-pay patients looking for long-term wellness care, not just a one-time adjustment.
+
+Open to a 15-minute call to see if it's a fit for [Practice]?
+
+[Your Name]">
+            <div class="tmpl-card-header"><span class="tmpl-card-label">📩 Cold Email</span><button class="tmpl-copy" onclick="copyTmpl(this)">Copy</button></div>
+            <div class="tmpl-subject"><div class="tmpl-subject-label">Subject</div><div class="tmpl-subject-value">More cash-pay patients for <span class="tmpl-ph">[Practice]</span></div></div>
+            <div class="tmpl-body">Hi <span class="tmpl-ph">[Name]</span>,
+
+Most chiro practices I speak with are either dependent on referrals or running ads that pull in insurance-heavy patients with short visit windows.
+
+I specialize in paid media for chiropractors — campaigns that target cash-pay patients looking for long-term wellness care, not just a one-time adjustment.
+
+Open to a 15-minute call to see if it's a fit for <span class="tmpl-ph">[Practice]</span>?
+
+<span class="tmpl-ph">[Your Name]</span></div>
+          </div>
+        </div>
+
+        <!-- Aesthetics -->
+        <div class="outreach-panel" data-ind="aesthetics">
+          <div class="tmpl-card" data-raw="Hi [Name], came across [Practice] — impressive range of treatments. I run paid media for aesthetic clinics and help fill high-ticket consultation slots through Facebook and Instagram. Would love to connect.">
+            <div class="tmpl-card-header"><span class="tmpl-card-label">🔗 LinkedIn Connection Note</span><button class="tmpl-copy" onclick="copyTmpl(this)">Copy</button></div>
+            <div class="tmpl-body">Hi <span class="tmpl-ph">[Name]</span>, came across <span class="tmpl-ph">[Practice]</span> — impressive range of treatments. I run paid media for aesthetic clinics and help fill high-ticket consultation slots through Facebook and Instagram. Would love to connect.</div>
+          </div>
+          <div class="tmpl-card" data-raw="Subject: Filling more consultations at [Practice]
+
+Hi [Name],
+
+Most aesthetic clinics I work with have great clinical outcomes but a leaky acquisition funnel — relying on word-of-mouth while their ad spend underperforms.
+
+I build paid media campaigns specifically for aesthetics — targeting patients with real buying intent for treatments like [relevant procedure], not just awareness traffic.
+
+Worth a 15-minute call to see what's working in your area?
+
+[Your Name]">
+            <div class="tmpl-card-header"><span class="tmpl-card-label">📩 Cold Email</span><button class="tmpl-copy" onclick="copyTmpl(this)">Copy</button></div>
+            <div class="tmpl-subject"><div class="tmpl-subject-label">Subject</div><div class="tmpl-subject-value">Filling more consultations at <span class="tmpl-ph">[Practice]</span></div></div>
+            <div class="tmpl-body">Hi <span class="tmpl-ph">[Name]</span>,
+
+Most aesthetic clinics I work with have great clinical outcomes but a leaky acquisition funnel — relying on word-of-mouth while their ad spend underperforms.
+
+I build paid media campaigns specifically for aesthetics — targeting patients with real buying intent for treatments like <span class="tmpl-ph">[relevant procedure]</span>, not just awareness traffic.
+
+Worth a 15-minute call to see what's working in your area?
+
+<span class="tmpl-ph">[Your Name]</span></div>
+          </div>
+        </div>
+
+        <!-- Plastic Surgery -->
+        <div class="outreach-panel" data-ind="plastic">
+          <div class="tmpl-card" data-raw="Hi [Name], noticed [Practice] — remarkable work. I help plastic surgery practices fill their consultation pipeline through multi-touch paid campaigns built around the longer patient decision cycle. Would love to connect.">
+            <div class="tmpl-card-header"><span class="tmpl-card-label">🔗 LinkedIn Connection Note</span><button class="tmpl-copy" onclick="copyTmpl(this)">Copy</button></div>
+            <div class="tmpl-body">Hi <span class="tmpl-ph">[Name]</span>, noticed <span class="tmpl-ph">[Practice]</span> — remarkable work. I help plastic surgery practices fill their consultation pipeline through multi-touch paid campaigns built around the longer patient decision cycle. Would love to connect.</div>
+          </div>
+          <div class="tmpl-card" data-raw="Subject: Consultation pipeline for [Practice]
+
+Hi [Name],
+
+Plastic surgery has one of the longest patient decision cycles in healthcare — most ad strategies fail because they optimize too early and lose people in the consideration phase.
+
+I specialize in paid media for plastic surgery — building campaigns that nurture prospects from first awareness through to booking, for procedures like rhinoplasty, BBL, and breast augmentation.
+
+Happy to walk you through the approach. 15 minutes this week?
+
+[Your Name]">
+            <div class="tmpl-card-header"><span class="tmpl-card-label">📩 Cold Email</span><button class="tmpl-copy" onclick="copyTmpl(this)">Copy</button></div>
+            <div class="tmpl-subject"><div class="tmpl-subject-label">Subject</div><div class="tmpl-subject-value">Consultation pipeline for <span class="tmpl-ph">[Practice]</span></div></div>
+            <div class="tmpl-body">Hi <span class="tmpl-ph">[Name]</span>,
+
+Plastic surgery has one of the longest patient decision cycles in healthcare — most ad strategies fail because they optimize too early and lose people in the consideration phase.
+
+I specialize in paid media for plastic surgery — building campaigns that nurture prospects from first awareness through to booking, for procedures like rhinoplasty, BBL, and breast augmentation.
+
+Happy to walk you through the approach. 15 minutes this week?
+
+<span class="tmpl-ph">[Your Name]</span></div>
+          </div>
+        </div>
+
+        <!-- Orthodontics -->
+        <div class="outreach-panel" data-ind="ortho">
+          <div class="tmpl-card" data-raw="Hi [Name], came across [Practice] — great setup. I help ortho practices increase Invisalign starts and new patient volume through paid ads targeting adult patients specifically. Would love to connect.">
+            <div class="tmpl-card-header"><span class="tmpl-card-label">🔗 LinkedIn Connection Note</span><button class="tmpl-copy" onclick="copyTmpl(this)">Copy</button></div>
+            <div class="tmpl-body">Hi <span class="tmpl-ph">[Name]</span>, came across <span class="tmpl-ph">[Practice]</span> — great setup. I help ortho practices increase Invisalign starts and new patient volume through paid ads targeting adult patients specifically. Would love to connect.</div>
+          </div>
+          <div class="tmpl-card" data-raw="Subject: More Invisalign starts for [Practice]
+
+Hi [Name],
+
+Most ortho practices are strong on family referrals but haven't cracked paid ads for adult Invisalign — where the patient is making a personal, self-motivated decision and responds very differently to messaging.
+
+I run paid social campaigns for orthodontic practices focused on adult Invisalign cases and family starts in your specific market.
+
+Would a 15-minute call make sense to see if there's a fit?
+
+[Your Name]">
+            <div class="tmpl-card-header"><span class="tmpl-card-label">📩 Cold Email</span><button class="tmpl-copy" onclick="copyTmpl(this)">Copy</button></div>
+            <div class="tmpl-subject"><div class="tmpl-subject-label">Subject</div><div class="tmpl-subject-value">More Invisalign starts for <span class="tmpl-ph">[Practice]</span></div></div>
+            <div class="tmpl-body">Hi <span class="tmpl-ph">[Name]</span>,
+
+Most ortho practices are strong on family referrals but haven't cracked paid ads for adult Invisalign — where the patient is making a personal, self-motivated decision and responds very differently to messaging.
+
+I run paid social campaigns for orthodontic practices focused on adult Invisalign cases and family starts in your specific market.
+
+Would a 15-minute call make sense to see if there's a fit?
+
+<span class="tmpl-ph">[Your Name]</span></div>
+          </div>
+        </div>
+
+        <!-- Cosmetic Dentistry -->
+        <div class="outreach-panel" data-ind="cosmdental">
+          <div class="tmpl-card" data-raw="Hi [Name], noticed [Practice] — the cosmetic work looks exceptional. I help cosmetic dentists fill their books with smile makeover consultations through paid ads that attract patients already sold on the investment. Would love to connect.">
+            <div class="tmpl-card-header"><span class="tmpl-card-label">🔗 LinkedIn Connection Note</span><button class="tmpl-copy" onclick="copyTmpl(this)">Copy</button></div>
+            <div class="tmpl-body">Hi <span class="tmpl-ph">[Name]</span>, noticed <span class="tmpl-ph">[Practice]</span> — the cosmetic work looks exceptional. I help cosmetic dentists fill their books with smile makeover consultations through paid ads that attract patients already sold on the investment. Would love to connect.</div>
+          </div>
+          <div class="tmpl-card" data-raw="Subject: More smile makeover consults at [Practice]
+
+Hi [Name],
+
+Cosmetic dentistry is high-ticket — which means every patient acquisition dollar needs to reach the right person. Most practices I work with were getting leads that couldn't afford the treatment, or ads optimized for volume instead of case value.
+
+I build paid media campaigns specifically for cosmetic dentists — targeting patients with genuine intent for veneers, implants, and full smile makeovers.
+
+Worth a quick call to see what's working in your market right now?
+
+[Your Name]">
+            <div class="tmpl-card-header"><span class="tmpl-card-label">📩 Cold Email</span><button class="tmpl-copy" onclick="copyTmpl(this)">Copy</button></div>
+            <div class="tmpl-subject"><div class="tmpl-subject-label">Subject</div><div class="tmpl-subject-value">More smile makeover consults at <span class="tmpl-ph">[Practice]</span></div></div>
+            <div class="tmpl-body">Hi <span class="tmpl-ph">[Name]</span>,
+
+Cosmetic dentistry is high-ticket — which means every patient acquisition dollar needs to reach the right person. Most practices I work with were getting leads that couldn't afford the treatment, or ads optimized for volume instead of case value.
+
+I build paid media campaigns specifically for cosmetic dentists — targeting patients with genuine intent for veneers, implants, and full smile makeovers.
+
+Worth a quick call to see what's working in your market right now?
+
+<span class="tmpl-ph">[Your Name]</span></div>
+          </div>
+        </div>
+
+      </div><!-- /.outreach-section -->
 
     </div><!-- /#noticeBody -->
   </div><!-- /.notice-banner -->
@@ -1345,6 +1685,20 @@ function showToast(msg) {
   t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ─────────────── OUTREACH TEMPLATES ─────────────── */
+function switchOutreachTab(ind) {
+  document.querySelectorAll('.outreach-tab').forEach(t => t.classList.toggle('active', t.dataset.ind === ind));
+  document.querySelectorAll('.outreach-panel').forEach(p => p.classList.toggle('active', p.dataset.ind === ind));
+}
+function copyTmpl(btn) {
+  const raw = btn.closest('.tmpl-card').dataset.raw;
+  navigator.clipboard.writeText(raw).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => showToast('Copy failed — select manually'));
 }
 
 /* ─────────────── NOTICE TOGGLE ─────────────── */
