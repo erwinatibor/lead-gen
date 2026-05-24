@@ -432,6 +432,123 @@
 
   .bottom-line-text { font-size:12px; color:var(--muted2); line-height:1.7; }
   .bottom-line-text strong { color:var(--green); font-weight:600; }
+
+  /* ── SCRAPER COMMAND BLOCK ──────────────────────────── */
+  .scraper-wrap {
+    max-width:1900px; margin:0 auto; padding:0 24px 60px;
+  }
+
+  .scraper-panel {
+    border:1.5px solid rgba(34,197,94,.35);
+    border-radius:16px;
+    background:linear-gradient(135deg,rgba(34,197,94,.06) 0%,rgba(16,185,129,.03) 100%);
+    overflow:hidden;
+    animation:fadeUp .5s ease .15s both;
+  }
+
+  .scraper-header {
+    display:flex; align-items:center; gap:14px;
+    padding:20px 28px;
+    border-bottom:1px solid rgba(34,197,94,.2);
+    background:rgba(34,197,94,.05);
+  }
+
+  .scraper-header-icon {
+    width:38px; height:38px; border-radius:10px;
+    background:rgba(34,197,94,.15); border:1px solid rgba(34,197,94,.35);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; font-size:18px;
+  }
+
+  .scraper-header-text { flex:1; }
+
+  .scraper-eyebrow {
+    font-family:'Syne',sans-serif; font-size:9px; font-weight:700;
+    text-transform:uppercase; letter-spacing:.18em; color:var(--green);
+    margin-bottom:3px;
+  }
+
+  .scraper-title {
+    font-family:'Syne',sans-serif; font-size:16px; font-weight:800;
+    color:#d1fae5; letter-spacing:.01em;
+  }
+
+  .scraper-subtitle {
+    font-size:11px; color:var(--muted2); margin-top:2px;
+  }
+
+  .scraper-body { padding:28px; }
+
+  .terminal-window {
+    background:#060a0d;
+    border:1px solid rgba(34,197,94,.2);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 0 40px rgba(34,197,94,.05);
+  }
+
+  .terminal-bar {
+    display:flex; align-items:center; gap:7px;
+    padding:11px 16px;
+    background:#0d1117;
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+
+  .t-dot {
+    width:11px; height:11px; border-radius:50%;
+  }
+  .t-dot.red   { background:#ff5f57; }
+  .t-dot.amber { background:#febc2e; }
+  .t-dot.green { background:#28c840; }
+
+  .terminal-bar-label {
+    flex:1; text-align:center;
+    font-size:11px; color:var(--muted2); letter-spacing:.04em;
+  }
+
+  .copy-btn {
+    background:rgba(34,197,94,.12);
+    border:1px solid rgba(34,197,94,.3);
+    color:var(--green);
+    font-family:'DM Mono',monospace;
+    font-size:10px; font-weight:600;
+    letter-spacing:.06em; text-transform:uppercase;
+    padding:4px 12px; border-radius:6px;
+    cursor:pointer; transition:background .2s, border-color .2s;
+    white-space:nowrap;
+  }
+  .copy-btn:hover { background:rgba(34,197,94,.22); border-color:rgba(34,197,94,.55); }
+  .copy-btn.copied { background:rgba(34,197,94,.3); color:#d1fae5; }
+
+  .terminal-code {
+    padding:24px 28px;
+    overflow-x:auto;
+    font-family:'DM Mono',monospace;
+    font-size:12.5px;
+    line-height:1.9;
+    white-space:pre;
+    color:#8b949e;
+  }
+
+  .t-cmd    { color:#79c0ff; }
+  .t-flag   { color:#d2a8ff; }
+  .t-eq     { color:#8b949e; }
+  .t-str    { color:#f59e0b; }
+  .t-bool   { color:#56d364; }
+  .t-cont   { color:rgba(139,148,158,.5); }
+
+  .scraper-note {
+    margin-top:18px;
+    padding:14px 18px;
+    border-radius:10px;
+    background:rgba(99,102,241,.07);
+    border:1px solid rgba(99,102,241,.22);
+    font-size:11px;
+    color:var(--muted2);
+    line-height:1.7;
+  }
+
+  .scraper-note strong { color:#a5b4fc; font-weight:600; }
 </style>
 </head>
 <body>
@@ -703,6 +820,49 @@
     </div><!-- /#noticeBody -->
   </div><!-- /.notice-banner -->
 </div><!-- /.notice-wrap -->
+
+<!-- SCRAPER COMMAND BLOCK -->
+<div class="scraper-wrap">
+  <div class="scraper-panel">
+
+    <div class="scraper-header">
+      <div class="scraper-header-icon">⚡</div>
+      <div class="scraper-header-text">
+        <div class="scraper-eyebrow">Advanced · Claude Code CLI</div>
+        <div class="scraper-title">CLAUDE CODE SCRAPER COMMAND</div>
+        <div class="scraper-subtitle">Run this in your terminal to auto-scrape, verify, and export fresh leads to a JSON file</div>
+      </div>
+    </div>
+
+    <div class="scraper-body">
+      <div class="terminal-window">
+        <div class="terminal-bar">
+          <span class="t-dot red"></span>
+          <span class="t-dot amber"></span>
+          <span class="t-dot green"></span>
+          <span class="terminal-bar-label">claude-code — bash</span>
+          <button class="copy-btn" id="copyBtn" onclick="copyCommand()">Copy</button>
+        </div>
+        <div class="terminal-code" id="terminalCode"><span class="t-cmd">/search_leads</span> <span class="t-cont">\</span>
+  <span class="t-flag">--niche</span><span class="t-eq">=</span><span class="t-str">"Dental,MedSpa,Plastic Surgery,Cosmetic Dentistry"</span> <span class="t-cont">\</span>
+  <span class="t-flag">--locations</span><span class="t-eq">=</span><span class="t-str">"United States,Canada,Australia"</span> <span class="t-cont">\</span>
+  <span class="t-flag">--hiring_keywords</span><span class="t-eq">=</span><span class="t-str">"media buyer,facebook ads,google ads,ppc,digital marketing,growth marketer"</span> <span class="t-cont">\</span>
+  <span class="t-flag">--posted_within</span><span class="t-eq">=</span><span class="t-str">"7d"</span> <span class="t-cont">\</span>
+  <span class="t-flag">--sources</span><span class="t-eq">=</span><span class="t-str">"linkedin,indeed,glassdoor,company_sites,google_maps"</span> <span class="t-cont">\</span>
+  <span class="t-flag">--filters</span><span class="t-eq">=</span><span class="t-str">"high_ticket,multi_location,modern_website,online_booking"</span> <span class="t-cont">\</span>
+  <span class="t-flag">--extract</span><span class="t-eq">=</span><span class="t-str">"company_name,contact_name,position,email,phone,linkedin,website,address,hiring_role,job_date"</span> <span class="t-cont">\</span>
+  <span class="t-flag">--verify_emails</span><span class="t-eq">=</span><span class="t-bool">true</span> <span class="t-cont">\</span>
+  <span class="t-flag">--deduplicate</span><span class="t-eq">=</span><span class="t-bool">true</span> <span class="t-cont">\</span>
+  <span class="t-flag">--output</span><span class="t-eq">=</span><span class="t-str">"lead_tracker.json"</span></div>
+      </div>
+
+      <div class="scraper-note">
+        <strong>How to use:</strong> Open Claude Code in your terminal and paste this command. It will scrape LinkedIn, Indeed, Glassdoor, company sites, and Google Maps for businesses actively hiring paid media roles — a strong signal they're ready to spend on ads management. Results are deduplicated, email-verified, and exported to <strong>lead_tracker.json</strong> for import into this tracker.
+      </div>
+    </div>
+
+  </div>
+</div><!-- /.scraper-wrap -->
 
 <div id="toast"></div>
 
@@ -1200,6 +1360,17 @@ function toggleNotice() {
 loadState();
 render();
 showSaved();
+
+/* ─────────────── COPY COMMAND ─────────────── */
+function copyCommand() {
+  const raw = `/search_leads \\\n  --niche="Dental,MedSpa,Plastic Surgery,Cosmetic Dentistry" \\\n  --locations="United States,Canada,Australia" \\\n  --hiring_keywords="media buyer,facebook ads,google ads,ppc,digital marketing,growth marketer" \\\n  --posted_within="7d" \\\n  --sources="linkedin,indeed,glassdoor,company_sites,google_maps" \\\n  --filters="high_ticket,multi_location,modern_website,online_booking" \\\n  --extract="company_name,contact_name,position,email,phone,linkedin,website,address,hiring_role,job_date" \\\n  --verify_emails=true \\\n  --deduplicate=true \\\n  --output="lead_tracker.json"`;
+  navigator.clipboard.writeText(raw).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => showToast('Copy failed — select manually'));
+}
 </script>
 </body>
 </html>
