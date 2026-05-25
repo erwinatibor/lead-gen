@@ -757,24 +757,9 @@
   .intel-row-count { font-size:11px; font-weight:600; color:var(--text); font-family:'JetBrains Mono',monospace; width:26px; text-align:right; flex-shrink:0; }
 
   /* ── OUTREACH VIEW ── */
-  .ov-body { padding:18px 24px 24px; display:flex; flex-direction:column; gap:18px; flex:1; }
-  .ov-tabs { display:flex; gap:6px; flex-wrap:wrap; }
-  .ov-tab { height:28px; padding:0 12px; border-radius:6px; font-size:11px; font-family:'JetBrains Mono',monospace; cursor:pointer; border:1px solid var(--border2); background:rgba(255,255,255,.04); color:var(--muted); transition:all .15s; }
-  .ov-tab:hover { color:var(--text2); background:rgba(255,255,255,.07); }
-  .ov-tab.active { background:rgba(0,255,174,.1); border-color:rgba(0,255,174,.28); color:var(--green); }
-  .ov-panels { display:flex; flex-direction:column; gap:10px; }
-  .ov-panel { display:none; }
-  .ov-panel.active { display:flex; flex-direction:column; gap:10px; }
-  .ov-card { background:var(--surface); border:1px solid var(--border); border-radius:11px; padding:16px; max-width:700px; }
-  .ov-card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
-  .ov-card-label { font-size:10px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; font-family:'JetBrains Mono',monospace; }
-  .ov-card-copy { height:24px; padding:0 10px; border-radius:5px; font-size:10px; font-family:'JetBrains Mono',monospace; border:1px solid var(--border2); background:rgba(255,255,255,.04); color:var(--muted); cursor:pointer; transition:all .15s; }
-  .ov-card-copy:hover { color:var(--green); border-color:rgba(0,255,174,.3); }
-  .ov-card-copy.copied { color:var(--green); border-color:rgba(0,255,174,.4); }
-  .ov-subject { display:flex; align-items:baseline; gap:8px; background:rgba(245,158,11,.07); border:1px solid rgba(245,158,11,.15); border-radius:6px; padding:7px 10px; margin-bottom:8px; }
-  .ov-subject-label { font-size:8.5px; text-transform:uppercase; letter-spacing:.12em; color:var(--yellow); font-family:'JetBrains Mono',monospace; flex-shrink:0; }
-  .ov-subject-val { font-size:11.5px; color:var(--text2); }
-  .ov-body-text { font-size:11.5px; color:var(--text2); line-height:1.65; white-space:pre-wrap; font-family:'JetBrains Mono',monospace; }
+  .ov-gen-body { padding:28px 24px; display:flex; justify-content:center; overflow-y:auto; flex:1; }
+  .ov-gen-card { width:100%; max-width:560px; display:flex; flex-direction:column; gap:14px; }
+  .gen-row-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
 
   /* ── AUTOMATIONS VIEW ── */
   .auto-body { padding:18px 24px 24px; }
@@ -1545,82 +1530,6 @@ ianentila27@gmail.com</div>
         </div><!-- /.table-inner-wrap -->
       </div><!-- /.table-section -->
 
-      <!-- RIGHT PANEL: OUTREACH GENERATOR -->
-      <div class="right-panel">
-        <div class="rp-header">
-          <div class="rp-title">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-            </svg>
-            Outreach Generator
-          </div>
-          <button class="rp-icon-btn" title="Collapse">
-            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-          </button>
-        </div>
-        <div class="rp-body">
-
-          <div class="gen-field">
-            <label class="gen-label">Target Company</label>
-            <input class="gen-input" type="text" id="genCompany" placeholder="e.g. Smile LA Dental">
-          </div>
-
-          <div class="gen-field">
-            <label class="gen-label">Contact Name</label>
-            <input class="gen-input" type="text" id="genContact" placeholder="e.g. Dr. Kourosh">
-          </div>
-
-          <div class="gen-field">
-            <label class="gen-label">Industry</label>
-            <select class="gen-select" id="genIndustry">
-              <option value="">Select Industry…</option>
-              <option value="MedSpa">MedSpa</option>
-              <option value="Dental">Dental</option>
-              <option value="Marketing Agency">Marketing Agency</option>
-              <option value="Wellness">Wellness</option>
-              <option value="Chiropractic">Chiropractic</option>
-              <option value="Aesthetics">Aesthetics</option>
-              <option value="Plastic Surgery">Plastic Surgery</option>
-              <option value="Orthodontics">Orthodontics</option>
-              <option value="Cosmetic Dentistry">Cosmetic Dentistry</option>
-            </select>
-          </div>
-
-          <div class="gen-field">
-            <label class="gen-label">Channel</label>
-            <select class="gen-select" id="genChannel" onchange="updateChannelUI()">
-              <option value="li-note">LinkedIn Connection Note</option>
-              <option value="li-dm">LinkedIn DM</option>
-              <option value="email">Cold Email</option>
-            </select>
-          </div>
-
-          <div class="gen-row">
-            <div class="gen-field">
-              <label class="gen-label">Sender</label>
-              <select class="gen-select" id="genSender">
-                <option value="ian">Ian (Direct)</option>
-                <option value="junnel">Junnel (Proxy)</option>
-              </select>
-            </div>
-            <div class="gen-field">
-              <label class="gen-label">City</label>
-              <input class="gen-input" type="text" id="genCity" placeholder="e.g. Miami, FL">
-            </div>
-          </div>
-
-          <div class="gen-field">
-            <label class="gen-label">Extra Context <span style="color:var(--muted2);font-weight:400;font-size:9px;text-transform:none;letter-spacing:0">(optional)</span></label>
-            <textarea class="gen-input gen-textarea" id="genContext" placeholder="Personalization notes…" rows="2"></textarea>
-          </div>
-
-          <button class="btn-generate" onclick="generateOutreach()">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            Generate Message
-          </button>
-
-        </div>
-      </div><!-- /.right-panel -->
 
     </div><!-- /.workspace -->
 
@@ -1679,12 +1588,71 @@ ianentila27@gmail.com</div>
     <!-- ── OUTREACH VIEW ── -->
     <div class="view-panel" data-view="outreach" id="viewOutreach">
       <div class="view-header">
-        <div class="view-header-title">Outreach</div>
-        <div class="view-header-sub">Copy-ready templates by industry — replace [bracketed] fields before sending</div>
+        <div class="view-header-title">Outreach Generator</div>
+        <div class="view-header-sub">Fill in the fields and generate a personalized outreach message</div>
       </div>
-      <div class="ov-body">
-        <div class="ov-tabs" id="ovTabs"></div>
-        <div class="ov-panels" id="ovPanels"></div>
+      <div class="ov-gen-body">
+        <div class="ov-gen-card">
+
+          <div class="gen-field">
+            <label class="gen-label">Target Company</label>
+            <input class="gen-input" type="text" id="genCompany" placeholder="e.g. Smile LA Dental">
+          </div>
+
+          <div class="gen-field">
+            <label class="gen-label">Contact Name</label>
+            <input class="gen-input" type="text" id="genContact" placeholder="e.g. Dr. Kourosh">
+          </div>
+
+          <div class="gen-row-3">
+            <div class="gen-field">
+              <label class="gen-label">Industry</label>
+              <select class="gen-select" id="genIndustry">
+                <option value="">Select Industry…</option>
+                <option value="MedSpa">MedSpa</option>
+                <option value="Dental">Dental</option>
+                <option value="Marketing Agency">Marketing Agency</option>
+                <option value="Wellness">Wellness</option>
+                <option value="Chiropractic">Chiropractic</option>
+                <option value="Aesthetics">Aesthetics</option>
+                <option value="Plastic Surgery">Plastic Surgery</option>
+                <option value="Orthodontics">Orthodontics</option>
+                <option value="Cosmetic Dentistry">Cosmetic Dentistry</option>
+              </select>
+            </div>
+            <div class="gen-field">
+              <label class="gen-label">Channel</label>
+              <select class="gen-select" id="genChannel" onchange="updateChannelUI()">
+                <option value="li-note">LinkedIn Note</option>
+                <option value="li-dm">LinkedIn DM</option>
+                <option value="email">Cold Email</option>
+              </select>
+            </div>
+            <div class="gen-field">
+              <label class="gen-label">Sender</label>
+              <select class="gen-select" id="genSender">
+                <option value="ian">Ian (Direct)</option>
+                <option value="junnel">Junnel (Proxy)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="gen-field">
+            <label class="gen-label">City <span style="color:var(--muted2);font-weight:400;font-size:9px;text-transform:none;letter-spacing:0">(optional)</span></label>
+            <input class="gen-input" type="text" id="genCity" placeholder="e.g. Miami, FL">
+          </div>
+
+          <div class="gen-field">
+            <label class="gen-label">Extra Context <span style="color:var(--muted2);font-weight:400;font-size:9px;text-transform:none;letter-spacing:0">(optional)</span></label>
+            <textarea class="gen-input gen-textarea" id="genContext" placeholder="Personalization notes…" rows="3"></textarea>
+          </div>
+
+          <button class="btn-generate" onclick="generateOutreach()">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Generate Message
+          </button>
+
+        </div>
       </div>
     </div><!-- /.viewOutreach -->
 
@@ -2512,7 +2480,6 @@ function switchView(view) {
     n.classList.toggle('active', n.dataset.view === view)
   );
   if (view === 'intelligence') renderIntelligence();
-  if (view === 'outreach') renderOutreachView();
 }
 
 /* ─────────────── INTELLIGENCE ─────────────── */
@@ -2558,97 +2525,6 @@ function renderIntelligence() {
   document.getElementById('settingsTotal').textContent = total;
 }
 
-/* ─────────────── OUTREACH TEMPLATE VIEW ─────────────── */
-const OV_TMPLS = [
-  { key:'medspa', label:'💆 MedSpa',
-    li: "Hi [Name], I'm Ian — COO at AGLA Media. We run Meta + TikTok ads for med spas, averaging 3x–5x ROAS on injectables and body contouring. Saw [Company] and thought there might be a fit. Worth connecting?",
-    emailSubject: "[Company] — paid ads for injectables and body contouring",
-    email: "Hi [Name],\n\nI'm Ian, COO & Head of Media Buyers at AGLA Media. We build Meta and TikTok campaigns for med spas — focused on filling injectable, laser, and body contouring slots.\n\nOur clients consistently hit 3x–5x ROAS. We don't use Groupon plays or discount funnels — just campaigns built around the value of what you offer.\n\nWorth a 15-minute call to see if there's a fit?\n\nIan Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com" },
-  { key:'dental', label:'🦷 Dental',
-    li: "Hi [Name], I'm Ian — COO at AGLA Media. We run paid ads for dental practices targeting cosmetic cases — veneers, implants, smile makeovers. Averaging 3x–5x ROAS. Saw [Practice], think there's a fit. Worth connecting?",
-    emailSubject: "More cosmetic case bookings for [Practice]",
-    email: "Hi [Name],\n\nI'm Ian, COO & Head of Media Buyers at AGLA Media. We run Meta and Google campaigns for dental practices — targeting patients with intent for veneers, implants, and full-arch cases. Not cleaning inquiries.\n\nOur clients average 3x–5x ROAS. Happy to walk you through what's converting in your market.\n\nWorth a 15-minute call?\n\nIan Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com" },
-  { key:'agency', label:'📊 Agency',
-    li: "Hi [Name], I'm Ian — COO at AGLA Media. 5+ years across Meta, TikTok, and Google, averaging 3x–5x ROAS. Open to connecting with agency operators — whether there's a white-label angle or just a good conversation.",
-    emailSubject: "White-label media buying — [Agency]",
-    email: "Hi [Name],\n\nI'm Ian, COO & Head of Media Buyers at AGLA Media. I built our media buying department from scratch and we consistently hit 3x–5x ROAS across Meta, TikTok, and Google.\n\nA number of agencies bring us in to handle overflow or niche verticals under their brand. If that's ever useful for [Agency], happy to explore it.\n\n15 minutes this week?\n\nIan Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com" },
-  { key:'wellness', label:'💚 Wellness',
-    li: "Hi [Name], I'm Ian — COO at AGLA Media. We run Meta + TikTok campaigns for wellness brands filling memberships and high-ticket programs, averaging 3x–5x ROAS. Saw [Company], think there's a fit. Worth connecting?",
-    emailSubject: "[Company] — paid ads for memberships and programs",
-    email: "Hi [Name],\n\nI'm Ian, COO & Head of Media Buyers at AGLA Media. We build Meta and TikTok campaigns for wellness brands — focused on filling memberships, retreats, and high-ticket programs with qualified buyers.\n\nOur clients average 3x–5x ROAS. The difference is targeting people already inclined to invest, not just general interest traffic.\n\nWorth a 15-minute call to see what's working right now?\n\nIan Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com" },
-  { key:'chiro', label:'🦴 Chiro',
-    li: "Hi [Name], I'm Ian — COO at AGLA Media. We run paid ads for chiro practices targeting cash-pay and long-term wellness patients, not just insurance cases. Averaging 3x–5x ROAS. Think there's a fit with [Practice]. Worth connecting?",
-    emailSubject: "More cash-pay patients for [Practice]",
-    email: "Hi [Name],\n\nI'm Ian, COO & Head of Media Buyers at AGLA Media. We run Meta and Google campaigns for chiropractic practices — targeting cash-pay and long-term wellness patients, not insurance-driven volume.\n\nOur clients average 3x–5x ROAS.\n\nWorth a 15-minute call?\n\nIan Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com" },
-  { key:'aesthetics', label:'✨ Aesthetics',
-    li: "Hi [Name], I'm Ian — COO at AGLA Media. We run Meta + TikTok campaigns for aesthetics practices targeting high-intent procedure inquiries, not just awareness traffic. Averaging 3x–5x ROAS. Saw [Company], think there's a fit. Worth connecting?",
-    emailSubject: "Filling more consultations at [Company]",
-    email: "Hi [Name],\n\nI'm Ian, COO & Head of Media Buyers at AGLA Media. We run Meta and TikTok campaigns for aesthetics practices — targeting patients with real buying intent for procedures, not awareness-only traffic.\n\nOur clients average 3x–5x ROAS.\n\nWorth a 15-minute call to see what's converting in your market?\n\nIan Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com" },
-  { key:'plastic', label:'🔬 Plastic Surgery',
-    li: "Hi [Name], I'm Ian — COO at AGLA Media. We run Meta + Google campaigns for plastic surgery practices built around the full patient decision cycle — not early-funnel optimization. Averaging 3x–5x ROAS. Saw [Company], worth connecting?",
-    emailSubject: "Consultation pipeline for [Company]",
-    email: "Hi [Name],\n\nI'm Ian, COO & Head of Media Buyers at AGLA Media. We run multi-touch Meta and Google campaigns for plastic surgery practices — structured around the full patient decision cycle, not early-funnel optimizations that waste budget.\n\nOur clients average 3x–5x ROAS.\n\nWorth a 15-minute call?\n\nIan Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com" },
-  { key:'ortho', label:'😁 Orthodontics',
-    li: "Hi [Name], I'm Ian — COO at AGLA Media. We run Meta + TikTok ads for ortho practices targeting adult Invisalign starts and new family cases. Averaging 3x–5x ROAS. Saw [Practice], think there's a fit. Worth connecting?",
-    emailSubject: "More Invisalign starts for [Practice]",
-    email: "Hi [Name],\n\nI'm Ian, COO & Head of Media Buyers at AGLA Media. We run Meta and TikTok campaigns for orthodontic practices — targeting adult Invisalign starts and new family cases, not just general awareness.\n\nOur clients average 3x–5x ROAS.\n\nWorth a 15-minute call?\n\nIan Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com" },
-  { key:'cosmdental', label:'💎 Cosmetic Dental',
-    li: "Hi [Name], I'm Ian — COO at AGLA Media. We run Meta + Google ads for cosmetic dentistry targeting patients with real intent for veneers, implants, and smile makeovers. Averaging 3x–5x ROAS. Saw [Practice], think there's a fit. Worth connecting?",
-    emailSubject: "More smile makeover consults at [Practice]",
-    email: "Hi [Name],\n\nI'm Ian, COO & Head of Media Buyers at AGLA Media. We run Meta and Google campaigns for cosmetic dental practices — targeting patients with intent for veneers, implants, and smile makeovers. Not volume-optimized traffic that can't afford the work.\n\nOur clients average 3x–5x ROAS.\n\nWorth a 15-minute call?\n\nIan Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com" }
-];
-
-let ovRendered = false;
-function renderOutreachView() {
-  if (ovRendered) return;
-  ovRendered = true;
-
-  const tabsEl   = document.getElementById('ovTabs');
-  const panelsEl = document.getElementById('ovPanels');
-
-  tabsEl.innerHTML = OV_TMPLS.map((t, i) =>
-    `<button class="ov-tab${i===0?' active':''}" data-ovkey="${t.key}" onclick="switchOvTab('${t.key}')">${t.label}</button>`
-  ).join('');
-
-  panelsEl.innerHTML = OV_TMPLS.map((t, i) => `
-    <div class="ov-panel${i===0?' active':''}" data-ovpanel="${t.key}">
-      <div class="ov-card">
-        <div class="ov-card-header">
-          <span class="ov-card-label">🔗 LinkedIn Connection Note</span>
-          <button class="ov-card-copy" onclick="ovCopy(this,'${escQ(t.li)}')">Copy</button>
-        </div>
-        <div class="ov-body-text">${escH(t.li)}</div>
-      </div>
-      <div class="ov-card">
-        <div class="ov-card-header">
-          <span class="ov-card-label">📩 Cold Email</span>
-          <button class="ov-card-copy" onclick="ovCopy(this,'${escQ('Subject: ' + t.emailSubject + '\n\n' + t.email)}')">Copy</button>
-        </div>
-        <div class="ov-subject">
-          <span class="ov-subject-label">Subject</span>
-          <span class="ov-subject-val">${escH(t.emailSubject)}</span>
-        </div>
-        <div class="ov-body-text">${escH(t.email)}</div>
-      </div>
-    </div>`
-  ).join('');
-}
-
-function switchOvTab(key) {
-  document.querySelectorAll('.ov-tab').forEach(t => t.classList.toggle('active', t.dataset.ovkey === key));
-  document.querySelectorAll('.ov-panel').forEach(p => p.classList.toggle('active', p.dataset.ovpanel === key));
-}
-
-function ovCopy(btn, text) {
-  navigator.clipboard.writeText(text).then(() => {
-    btn.textContent = 'Copied!';
-    btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
-  }).catch(() => showToast('Copy failed — select manually'));
-}
-
-function escH(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function escQ(s) { return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\r?\n/g,'\\n'); }
 
 /* ─────────────── COPY COMMAND ─────────────── */
 function copyCommand() {
