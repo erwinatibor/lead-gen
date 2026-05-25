@@ -831,6 +831,17 @@
   .stb-swatch.t-white   { background:#e8e2d8; border-color:#b8b2a8; }
   .stb-swatch.t-black   { background:#181818; border-color:#3c3c3c; }
 
+  /* ── COMPANY FILL-GEN BUTTON ── */
+  .co-fill-btn {
+    display:none; align-items:center; justify-content:center;
+    background:none; border:1px solid rgba(0,255,174,.3); border-radius:4px;
+    color:var(--green); cursor:pointer; padding:2px 5px; font-size:9px;
+    font-family:'JetBrains Mono',monospace; white-space:nowrap;
+    margin-left:6px; flex-shrink:0; transition:all .15s;
+  }
+  .co-fill-btn:hover { background:var(--green); color:#000; }
+  tr:hover .co-fill-btn { display:inline-flex; }
+
   @media(max-width:768px) {
     body { overflow:auto; }
     .app-wrapper { flex-direction:column; height:auto; }
@@ -843,6 +854,13 @@
     .table-section { overflow:visible; height:auto; }
     .table-inner-wrap { overflow-x:auto; }
     .right-panel { width:100%; border-left:none; border-top:1px solid var(--border); height:auto; }
+    .view-panel.active { flex:none; overflow-y:visible; }
+    .gen-row-3 { grid-template-columns:1fr; }
+    .ov-gen-body { padding:16px 16px 0; }
+    .premade-section { padding:0 16px 32px; }
+    .pm-cards { grid-template-columns:1fr; }
+    .intel-member-grid { grid-template-columns:repeat(2,1fr); }
+    .co-fill-btn { display:inline-flex; }
   }
 </style>
 </head>
@@ -2220,7 +2238,7 @@ function render() {
 
     tr.innerHTML = `
       <td class="td-num">${l.id}</td>
-      <td class="td-company"><div class="company-cell"><div class="co-avatar ${avatarClass}">${initials}</div>${companyCellInner}</div></td>
+      <td class="td-company"><div class="company-cell"><div class="co-avatar ${avatarClass}">${initials}</div>${companyCellInner}<button class="co-fill-btn" data-action="fill-gen" data-id="${k}" title="Load in Outreach Generator">→ Gen</button></div></td>
       <td><span class="tag ${IND_CLS[l.industry]||'tag-agency'}">${l.industry}</span></td>
       <td><span class="flag">${FLAGS[l.country]||''}</span> <span style="font-size:11px;color:var(--muted2)">${l.country}</span></td>
       <td style="max-width:180px;color:var(--muted2);font-size:11px" title="${esc(l.address)}">${l.address ? esc(l.address) : '<span class="no-data">—</span>'}</td>
@@ -2277,7 +2295,19 @@ function esc(str) {
 
 /* ─────────────── ROW EXPAND ON CLICK ─────────────── */
 document.getElementById('tbody').addEventListener('click', e => {
-  // ignore clicks on interactive controls
+  // fill-gen button: load company into Outreach Generator
+  const fillBtn = e.target.closest('[data-action="fill-gen"]');
+  if (fillBtn) {
+    const lead = LEADS.find(l => String(l.id) === fillBtn.dataset.id);
+    if (!lead) return;
+    switchView('outreach');
+    const genCo = document.getElementById('genCompany');
+    genCo.value = lead.company;
+    autofillFromLead(lead.company);
+    showToast('Loaded in generator ✓');
+    return;
+  }
+  // ignore clicks on other interactive controls
   if (e.target.matches('input,select,a,button,label')) return;
   const tr = e.target.closest('tr');
   if (tr) tr.classList.toggle('row-expanded');
