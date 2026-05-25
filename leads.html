@@ -136,9 +136,16 @@
   tbody tr.done-row { opacity:.4; }
   tbody tr.done-row td:not(.td-done) { text-decoration:line-through; }
 
-  td { padding:9px 12px; vertical-align:middle; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  td { padding:9px 12px; vertical-align:middle; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; cursor:pointer; }
   td.td-num { color:var(--muted); font-size:11px; width:36px; min-width:36px; max-width:36px; }
-  td.td-done { text-align:center; }
+  td.td-done { text-align:center; cursor:default; }
+
+  /* Expanded row — click to reveal full text */
+  tbody tr.row-expanded td {
+    max-width:none; overflow:visible; text-overflow:unset; white-space:normal;
+    background:rgba(0,210,100,.04); vertical-align:top;
+  }
+  tbody tr.row-expanded { outline:1px solid rgba(0,210,100,.25); outline-offset:-1px; }
 
   /* Row status accent */
   tr.row-new       { border-left:2px solid transparent; }
@@ -1646,6 +1653,14 @@ function esc(str) {
   if (!str) return '';
   return str.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
+
+/* ─────────────── ROW EXPAND ON CLICK ─────────────── */
+document.getElementById('tbody').addEventListener('click', e => {
+  // ignore clicks on interactive controls
+  if (e.target.matches('input,select,a,button,label')) return;
+  const tr = e.target.closest('tr');
+  if (tr) tr.classList.toggle('row-expanded');
+});
 
 /* ─────────────── EVENT DELEGATION ─────────────── */
 document.getElementById('tbody').addEventListener('change', e => {
