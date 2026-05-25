@@ -3,147 +3,163 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LeadForge — AI-Powered B2B Lead Intelligence</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Lead Intelligence — Ian Fleni Sison</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 
 :root {
-  --bg:         #020408;
-  --bg2:        #040710;
-  --surface:    #070d16;
-  --card:       #0b1120;
-  --card2:      #0f1626;
-  --border:     rgba(0,210,100,.1);
-  --border2:    rgba(0,210,100,.22);
-  --border3:    rgba(0,210,100,.4);
+  --bg:         #09090b;
+  --bg2:        #0d0d10;
+  --surface:    #111116;
+  --card:       #18181b;
+  --card2:      #1d1d22;
+  --border:     rgba(255,255,255,.07);
+  --border-em:  rgba(0,210,100,.16);
+  --border-em2: rgba(0,210,100,.3);
   --green:      #00d264;
   --green2:     #1aeb7a;
-  --green-glow: rgba(0,210,100,.11);
-  --text:       #edf2f7;
-  --text2:      #8896ab;
-  --text3:      #465060;
-  --radius:     14px;
-  --radius-lg:  20px;
+  --green-glow: rgba(0,210,100,.09);
+  --text:       #fafafa;
+  --text2:      #a1a1aa;
+  --text3:      #52525b;
+  --radius:     10px;
+  --radius-lg:  14px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
+
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 16px;
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-::-webkit-scrollbar { width: 5px; }
+
+/* Ambient background glow */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 55% at -8% 18%, rgba(0,210,100,.055) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 45% at 108% 82%, rgba(0,150,75,.04) 0%, transparent 55%);
+}
+
+::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: rgba(0,210,100,.25); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: rgba(0,210,100,.18); border-radius: 2px; }
 
-.container { max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+.container { max-width: 1160px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
 
-/* ── NAV ──────────────────────────────────── */
+/* ── NAV ─────────────────────────────────── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  background: rgba(2,4,8,.88);
-  backdrop-filter: blur(24px) saturate(1.5);
+  background: rgba(9,9,11,.92);
+  backdrop-filter: blur(20px) saturate(1.5);
   border-bottom: 1px solid var(--border);
 }
 .nav-inner {
-  max-width: 1200px; margin: 0 auto; padding: 0 28px;
-  height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  max-width: 1160px; margin: 0 auto; padding: 0 28px;
+  height: 54px; display: flex; align-items: center; justify-content: space-between; gap: 20px;
 }
 .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
 .nav-logo-mark {
-  width: 32px; height: 32px; border-radius: 8px;
-  background: linear-gradient(135deg, var(--green), #008f50);
+  width: 26px; height: 26px; border-radius: 6px;
+  background: var(--green);
   display: flex; align-items: center; justify-content: center;
-  font-size: 15px; font-weight: 900; color: #000; letter-spacing: -.5px;
-  box-shadow: 0 0 24px rgba(0,210,100,.5), 0 2px 8px rgba(0,0,0,.4);
+  font-size: 10px; font-weight: 900; color: #000;
+  font-family: 'JetBrains Mono', monospace; letter-spacing: -.5px;
 }
-.nav-logo-name { font-size: 17px; font-weight: 700; letter-spacing: -.4px; }
-.nav-links { display: flex; align-items: center; gap: 30px; }
-.nav-link { font-size: 14px; font-weight: 500; color: var(--text2); text-decoration: none; transition: color .18s; }
-.nav-link:hover { color: var(--text); }
-.nav-right { display: flex; align-items: center; gap: 10px; }
-.btn-ghost {
-  padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 500;
-  color: var(--text2); border: 1px solid rgba(255,255,255,.08);
-  background: transparent; cursor: pointer; transition: all .18s;
-  text-decoration: none; display: inline-block;
+.nav-logo-name { font-size: 13.5px; font-weight: 600; letter-spacing: -.02em; }
+.nav-logo-slash { color: var(--text3); font-size: 13px; font-weight: 300; margin: 0 1px; }
+.nav-logo-sub {
+  font-size: 11.5px; color: var(--text3);
+  font-family: 'JetBrains Mono', monospace; letter-spacing: .01em;
 }
-.btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.04); }
-.btn-nav-cta {
-  padding: 9px 20px; border-radius: 8px; font-size: 14px; font-weight: 600;
-  background: var(--green); color: #000; border: none; cursor: pointer;
-  text-decoration: none; display: inline-block;
-  box-shadow: 0 0 20px rgba(0,210,100,.28); transition: all .2s;
+.nav-links { display: flex; align-items: center; gap: 22px; }
+.nav-link {
+  font-size: 13px; font-weight: 500; color: var(--text3);
+  text-decoration: none; transition: color .15s; letter-spacing: -.01em;
 }
-.btn-nav-cta:hover { background: var(--green2); transform: translateY(-1px); box-shadow: 0 0 32px rgba(0,210,100,.45); }
+.nav-link:hover { color: var(--text2); }
+.nav-right { display: flex; align-items: center; gap: 8px; }
+.nav-tracker-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 13px; border-radius: 7px; font-size: 12.5px; font-weight: 600;
+  background: rgba(0,210,100,.09); border: 1px solid rgba(0,210,100,.2);
+  color: var(--green); text-decoration: none;
+  transition: all .16s; letter-spacing: -.01em;
+  font-family: 'Geist', sans-serif;
+}
+.nav-tracker-btn:hover { background: rgba(0,210,100,.16); border-color: rgba(0,210,100,.35); }
+.nav-status-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--green); box-shadow: 0 0 6px var(--green);
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.35} }
 
-/* ── HERO ─────────────────────────────────── */
+/* ── HERO ────────────────────────────────── */
 #hero {
   position: relative; min-height: 100vh;
   display: flex; align-items: center;
-  padding: 128px 0 96px;
-  overflow: hidden;
+  padding: 108px 0 80px; overflow: hidden;
 }
-/* Grid lines */
 #hero::before {
   content: '';
   position: absolute; inset: 0; z-index: 0;
   background-image:
-    linear-gradient(rgba(0,210,100,.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,210,100,.05) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, black 0%, transparent 100%);
+    linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: radial-gradient(ellipse 88% 88% at 50% 50%, black 0%, transparent 100%);
 }
-/* Center glow */
-.hero-orb-center {
+.hero-glow-tl {
   position: absolute; z-index: 0;
-  width: 1000px; height: 1000px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,210,100,.1) 0%, rgba(0,150,80,.04) 40%, transparent 70%);
-  top: 50%; left: 40%; transform: translate(-50%, -50%);
-  pointer-events: none;
+  width: 860px; height: 860px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,210,100,.065) 0%, transparent 65%);
+  top: -200px; left: -180px; pointer-events: none;
 }
-.hero-orb-right {
+.hero-glow-r {
   position: absolute; z-index: 0;
-  width: 520px; height: 520px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,210,100,.09) 0%, transparent 70%);
-  top: 30%; right: 2%; pointer-events: none;
+  width: 560px; height: 560px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,175,75,.055) 0%, transparent 65%);
+  top: 22%; right: -4%; pointer-events: none;
 }
 .hero-inner {
   position: relative; z-index: 2;
   display: grid; grid-template-columns: 1fr 1fr;
-  gap: 72px; align-items: center;
-  max-width: 1200px; margin: 0 auto; padding: 0 28px;
-  width: 100%;
+  gap: 60px; align-items: center;
+  max-width: 1160px; margin: 0 auto; padding: 0 28px; width: 100%;
 }
 
-/* Badge */
-.hero-badge {
+/* Eyebrow */
+.hero-eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
-  padding: 6px 14px 6px 10px; border-radius: 100px;
-  background: rgba(0,210,100,.08);
-  border: 1px solid rgba(0,210,100,.22);
-  font-size: 11.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase;
-  color: var(--green); margin-bottom: 32px; width: fit-content;
+  padding: 4px 12px 4px 9px; border-radius: 100px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border);
+  font-size: 10.5px; font-weight: 500; letter-spacing: .03em;
+  color: var(--text3); margin-bottom: 26px; width: fit-content;
+  font-family: 'JetBrains Mono', monospace;
 }
-.badge-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--green); box-shadow: 0 0 8px var(--green);
-  animation: blink-dot 2s ease-in-out infinite;
+.eyebrow-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--green); box-shadow: 0 0 6px var(--green);
+  animation: pulse-dot 2.4s ease-in-out infinite;
 }
-@keyframes blink-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.75)} }
+.eyebrow-ver { color: var(--green); }
 
 /* H1 */
 .hero-h1 {
-  font-size: clamp(42px, 5.2vw, 70px);
-  font-weight: 900; line-height: 1.04; letter-spacing: -.04em;
-  margin-bottom: 22px;
-  background: linear-gradient(155deg, #ffffff 0%, #d0dcea 55%, rgba(180,210,240,.45) 100%);
+  font-size: clamp(36px, 4.6vw, 60px);
+  font-weight: 800; line-height: 1.06; letter-spacing: -.045em;
+  margin-bottom: 20px;
+  background: linear-gradient(158deg, #ffffff 0%, rgba(195,205,220,.5) 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 .hero-h1 .accent {
@@ -153,272 +169,260 @@ nav {
 
 /* Sub */
 .hero-sub {
-  font-size: 17px; line-height: 1.75; color: var(--text2);
-  max-width: 460px; margin-bottom: 40px; font-weight: 400;
+  font-size: 15px; line-height: 1.82; color: var(--text2);
+  max-width: 430px; margin-bottom: 34px; font-weight: 400; letter-spacing: -.01em;
 }
 
 /* Buttons */
-.hero-btns { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 36px; }
+.hero-btns { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-bottom: 36px; }
 .btn-hero-primary {
-  padding: 14px 28px; border-radius: 11px;
-  font-size: 15px; font-weight: 700;
+  padding: 10px 20px; border-radius: 8px;
+  font-size: 13.5px; font-weight: 700;
   background: var(--green); color: #000;
   border: none; cursor: pointer; text-decoration: none;
-  display: inline-flex; align-items: center; gap: 8px;
-  box-shadow: 0 0 36px rgba(0,210,100,.32), 0 4px 20px rgba(0,0,0,.45);
-  transition: all .22s; letter-spacing: -.01em;
+  display: inline-flex; align-items: center; gap: 6px;
+  box-shadow: 0 0 24px rgba(0,210,100,.22), 0 2px 10px rgba(0,0,0,.35);
+  transition: all .2s; letter-spacing: -.02em;
+  font-family: 'Geist', sans-serif;
 }
 .btn-hero-primary:hover {
   background: var(--green2);
-  box-shadow: 0 0 56px rgba(0,210,100,.5), 0 6px 28px rgba(0,0,0,.5);
-  transform: translateY(-2px);
+  box-shadow: 0 0 38px rgba(0,210,100,.38), 0 4px 18px rgba(0,0,0,.45);
+  transform: translateY(-1px);
 }
 .btn-hero-secondary {
-  padding: 13px 24px; border-radius: 11px;
-  font-size: 15px; font-weight: 600;
-  background: rgba(255,255,255,.05); color: var(--text2);
-  border: 1px solid rgba(255,255,255,.1); cursor: pointer;
-  text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
-  transition: all .22s;
+  padding: 9px 18px; border-radius: 8px;
+  font-size: 13.5px; font-weight: 500;
+  background: rgba(255,255,255,.04); color: var(--text2);
+  border: 1px solid var(--border); cursor: pointer;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+  transition: all .18s; letter-spacing: -.01em;
+  font-family: 'Geist', sans-serif;
 }
-.btn-hero-secondary:hover { background: rgba(255,255,255,.09); color: var(--text); border-color: rgba(255,255,255,.2); }
+.btn-hero-secondary:hover { background: rgba(255,255,255,.07); color: var(--text); border-color: rgba(255,255,255,.14); }
 
-/* Trust row */
-.hero-trust { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
-.trust-item {
-  display: flex; align-items: center; gap: 7px;
-  font-size: 13px; color: var(--text3); font-weight: 500;
+/* Operator strip */
+.operator-strip { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.op-item {
+  font-size: 12px; color: var(--text3); font-weight: 500;
+  font-family: 'JetBrains Mono', monospace; letter-spacing: .01em;
 }
-.trust-check { color: var(--green); flex-shrink: 0; }
+.op-sep { color: var(--text3); opacity: .3; }
 
-/* ── TERMINAL ─────────────────────────────── */
-.terminal-outer {
-  position: relative;
-}
+/* ── TERMINAL ────────────────────────────── */
+.terminal-outer { position: relative; }
 .terminal-halo {
-  position: absolute; inset: -50px;
-  background: radial-gradient(ellipse at center, rgba(0,210,100,.13) 0%, transparent 65%);
+  position: absolute; inset: -44px;
+  background: radial-gradient(ellipse at center, rgba(0,210,100,.09) 0%, transparent 62%);
   border-radius: 50%; pointer-events: none; z-index: 0;
 }
 .terminal-card {
   position: relative; z-index: 1;
-  background: rgba(5,9,16,.97);
-  border: 1px solid rgba(0,210,100,.22);
-  border-radius: 18px; overflow: hidden;
+  background: rgba(4,4,6,.98);
+  border: 1px solid rgba(0,210,100,.16);
+  border-radius: 13px; overflow: hidden;
   box-shadow:
     0 0 0 1px rgba(0,0,0,.9),
-    0 40px 100px rgba(0,0,0,.7),
-    0 0 80px rgba(0,210,100,.07),
-    inset 0 1px 0 rgba(255,255,255,.04);
+    0 32px 72px rgba(0,0,0,.6),
+    0 0 50px rgba(0,210,100,.05),
+    inset 0 1px 0 rgba(255,255,255,.025);
 }
 .terminal-titlebar {
   display: flex; align-items: center;
-  padding: 14px 18px; gap: 0;
-  background: rgba(255,255,255,.025);
-  border-bottom: 1px solid rgba(0,210,100,.1);
+  padding: 11px 15px;
+  background: rgba(255,255,255,.018);
+  border-bottom: 1px solid rgba(255,255,255,.05);
 }
-.tdot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
-.tdot.red   { background: #ff5f57; box-shadow: 0 0 6px rgba(255,95,87,.4); margin-right: 8px; }
-.tdot.amber { background: #febc2e; box-shadow: 0 0 6px rgba(254,188,46,.4); margin-right: 8px; }
-.tdot.grn   { background: #28c840; box-shadow: 0 0 6px rgba(40,200,64,.4); }
+.tdot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.tdot.red   { background: #ff5f57; box-shadow: 0 0 5px rgba(255,95,87,.3); margin-right: 6px; }
+.tdot.amber { background: #febc2e; box-shadow: 0 0 5px rgba(254,188,46,.3); margin-right: 6px; }
+.tdot.grn   { background: #28c840; box-shadow: 0 0 5px rgba(40,200,64,.3); }
 .t-titlebar-label {
-  flex: 1; text-align: center; margin-left: -60px;
+  flex: 1; text-align: center; margin-left: -50px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12px; color: rgba(255,255,255,.25); letter-spacing: .03em;
+  font-size: 11px; color: rgba(255,255,255,.18); letter-spacing: .03em;
 }
 .terminal-body {
-  padding: 22px 22px 24px;
+  padding: 18px 20px 20px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12.5px; line-height: 2; min-height: 220px;
+  font-size: 11.5px; line-height: 2; min-height: 220px;
 }
 .t-line { display: block; white-space: pre; }
 .t-prompt  { color: var(--green); }
 .t-cmd     { color: #7dd3fc; }
 .t-flag    { color: #c4b5fd; }
-.t-eq      { color: rgba(255,255,255,.35); }
+.t-eq      { color: rgba(255,255,255,.28); }
 .t-str     { color: #fcd34d; }
 .t-bool    { color: #6ee7b7; }
-.t-cont    { color: rgba(255,255,255,.28); }
-.t-out-ok  { color: rgba(0,210,100,.8); }
-.t-out-dim { color: rgba(255,255,255,.4); }
+.t-cont    { color: rgba(255,255,255,.2); }
+.t-out-ok  { color: rgba(0,210,100,.88); }
+.t-out-dim { color: rgba(255,255,255,.32); }
 .t-cursor-block {
-  display: inline-block; width: 8px; height: 14px;
+  display: inline-block; width: 7px; height: 13px;
   background: var(--green); vertical-align: middle; margin-left: 1px;
-  animation: cur-blink .85s step-end infinite;
+  animation: cur-blink .88s step-end infinite;
 }
 @keyframes cur-blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
 .terminal-statusbar {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 9px 20px;
-  background: rgba(0,210,100,.04);
-  border-top: 1px solid rgba(0,210,100,.1);
+  padding: 7px 17px;
+  background: rgba(0,210,100,.025);
+  border-top: 1px solid rgba(255,255,255,.04);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; color: var(--text3);
+  font-size: 10px; color: var(--text3);
 }
-.t-status-live { color: var(--green); display: flex; align-items: center; gap: 6px; }
+.t-status-live { color: var(--green); display: flex; align-items: center; gap: 5px; }
 .t-live-dot {
-  width: 6px; height: 6px; border-radius: 50%; background: var(--green);
-  box-shadow: 0 0 6px var(--green);
-  animation: blink-dot 1.4s ease-in-out infinite;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--green);
+  box-shadow: 0 0 5px var(--green);
+  animation: pulse-dot 1.6s ease-in-out infinite;
 }
 
-/* ── PROOF BAR ────────────────────────────── */
-.proof-bar {
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  background: rgba(255,255,255,.012);
-  padding: 18px 0;
-}
-.proof-inner {
-  max-width: 1200px; margin: 0 auto; padding: 0 28px;
-  display: flex; align-items: center; gap: 40px; flex-wrap: wrap;
-}
-.proof-label {
-  font-size: 11.5px; font-weight: 600; text-transform: uppercase;
-  letter-spacing: .08em; color: var(--text3); white-space: nowrap;
-}
-.proof-logos { display: flex; align-items: center; gap: 36px; flex-wrap: wrap; }
-.proof-logo {
-  font-size: 14px; font-weight: 700; color: rgba(255,255,255,.18);
-  letter-spacing: -.3px; transition: color .2s; cursor: default;
-}
-.proof-logo:hover { color: rgba(255,255,255,.38); }
-
-/* ── SECTION SHARED ───────────────────────── */
+/* ── SECTION SHARED ──────────────────────── */
 .section-eyebrow {
-  display: inline-block; font-size: 11.5px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: .1em;
-  color: var(--green); margin-bottom: 16px;
+  display: inline-block; font-size: 10.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .11em;
+  color: var(--green); margin-bottom: 13px;
+  font-family: 'JetBrains Mono', monospace;
 }
 .section-h2 {
-  font-size: clamp(30px, 3.8vw, 48px);
-  font-weight: 900; letter-spacing: -.03em; line-height: 1.12; margin-bottom: 16px;
-  background: linear-gradient(155deg, #fff 0%, rgba(190,210,240,.55) 100%);
+  font-size: clamp(27px, 3.4vw, 42px);
+  font-weight: 800; letter-spacing: -.04em; line-height: 1.1; margin-bottom: 13px;
+  background: linear-gradient(155deg, #fff 0%, rgba(175,185,205,.5) 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
-.section-sub { font-size: 17px; color: var(--text2); line-height: 1.75; max-width: 540px; margin: 0 auto; }
-.section-header { text-align: center; margin-bottom: 68px; }
+.section-sub {
+  font-size: 15.5px; color: var(--text2); line-height: 1.78;
+  max-width: 510px; margin: 0 auto; letter-spacing: -.01em;
+}
+.section-header { text-align: center; margin-bottom: 56px; }
 .divider {
-  height: 1px; background: linear-gradient(90deg, transparent, var(--border2), transparent);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
   margin: 0 28px;
 }
 
-/* ── FEATURES ─────────────────────────────── */
-#features { padding: 120px 0; }
-.features-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
-}
+/* ── CAPABILITIES ────────────────────────── */
+#features { padding: 108px 0; }
+.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+
 .feat-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg); padding: 32px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 26px;
   position: relative; overflow: hidden;
-  transition: all .28s cubic-bezier(.4,0,.2,1);
-  cursor: default;
+  transition: all .24s cubic-bezier(.4,0,.2,1); cursor: default;
 }
 .feat-card::after {
   content: '';
   position: absolute; inset: 0; border-radius: var(--radius-lg);
-  background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(0,210,100,.06) 0%, transparent 60%);
-  opacity: 0; transition: opacity .3s;
-  pointer-events: none;
+  background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(0,210,100,.048) 0%, transparent 55%);
+  opacity: 0; transition: opacity .28s; pointer-events: none;
 }
-.feat-card:hover { border-color: rgba(0,210,100,.28); background: var(--card2); transform: translateY(-4px); }
+.feat-card:hover { border-color: rgba(0,210,100,.2); background: var(--card2); transform: translateY(-3px); }
 .feat-card:hover::after { opacity: 1; }
-/* Top glow line on hover */
 .feat-card::before {
   content: '';
-  position: absolute; top: 0; left: 16px; right: 16px; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0,210,100,.5), transparent);
-  opacity: 0; transition: opacity .3s;
+  position: absolute; top: 0; left: 18px; right: 18px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,210,100,.4), transparent);
+  opacity: 0; transition: opacity .28s;
 }
 .feat-card:hover::before { opacity: 1; }
 
 .feat-icon-wrap {
-  width: 46px; height: 46px; border-radius: 12px;
-  background: var(--green-glow); border: 1px solid var(--border2);
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(255,255,255,.04); border: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center;
-  font-size: 21px; margin-bottom: 20px;
-  box-shadow: 0 0 20px rgba(0,210,100,.07);
+  font-size: 17px; margin-bottom: 14px;
 }
-.feat-title { font-size: 16px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 10px; }
-.feat-desc { font-size: 13.5px; color: var(--text2); line-height: 1.72; }
+.feat-title { font-size: 14px; font-weight: 700; letter-spacing: -.025em; margin-bottom: 7px; }
+.feat-desc { font-size: 12.5px; color: var(--text2); line-height: 1.78; }
 .feat-pill {
-  display: inline-block; margin-top: 18px;
-  padding: 3px 10px; border-radius: 100px;
+  display: inline-block; margin-top: 14px;
+  padding: 2px 8px; border-radius: 100px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10.5px; font-weight: 500; color: var(--green);
-  background: rgba(0,210,100,.07); border: 1px solid rgba(0,210,100,.16);
+  font-size: 9.5px; font-weight: 500; color: var(--green);
+  background: rgba(0,210,100,.055); border: 1px solid rgba(0,210,100,.13);
 }
 
-/* ── HOW IT WORKS ─────────────────────────── */
+/* ── WORKFLOW ────────────────────────────── */
 #how {
-  padding: 120px 0;
-  background: linear-gradient(180deg, transparent 0%, rgba(0,210,100,.018) 50%, transparent 100%);
+  padding: 108px 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(0,210,100,.01) 50%, transparent 100%);
 }
-.how-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-.steps { display: flex; flex-direction: column; gap: 38px; }
-.step { display: flex; gap: 20px; }
+.how-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 68px; align-items: center; }
+.steps { display: flex; flex-direction: column; gap: 30px; }
+.step { display: flex; gap: 16px; }
 .step-num-badge {
-  width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
-  background: var(--green-glow); border: 1px solid var(--border2);
+  width: 30px; height: 30px; border-radius: 7px; flex-shrink: 0;
+  background: rgba(0,210,100,.065); border: 1px solid rgba(0,210,100,.16);
   display: flex; align-items: center; justify-content: center;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12px; font-weight: 700; color: var(--green);
+  font-size: 10.5px; font-weight: 700; color: var(--green);
 }
-.step-title { font-size: 17px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 8px; }
-.step-desc { font-size: 14px; color: var(--text2); line-height: 1.75; }
+.step-title { font-size: 15px; font-weight: 700; letter-spacing: -.025em; margin-bottom: 5px; }
+.step-desc { font-size: 13px; color: var(--text2); line-height: 1.78; }
 
 /* Pipeline UI card */
 .pipeline-ui {
-  background: var(--card);
-  border: 1px solid var(--border);
+  background: var(--card); border: 1px solid var(--border);
   border-radius: var(--radius-lg); overflow: hidden;
-  box-shadow: 0 40px 100px rgba(0,0,0,.55), 0 0 50px rgba(0,210,100,.06);
+  box-shadow: 0 28px 70px rgba(0,0,0,.48), 0 0 36px rgba(0,210,100,.035);
 }
 .pl-header {
-  display: flex; align-items: center; gap: 10px;
-  padding: 14px 20px;
-  background: rgba(255,255,255,.02);
+  display: flex; align-items: center; gap: 9px;
+  padding: 11px 17px;
+  background: rgba(255,255,255,.015);
   border-bottom: 1px solid var(--border);
 }
-.pl-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); animation: blink-dot 1.6s ease-in-out infinite; }
-.pl-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text3); }
-.pl-count { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--green); }
-.pl-rows { padding: 6px 0; }
+.pl-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green); box-shadow: 0 0 6px var(--green);
+  animation: pulse-dot 1.7s ease-in-out infinite;
+}
+.pl-title {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--text3);
+  font-family: 'JetBrains Mono', monospace;
+}
+.pl-count { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--green); }
+.pl-rows { padding: 3px 0; }
 .pl-row {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 11px 20px; border-bottom: 1px solid rgba(255,255,255,.025);
-  transition: background .18s;
+  padding: 9px 17px; border-bottom: 1px solid rgba(255,255,255,.03);
+  transition: background .14s;
 }
 .pl-row:last-child { border-bottom: none; }
-.pl-row:hover { background: rgba(255,255,255,.02); }
-.pl-row-l { display: flex; align-items: center; gap: 12px; }
+.pl-row:hover { background: rgba(255,255,255,.016); }
+.pl-row-l { display: flex; align-items: center; gap: 10px; }
 .pl-av {
-  width: 33px; height: 33px; border-radius: 8px;
+  width: 28px; height: 28px; border-radius: 6px;
   border: 1px solid var(--border);
-  background: linear-gradient(135deg, rgba(0,210,100,.18), rgba(0,80,40,.3));
+  background: linear-gradient(135deg, rgba(0,210,100,.12), rgba(0,75,35,.22));
   display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 800; color: var(--green);
+  font-size: 9.5px; font-weight: 800; color: var(--green);
+  font-family: 'JetBrains Mono', monospace;
 }
-.pl-co { font-size: 13px; font-weight: 600; margin-bottom: 1px; }
-.pl-ind { font-size: 11px; color: var(--text3); }
-.status-badge { padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 600; white-space: nowrap; }
-.s-verified  { background: rgba(0,210,100,.1);  color: var(--green); border: 1px solid rgba(0,210,100,.22); }
-.s-outreach  { background: rgba(96,165,250,.1);  color: #60a5fa;      border: 1px solid rgba(96,165,250,.22); }
-.s-pending   { background: rgba(251,191,36,.08); color: #fbbf24;      border: 1px solid rgba(251,191,36,.2); }
+.pl-co { font-size: 12px; font-weight: 600; margin-bottom: 1px; letter-spacing: -.01em; }
+.pl-ind { font-size: 10.5px; color: var(--text3); }
+.status-badge {
+  padding: 2px 8px; border-radius: 100px;
+  font-size: 10px; font-weight: 600; white-space: nowrap;
+  font-family: 'JetBrains Mono', monospace;
+}
+.s-verified { background: rgba(0,210,100,.07);  color: var(--green); border: 1px solid rgba(0,210,100,.16); }
+.s-outreach { background: rgba(96,165,250,.07);  color: #60a5fa;     border: 1px solid rgba(96,165,250,.16); }
+.s-pending  { background: rgba(251,191,36,.06); color: #fbbf24;      border: 1px solid rgba(251,191,36,.16); }
 
-/* ── STATS ────────────────────────────────── */
-#stats { padding: 100px 0; }
+/* ── STATS ───────────────────────────────── */
+#stats { padding: 84px 0; }
 .stats-wrap {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 22px; overflow: hidden;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); overflow: hidden;
 }
 .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); }
 .stat-cell {
-  padding: 52px 36px; text-align: center;
+  padding: 42px 30px; text-align: center;
   border-right: 1px solid var(--border);
   position: relative; overflow: hidden;
 }
@@ -426,329 +430,260 @@ nav {
 .stat-cell::before {
   content: '';
   position: absolute; bottom: 0; left: 30%; right: 30%; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0,210,100,.35), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0,210,100,.25), transparent);
 }
 .stat-num {
-  font-size: clamp(36px, 4vw, 52px);
-  font-weight: 900; letter-spacing: -.05em; line-height: 1.1;
+  font-size: clamp(30px, 3.2vw, 44px);
+  font-weight: 900; letter-spacing: -.055em; line-height: 1.1;
   background: linear-gradient(135deg, var(--green) 0%, var(--green2) 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
-.stat-label { font-size: 13.5px; color: var(--text2); font-weight: 500; }
+.stat-label { font-size: 12px; color: var(--text2); font-weight: 500; }
 
-/* ── TESTIMONIAL ──────────────────────────── */
-#testimonials { padding: 100px 0; }
-.testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
-.testi-card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: var(--radius-lg); padding: 32px;
-  transition: border-color .25s;
-}
-.testi-card:hover { border-color: rgba(0,210,100,.22); }
-.testi-stars { display: flex; gap: 3px; margin-bottom: 16px; }
-.testi-star { color: var(--green); font-size: 14px; }
-.testi-quote { font-size: 14.5px; color: var(--text2); line-height: 1.75; margin-bottom: 24px; }
-.testi-author { display: flex; align-items: center; gap: 12px; }
-.testi-av {
-  width: 36px; height: 36px; border-radius: 10px;
-  background: linear-gradient(135deg, rgba(0,210,100,.2), rgba(0,80,40,.4));
-  border: 1px solid var(--border2);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 800; color: var(--green);
-}
-.testi-name { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
-.testi-role { font-size: 12px; color: var(--text3); }
-
-/* ── CTA SECTION ──────────────────────────── */
-#cta { padding: 120px 0; position: relative; overflow: hidden; }
-.cta-bg-glow {
-  position: absolute;
-  width: 700px; height: 500px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,210,100,.14) 0%, transparent 70%);
-  top: 50%; left: 50%; transform: translate(-50%,-50%);
-  pointer-events: none;
-}
-.cta-box {
-  position: relative; z-index: 2;
-  background: var(--card);
-  border: 1px solid rgba(0,210,100,.22);
-  border-radius: 26px; padding: 80px 52px;
-  text-align: center;
-  box-shadow:
-    0 0 100px rgba(0,210,100,.07),
-    0 50px 120px rgba(0,0,0,.55),
-    inset 0 1px 0 rgba(255,255,255,.04);
-}
-.cta-h2 {
-  font-size: clamp(30px, 4vw, 54px);
-  font-weight: 900; letter-spacing: -.035em; line-height: 1.08; margin-bottom: 18px;
-  background: linear-gradient(155deg, #fff 0%, rgba(190,210,240,.55) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
-.cta-sub { font-size: 17px; color: var(--text2); line-height: 1.75; max-width: 480px; margin: 0 auto 44px; }
-.cta-btns { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
-.cta-note { font-size: 13px; color: var(--text3); margin-top: 20px; }
-
-/* ── FOOTER ───────────────────────────────── */
-footer { border-top: 1px solid var(--border); padding: 44px 0; }
-.footer-inner {
-  max-width: 1200px; margin: 0 auto; padding: 0 28px;
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 28px; flex-wrap: wrap;
-}
-.footer-brand { display: flex; align-items: center; gap: 9px; }
-.footer-logo-mark {
-  width: 26px; height: 26px; border-radius: 7px;
-  background: linear-gradient(135deg, var(--green), #008f50);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 900; color: #000;
-}
-.footer-name { font-size: 14px; font-weight: 700; color: var(--text2); }
-.footer-links { display: flex; gap: 28px; }
-.footer-link { font-size: 13px; color: var(--text3); text-decoration: none; transition: color .18s; }
-.footer-link:hover { color: var(--text2); }
-.footer-copy { font-size: 12.5px; color: var(--text3); }
-
-/* ── ANIMATIONS ───────────────────────────── */
-.fade-in {
-  opacity: 0; transform: translateY(22px);
-  transition: opacity .65s cubic-bezier(.4,0,.2,1), transform .65s cubic-bezier(.4,0,.2,1);
-}
-.fade-in.visible { opacity: 1; transform: none; }
-.fade-in:nth-child(2) { transition-delay: .08s; }
-.fade-in:nth-child(3) { transition-delay: .16s; }
-.fade-in:nth-child(4) { transition-delay: .24s; }
-.fade-in:nth-child(5) { transition-delay: .32s; }
-.fade-in:nth-child(6) { transition-delay: .40s; }
-
-/* ── RESPONSIVE ───────────────────────────── */
-@media (max-width: 960px) {
-  .hero-inner { grid-template-columns: 1fr; gap: 56px; }
-  .terminal-outer { max-width: 580px; margin: 0 auto; }
-  .features-grid { grid-template-columns: repeat(2,1fr); }
-  .how-grid { grid-template-columns: 1fr; }
-  .stats-grid { grid-template-columns: repeat(2,1fr); }
-  .stat-cell:nth-child(2) { border-right: none; }
-  .testimonials-grid { grid-template-columns: 1fr; }
-}
-@media (max-width: 640px) {
-  .nav-links { display: none; }
-  .features-grid { grid-template-columns: 1fr; }
-  .stats-grid { grid-template-columns: repeat(2,1fr); }
-  .proof-inner { flex-direction: column; align-items: flex-start; gap: 14px; }
-  .cta-box { padding: 52px 28px; }
-  .footer-inner { flex-direction: column; align-items: flex-start; }
-}
-
-/* ── AI OUTREACH GENERATOR ────────────────── */
-#generator { padding: 120px 0; }
+/* ── AI OUTREACH GENERATOR ───────────────── */
+#generator { padding: 108px 0; }
 
 .gen-section-label {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 5px 12px 5px 8px; border-radius: 100px;
-  background: rgba(168,85,247,.1); border: 1px solid rgba(168,85,247,.25);
-  font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-  color: #c084fc; margin-bottom: 16px;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 4px 11px 4px 8px; border-radius: 100px;
+  background: rgba(168,85,247,.07); border: 1px solid rgba(168,85,247,.18);
+  font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: #c084fc; margin-bottom: 13px;
+  font-family: 'JetBrains Mono', monospace;
 }
 .gen-section-label-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: #c084fc; box-shadow: 0 0 8px #c084fc;
-  animation: blink-dot 2s ease-in-out infinite;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #c084fc; box-shadow: 0 0 7px #c084fc;
+  animation: pulse-dot 2s ease-in-out infinite;
 }
 
 .gen-card {
   display: grid; grid-template-columns: 2fr 3fr;
-  background: var(--card);
-  border: 1px solid var(--border2);
-  border-radius: 22px; overflow: hidden;
-  box-shadow: 0 0 80px rgba(0,210,100,.06), 0 40px 100px rgba(0,0,0,.5);
-  margin-bottom: 40px;
+  background: var(--card); border: 1px solid var(--border-em);
+  border-radius: 16px; overflow: hidden;
+  box-shadow: 0 0 56px rgba(0,210,100,.045), 0 28px 72px rgba(0,0,0,.42);
+  margin-bottom: 32px;
 }
 
-/* Form panel */
 .gen-form-panel {
-  padding: 36px 32px;
-  border-right: 1px solid var(--border);
-  background: var(--surface);
-  display: flex; flex-direction: column; gap: 0;
+  padding: 30px 26px; border-right: 1px solid var(--border);
+  background: var(--surface); display: flex; flex-direction: column;
 }
 .gen-panel-title {
-  font-size: 13px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .09em; color: var(--text3); margin-bottom: 28px;
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .09em; color: var(--text3); margin-bottom: 22px;
   display: flex; align-items: center; gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
 }
 .gen-panel-title::after {
   content: ''; flex: 1; height: 1px;
   background: linear-gradient(90deg, var(--border), transparent);
 }
 
-.gen-field { margin-bottom: 18px; }
+.gen-field { margin-bottom: 14px; }
 .gen-label {
-  display: block; font-size: 11.5px; font-weight: 600;
-  color: var(--text2); margin-bottom: 7px; letter-spacing: .03em;
+  display: block; font-size: 10.5px; font-weight: 600;
+  color: var(--text2); margin-bottom: 5px; letter-spacing: .02em;
 }
 .gen-input, .gen-select {
-  width: 100%; padding: 10px 14px; border-radius: 10px;
-  background: #040810; color: var(--text);
-  border: 1px solid rgba(0,210,100,.15); outline: none;
-  font-family: 'Inter', sans-serif; font-size: 13.5px;
-  transition: border-color .18s, box-shadow .18s;
+  width: 100%; padding: 8px 12px; border-radius: 8px;
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--border); outline: none;
+  font-family: 'Geist', sans-serif; font-size: 13px;
+  transition: border-color .15s, box-shadow .15s;
   appearance: none; -webkit-appearance: none;
 }
 .gen-input::placeholder { color: var(--text3); }
 .gen-input:focus, .gen-select:focus {
-  border-color: rgba(0,210,100,.45);
-  box-shadow: 0 0 0 3px rgba(0,210,100,.08);
+  border-color: rgba(0,210,100,.32);
+  box-shadow: 0 0 0 3px rgba(0,210,100,.06);
 }
 .gen-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23465060' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 14px center;
-  padding-right: 36px; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2352525b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+  padding-right: 32px; cursor: pointer;
 }
-.gen-select option { background: #080d16; color: var(--text); }
+.gen-select option { background: #111116; color: var(--text); }
 
-/* Channel toggle */
-.gen-toggle { display: flex; gap: 8px; }
+.gen-toggle { display: flex; gap: 6px; }
 .gen-toggle-btn {
-  flex: 1; padding: 9px 12px; border-radius: 9px;
-  font-size: 12.5px; font-weight: 600; cursor: pointer;
-  border: 1px solid rgba(255,255,255,.08);
+  flex: 1; padding: 7px 10px; border-radius: 7px;
+  font-size: 11.5px; font-weight: 600; cursor: pointer;
+  border: 1px solid var(--border);
   background: transparent; color: var(--text3);
-  transition: all .18s; display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: all .15s; display: flex; align-items: center; justify-content: center; gap: 5px;
+  font-family: 'Geist', sans-serif;
 }
 .gen-toggle-btn.active {
-  background: rgba(0,210,100,.12);
-  border-color: rgba(0,210,100,.35);
-  color: var(--green);
+  background: rgba(0,210,100,.09); border-color: rgba(0,210,100,.25); color: var(--green);
 }
-.gen-toggle-btn:hover:not(.active) { border-color: rgba(255,255,255,.16); color: var(--text2); }
+.gen-toggle-btn:hover:not(.active) { border-color: rgba(255,255,255,.13); color: var(--text2); }
 
 .gen-generate-btn {
-  width: 100%; margin-top: 8px; padding: 13px 20px;
-  border-radius: 11px; font-size: 15px; font-weight: 700;
+  width: 100%; margin-top: 10px; padding: 11px 17px;
+  border-radius: 8px; font-size: 13.5px; font-weight: 700;
   background: var(--green); color: #000; border: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  box-shadow: 0 0 28px rgba(0,210,100,.28), 0 4px 16px rgba(0,0,0,.4);
-  transition: all .22s; letter-spacing: -.01em;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  box-shadow: 0 0 20px rgba(0,210,100,.2), 0 3px 10px rgba(0,0,0,.3);
+  transition: all .2s; letter-spacing: -.02em;
+  font-family: 'Geist', sans-serif;
 }
 .gen-generate-btn:hover {
   background: var(--green2);
-  box-shadow: 0 0 44px rgba(0,210,100,.46), 0 6px 24px rgba(0,0,0,.5);
+  box-shadow: 0 0 32px rgba(0,210,100,.38), 0 5px 18px rgba(0,0,0,.42);
   transform: translateY(-1px);
 }
 .gen-generate-btn:active { transform: none; }
 
-/* Output panel */
-.gen-output-panel {
-  display: flex; flex-direction: column;
-  background: #060a12;
-}
+.gen-output-panel { display: flex; flex-direction: column; background: #060608; }
 .gen-output-bar {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 22px;
-  background: rgba(255,255,255,.02);
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
+  padding: 11px 19px; background: rgba(255,255,255,.014);
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
 }
-.gen-output-bar-left { display: flex; align-items: center; gap: 10px; }
-.gen-output-bar-dots { display: flex; gap: 6px; }
-.gen-bar-dot { width: 10px; height: 10px; border-radius: 50%; }
+.gen-output-bar-left { display: flex; align-items: center; gap: 9px; }
+.gen-output-bar-dots { display: flex; gap: 5px; }
+.gen-bar-dot { width: 8px; height: 8px; border-radius: 50%; }
 .gen-bar-dot.r { background: #ff5f57; }
 .gen-bar-dot.a { background: #febc2e; }
 .gen-bar-dot.g { background: #28c840; }
 .gen-output-label {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11.5px; color: rgba(255,255,255,.25); letter-spacing: .03em;
+  font-size: 10.5px; color: rgba(255,255,255,.18); letter-spacing: .03em;
 }
-.gen-output-bar-right { display: flex; align-items: center; gap: 10px; }
+.gen-output-bar-right { display: flex; align-items: center; gap: 8px; }
 .gen-char-count {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 6px;
-  transition: all .2s;
+  font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 5px;
+  transition: all .18s;
 }
-.gen-char-count.ok { background: rgba(0,210,100,.12); color: var(--green); border: 1px solid rgba(0,210,100,.2); }
-.gen-char-count.over { background: rgba(239,68,68,.12); color: #f87171; border: 1px solid rgba(239,68,68,.25); }
+.gen-char-count.ok   { background: rgba(0,210,100,.09); color: var(--green); border: 1px solid rgba(0,210,100,.16); }
+.gen-char-count.over { background: rgba(239,68,68,.09); color: #f87171;      border: 1px solid rgba(239,68,68,.2); }
 .gen-char-count.hidden { display: none; }
 .gen-copy-btn {
-  padding: 5px 14px; border-radius: 7px; font-size: 12px; font-weight: 600;
-  background: rgba(0,210,100,.1); border: 1px solid rgba(0,210,100,.25);
-  color: var(--green); cursor: pointer; transition: all .18s;
-  font-family: 'Inter', sans-serif;
+  padding: 4px 11px; border-radius: 6px; font-size: 11px; font-weight: 600;
+  background: rgba(0,210,100,.07); border: 1px solid rgba(0,210,100,.18);
+  color: var(--green); cursor: pointer; transition: all .15s;
+  font-family: 'Geist', sans-serif;
 }
-.gen-copy-btn:hover { background: rgba(0,210,100,.2); }
-.gen-copy-btn.copied { color: #4ade80; border-color: #4ade80; background: rgba(74,222,128,.1); }
+.gen-copy-btn:hover { background: rgba(0,210,100,.14); }
+.gen-copy-btn.copied { color: #4ade80; border-color: #4ade80; background: rgba(74,222,128,.07); }
 
 .gen-output-body {
-  flex: 1; padding: 24px 26px; overflow-y: auto;
-  font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.9;
-  min-height: 300px;
+  flex: 1; padding: 20px 22px; overflow-y: auto;
+  font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.9;
+  min-height: 280px;
 }
 .gen-subject-label {
-  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+  font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
   color: var(--text3); margin-bottom: 4px; display: block;
 }
 .gen-subject-value {
-  color: #fcd34d; font-size: 13.5px; font-weight: 600;
-  padding: 8px 14px; background: rgba(252,211,77,.06);
-  border: 1px solid rgba(252,211,77,.15); border-radius: 8px;
-  margin-bottom: 20px; display: block;
+  color: #fcd34d; font-size: 12.5px; font-weight: 600;
+  padding: 6px 12px; background: rgba(252,211,77,.05);
+  border: 1px solid rgba(252,211,77,.11); border-radius: 6px;
+  margin-bottom: 16px; display: block;
 }
-.gen-body-text {
-  color: var(--text2); white-space: pre-wrap; line-height: 2;
-}
-.gen-ph { color: #fcd34d; }
+.gen-body-text { color: var(--text2); white-space: pre-wrap; line-height: 2; }
+.gen-ph        { color: #fcd34d; }
 .gen-highlight { color: var(--green); font-weight: 600; }
-.gen-sig { color: var(--text3); }
+.gen-sig       { color: var(--text3); }
 .gen-empty-state {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  height: 100%; min-height: 280px; text-align: center; color: var(--text3);
-  gap: 12px;
+  height: 100%; min-height: 260px; text-align: center; color: var(--text3); gap: 10px;
 }
-.gen-empty-icon { font-size: 32px; opacity: .4; }
-.gen-empty-text { font-size: 13px; font-family: 'JetBrains Mono', monospace; }
+.gen-empty-icon { font-size: 26px; opacity: .3; }
+.gen-empty-text { font-size: 11.5px; font-family: 'JetBrains Mono', monospace; }
 
 /* Prompt Reference Block */
 .prompt-ref-wrap {
-  background: #040810; border: 1px solid rgba(168,85,247,.2);
-  border-radius: 18px; overflow: hidden;
-  box-shadow: 0 0 60px rgba(168,85,247,.05), 0 30px 80px rgba(0,0,0,.5);
+  background: #05050a; border: 1px solid rgba(168,85,247,.16);
+  border-radius: 13px; overflow: hidden;
+  box-shadow: 0 0 44px rgba(168,85,247,.035), 0 22px 55px rgba(0,0,0,.42);
 }
 .prompt-ref-bar {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 13px 20px;
-  background: rgba(168,85,247,.05);
-  border-bottom: 1px solid rgba(168,85,247,.15);
+  padding: 10px 17px; background: rgba(168,85,247,.035);
+  border-bottom: 1px solid rgba(168,85,247,.11);
 }
-.prompt-ref-bar-left { display: flex; align-items: center; gap: 10px; }
+.prompt-ref-bar-left { display: flex; align-items: center; gap: 9px; }
 .prompt-ref-title {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12px; font-weight: 600; color: rgba(192,132,252,.7); letter-spacing: .04em;
+  font-size: 11px; font-weight: 600; color: rgba(192,132,252,.55); letter-spacing: .03em;
 }
 .prompt-ref-copy {
-  padding: 5px 14px; border-radius: 7px; font-size: 12px; font-weight: 600;
-  background: rgba(168,85,247,.1); border: 1px solid rgba(168,85,247,.25);
-  color: #c084fc; cursor: pointer; transition: all .18s; font-family: 'Inter', sans-serif;
+  padding: 3px 11px; border-radius: 5px; font-size: 11px; font-weight: 600;
+  background: rgba(168,85,247,.07); border: 1px solid rgba(168,85,247,.2);
+  color: #c084fc; cursor: pointer; transition: all .15s; font-family: 'Geist', sans-serif;
 }
-.prompt-ref-copy:hover { background: rgba(168,85,247,.2); }
+.prompt-ref-copy:hover { background: rgba(168,85,247,.14); }
 .prompt-ref-copy.copied { color: #a78bfa; border-color: #a78bfa; }
 .prompt-ref-body {
-  padding: 28px 32px;
+  padding: 22px 26px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12px; line-height: 2; color: rgba(255,255,255,.35);
+  font-size: 11.5px; line-height: 2; color: rgba(255,255,255,.28);
   white-space: pre-wrap; overflow-x: auto;
-  max-height: 520px; overflow-y: auto;
+  max-height: 500px; overflow-y: auto;
 }
 .pr-section-head { color: #c084fc; font-weight: 600; }
-.pr-ph  { color: #fcd34d; }
-.pr-key { color: #7dd3fc; }
-.pr-dash { color: rgba(255,255,255,.25); }
-.pr-rule { color: #6ee7b7; }
+.pr-ph   { color: #fcd34d; }
+.pr-key  { color: #7dd3fc; }
+.pr-dash { color: rgba(255,255,255,.2); }
 
 @media (max-width: 960px) {
   .gen-card { grid-template-columns: 1fr; }
   .gen-form-panel { border-right: none; border-bottom: 1px solid var(--border); }
-  .prompt-ref-body { font-size: 11px; padding: 20px; }
+  .prompt-ref-body { font-size: 11px; padding: 17px; }
+}
+
+/* ── FOOTER ──────────────────────────────── */
+footer { border-top: 1px solid var(--border); padding: 34px 0; }
+.footer-inner {
+  max-width: 1160px; margin: 0 auto; padding: 0 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 22px; flex-wrap: wrap;
+}
+.footer-brand { display: flex; align-items: center; gap: 8px; }
+.footer-logo-mark {
+  width: 22px; height: 22px; border-radius: 5px; background: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 900; color: #000;
+  font-family: 'JetBrains Mono', monospace;
+}
+.footer-name { font-size: 13px; font-weight: 600; color: var(--text2); letter-spacing: -.02em; }
+.footer-links { display: flex; gap: 22px; }
+.footer-link { font-size: 12px; color: var(--text3); text-decoration: none; transition: color .14s; }
+.footer-link:hover { color: var(--text2); }
+.footer-copy { font-size: 11.5px; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
+
+/* ── ANIMATIONS ──────────────────────────── */
+.fade-in {
+  opacity: 0; transform: translateY(16px);
+  transition: opacity .58s cubic-bezier(.4,0,.2,1), transform .58s cubic-bezier(.4,0,.2,1);
+}
+.fade-in.visible { opacity: 1; transform: none; }
+.fade-in:nth-child(2) { transition-delay: .07s; }
+.fade-in:nth-child(3) { transition-delay: .14s; }
+.fade-in:nth-child(4) { transition-delay: .21s; }
+.fade-in:nth-child(5) { transition-delay: .28s; }
+.fade-in:nth-child(6) { transition-delay: .35s; }
+
+/* ── RESPONSIVE ──────────────────────────── */
+@media (max-width: 960px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 44px; }
+  .terminal-outer { max-width: 540px; margin: 0 auto; }
+  .features-grid { grid-template-columns: repeat(2,1fr); }
+  .how-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); }
+  .stat-cell:nth-child(2) { border-right: none; }
+}
+@media (max-width: 640px) {
+  .nav-links { display: none; }
+  .nav-logo-slash, .nav-logo-sub { display: none; }
+  .features-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); }
+  .footer-inner { flex-direction: column; align-items: flex-start; }
 }
 
 </style>
@@ -759,70 +694,70 @@ footer { border-top: 1px solid var(--border); padding: 44px 0; }
 <nav>
   <div class="nav-inner">
     <a href="#" class="nav-logo">
-      <div class="nav-logo-mark">LF</div>
-      <span class="nav-logo-name">LeadForge</span>
+      <div class="nav-logo-mark">IFS</div>
+      <span class="nav-logo-name">Ian Fleni Sison</span>
+      <span class="nav-logo-slash">/</span>
+      <span class="nav-logo-sub">lead-intelligence</span>
     </a>
     <div class="nav-links">
-      <a href="#features" class="nav-link">Features</a>
-      <a href="#how"      class="nav-link">How It Works</a>
-      <a href="#"         class="nav-link">Pricing</a>
-      <a href="#"         class="nav-link">Docs</a>
+      <a href="#features"  class="nav-link">Capabilities</a>
+      <a href="#how"       class="nav-link">Workflow</a>
+      <a href="#generator" class="nav-link">Generator</a>
     </div>
     <div class="nav-right">
-      <a href="#" class="btn-ghost">Sign in</a>
-      <a href="#" class="btn-nav-cta">Get Started Free</a>
+      <a href="index.html" class="nav-tracker-btn">
+        <span class="nav-status-dot"></span>
+        Open Tracker
+      </a>
     </div>
   </div>
 </nav>
 
 <!-- ── HERO ── -->
 <section id="hero">
-  <div class="hero-orb-center"></div>
-  <div class="hero-orb-right"></div>
+  <div class="hero-glow-tl"></div>
+  <div class="hero-glow-r"></div>
 
   <div class="hero-inner">
 
     <!-- LEFT -->
     <div>
-      <div class="hero-badge">
-        <span class="badge-dot"></span>
-        AI-Powered · B2B Lead Intelligence · 2026
+      <div class="hero-eyebrow">
+        <span class="eyebrow-dot"></span>
+        <span class="eyebrow-ver">v2026</span>
+        <span>·</span>
+        private workspace
+        <span>·</span>
+        AGLA Media
       </div>
 
       <h1 class="hero-h1">
-        Find, Verify &amp; Close<br>
-        <span class="accent">B2B Leads</span><br>
-        at Machine Speed
+        Track. Enrich.<br>
+        <span class="accent">Outreach.</span><br>
+        No noise.
       </h1>
 
       <p class="hero-sub">
-        LeadForge scrapes, enriches, and tracks B2B prospects across LinkedIn, Google Maps, job boards, and company sites — verified and export-ready in minutes.
+        A private lead intelligence workspace for finding, qualifying, and messaging high-ticket clients in healthcare and aesthetics — built for one solo paid media operator.
       </p>
 
       <div class="hero-btns">
-        <a href="#" class="btn-hero-primary">
-          Start Free — No Card
-          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+        <a href="index.html" class="btn-hero-primary">
+          Open Lead Tracker
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
         </a>
-        <a href="#how" class="btn-hero-secondary">
-          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          Watch Demo
+        <a href="#generator" class="btn-hero-secondary">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="m13 2-3 14 4-4 4 4L13 2z"/><path d="m6 14-4 4 4-4zM18 6l4-4-4 4z"/></svg>
+          Outreach Generator
         </a>
       </div>
 
-      <div class="hero-trust">
-        <div class="trust-item">
-          <svg class="trust-check" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
-          Free 50 leads/month
-        </div>
-        <div class="trust-item">
-          <svg class="trust-check" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
-          94% email accuracy
-        </div>
-        <div class="trust-item">
-          <svg class="trust-check" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
-          Setup in 60 seconds
-        </div>
+      <div class="operator-strip">
+        <span class="op-item">176 leads tracked</span>
+        <span class="op-sep">·</span>
+        <span class="op-item">9 industries</span>
+        <span class="op-sep">·</span>
+        <span class="op-item">3x–5x ROAS</span>
       </div>
     </div>
 
@@ -834,14 +769,14 @@ footer { border-top: 1px solid var(--border); padding: 44px 0; }
           <span class="tdot red"></span>
           <span class="tdot amber"></span>
           <span class="tdot grn"></span>
-          <span class="t-titlebar-label">leadforge — bash — 80×24</span>
+          <span class="t-titlebar-label">ian@leadengine — bash — 80×24</span>
         </div>
         <div class="terminal-body" id="termBody">
           <span class="t-cursor-block" id="initCursor"></span>
         </div>
         <div class="terminal-statusbar">
-          <span style="font-family:'JetBrains Mono',monospace">leadforge v2.4.1</span>
-          <span class="t-status-live"><span class="t-live-dot"></span> ready</span>
+          <span style="font-family:'JetBrains Mono',monospace">leadengine v2.6.1</span>
+          <span class="t-status-live"><span class="t-live-dot"></span> active</span>
         </div>
       </div>
     </div>
@@ -849,71 +784,56 @@ footer { border-top: 1px solid var(--border); padding: 44px 0; }
   </div>
 </section>
 
-<!-- ── PROOF BAR ── -->
-<div class="proof-bar">
-  <div class="proof-inner">
-    <span class="proof-label">Trusted by teams at</span>
-    <div class="proof-logos">
-      <span class="proof-logo">AGLA Media</span>
-      <span class="proof-logo">GrowthLabs</span>
-      <span class="proof-logo">Apex Digital</span>
-      <span class="proof-logo">ScaleOps</span>
-      <span class="proof-logo">VentureAds</span>
-      <span class="proof-logo">PulseGrowth</span>
-    </div>
-  </div>
-</div>
-
-<!-- ── FEATURES ── -->
+<!-- ── CAPABILITIES ── -->
 <section id="features">
   <div class="container">
     <div class="section-header">
       <div class="section-eyebrow fade-in">Capabilities</div>
-      <h2 class="section-h2 fade-in">Everything you need<br>to fill your pipeline</h2>
-      <p class="section-sub fade-in">From discovery to closed deal — LeadForge automates the entire B2B prospecting workflow so your team focuses on revenue.</p>
+      <h2 class="section-h2 fade-in">Built around one workflow.<br>Every tool earns its place.</h2>
+      <p class="section-sub fade-in">Scraping, enrichment, outreach, and pipeline tracking — assembled for a solo operator running high-ticket paid media campaigns in healthcare and aesthetics.</p>
     </div>
 
     <div class="features-grid">
 
       <div class="feat-card fade-in">
         <div class="feat-icon-wrap">⚡</div>
-        <div class="feat-title">AI-Powered Scraping</div>
-        <div class="feat-desc">Discover businesses across LinkedIn, Google Maps, job boards, and company sites. Define your niche once — let the engine run continuously.</div>
+        <div class="feat-title">Targeted Scraping</div>
+        <div class="feat-desc">Find businesses across LinkedIn, Google Maps, job boards, and company sites. Define the niche once — the engine runs continuously and deduplicates automatically.</div>
         <span class="feat-pill">--auto-discover</span>
       </div>
 
       <div class="feat-card fade-in">
         <div class="feat-icon-wrap">✉️</div>
         <div class="feat-title">Email Verification</div>
-        <div class="feat-desc">Every lead goes through real-time MX validation and SMTP verification. 94%+ deliverability before your first send, zero bounces.</div>
+        <div class="feat-desc">MX validation and SMTP verification on every contact. High deliverability before the first send — no bounces polluting sender reputation.</div>
         <span class="feat-pill">--verify-emails=true</span>
       </div>
 
       <div class="feat-card fade-in">
         <div class="feat-icon-wrap">🔍</div>
-        <div class="feat-title">Multi-Source Discovery</div>
-        <div class="feat-desc">Pull simultaneously from 12+ sources — LinkedIn, Google Maps, Indeed, Glassdoor, and direct company sites — deduplicated and merged.</div>
+        <div class="feat-title">Multi-Source Enrichment</div>
+        <div class="feat-desc">Pull simultaneously from 12+ sources — LinkedIn, Maps, Indeed, and direct sites — merged and structured into clean contact records ready to track.</div>
         <span class="feat-pill">--sources="all"</span>
       </div>
 
       <div class="feat-card fade-in">
         <div class="feat-icon-wrap">📦</div>
-        <div class="feat-title">CRM-Ready Export</div>
-        <div class="feat-desc">Export verified leads as JSON, CSV, or pipe directly into HubSpot, Salesforce, Notion, or Airtable. Structured fields, zero cleanup.</div>
+        <div class="feat-title">Structured Export</div>
+        <div class="feat-desc">Export as JSON, CSV, or push directly to a CRM. Every field named, typed, and consistent — zero manual cleanup after export.</div>
         <span class="feat-pill">--output=leads.json</span>
       </div>
 
       <div class="feat-card fade-in">
         <div class="feat-icon-wrap">📊</div>
-        <div class="feat-title">Outreach Pipeline</div>
-        <div class="feat-desc">Track every lead from first contact to closed. Status updates, follow-up scheduling, and full team visibility — built into the dashboard.</div>
+        <div class="feat-title">Pipeline Tracking</div>
+        <div class="feat-desc">Status per lead, per outreach, per channel. From first scrape to live client — every stage tracked, timestamped, and visible in one table.</div>
         <span class="feat-pill">--track-pipeline</span>
       </div>
 
       <div class="feat-card fade-in">
         <div class="feat-icon-wrap">🎯</div>
         <div class="feat-title">Precision Filtering</div>
-        <div class="feat-desc">Filter by revenue signals, hiring activity, ad spend indicators, tech stack, company size, and 40+ qualifiers. No noise, just intent.</div>
+        <div class="feat-desc">Filter by revenue signals, tech stack, hiring activity, ad spend markers, and 40+ qualifiers. High-ticket targets only — no volume for volume's sake.</div>
         <span class="feat-pill">--filters="high_ticket"</span>
       </div>
 
@@ -923,11 +843,11 @@ footer { border-top: 1px solid var(--border); padding: 44px 0; }
 
 <div class="divider"></div>
 
-<!-- ── HOW IT WORKS ── -->
+<!-- ── WORKFLOW ── -->
 <section id="how">
   <div class="container">
     <div class="section-header">
-      <div class="section-eyebrow fade-in">How It Works</div>
+      <div class="section-eyebrow fade-in">Workflow</div>
       <h2 class="section-h2 fade-in">From niche to outreach<br>in three steps</h2>
     </div>
 
@@ -936,22 +856,22 @@ footer { border-top: 1px solid var(--border); padding: 44px 0; }
         <div class="step fade-in">
           <div class="step-num-badge">01</div>
           <div>
-            <div class="step-title">Define your target niche</div>
-            <div class="step-desc">Specify your industry, location, and qualifiers. Use natural language or the CLI — LeadForge understands both. Filter by niche, hiring signals, tech stack, or revenue indicators.</div>
+            <div class="step-title">Define the target niche</div>
+            <div class="step-desc">Specify industry, location, and qualifiers — niche type, hiring signals, tech stack, revenue tier. Use CLI flags or natural language. The engine understands both.</div>
           </div>
         </div>
         <div class="step fade-in">
           <div class="step-num-badge">02</div>
           <div>
-            <div class="step-title">AI scrapes and enriches</div>
-            <div class="step-desc">The engine pulls from 12+ data sources, deduplicates results, enriches each record with contact data and social profiles, then verifies emails in real-time. Ready in minutes.</div>
+            <div class="step-title">Scrape, enrich, verify</div>
+            <div class="step-desc">12+ data sources pulled in parallel, deduplicated, contact data enriched, emails verified in real-time. A clean, pipeline-ready record in under three minutes.</div>
           </div>
         </div>
         <div class="step fade-in">
           <div class="step-num-badge">03</div>
           <div>
-            <div class="step-title">Export and outreach</div>
-            <div class="step-desc">Download structured data straight into your CRM or outreach tool. Track response rates, schedule follow-ups, and move deals forward — all in one place.</div>
+            <div class="step-title">Generate and send outreach</div>
+            <div class="step-desc">Use the AI generator to write industry-personalized LinkedIn notes or cold emails — pre-loaded with Ian's background, pain points, and pitch. Copy and send.</div>
           </div>
         </div>
       </div>
@@ -961,7 +881,7 @@ footer { border-top: 1px solid var(--border); padding: 44px 0; }
         <div class="pl-header">
           <div class="pl-dot"></div>
           <span class="pl-title">Lead Pipeline</span>
-          <span class="pl-count">847 leads</span>
+          <span class="pl-count">176 leads</span>
         </div>
         <div class="pl-rows">
           <div class="pl-row">
@@ -972,7 +892,7 @@ footer { border-top: 1px solid var(--border); padding: 44px 0; }
                 <div class="pl-ind">Dental · Los Angeles, CA</div>
               </div>
             </div>
-            <span class="status-badge s-verified">Verified</span>
+            <span class="status-badge s-verified">verified</span>
           </div>
           <div class="pl-row">
             <div class="pl-row-l">
@@ -982,7 +902,7 @@ footer { border-top: 1px solid var(--border); padding: 44px 0; }
                 <div class="pl-ind">MedSpa · Miami, FL</div>
               </div>
             </div>
-            <span class="status-badge s-outreach">In Outreach</span>
+            <span class="status-badge s-outreach">contacted</span>
           </div>
           <div class="pl-row">
             <div class="pl-row-l">
@@ -992,7 +912,7 @@ footer { border-top: 1px solid var(--border); padding: 44px 0; }
                 <div class="pl-ind">Aesthetics · Beverly Hills, CA</div>
               </div>
             </div>
-            <span class="status-badge s-pending">Pending</span>
+            <span class="status-badge s-pending">pending</span>
           </div>
           <div class="pl-row">
             <div class="pl-row-l">
@@ -1002,7 +922,7 @@ footer { border-top: 1px solid var(--border); padding: 44px 0; }
                 <div class="pl-ind">Dental · Chicago, IL</div>
               </div>
             </div>
-            <span class="status-badge s-verified">Verified</span>
+            <span class="status-badge s-verified">verified</span>
           </div>
           <div class="pl-row">
             <div class="pl-row-l">
@@ -1012,7 +932,7 @@ footer { border-top: 1px solid var(--border); padding: 44px 0; }
                 <div class="pl-ind">Wellness · Austin, TX</div>
               </div>
             </div>
-            <span class="status-badge s-outreach">In Outreach</span>
+            <span class="status-badge s-outreach">contacted</span>
           </div>
         </div>
       </div>
@@ -1028,20 +948,20 @@ footer { border-top: 1px solid var(--border); padding: 44px 0; }
     <div class="stats-wrap fade-in">
       <div class="stats-grid">
         <div class="stat-cell">
-          <div class="stat-num">847K+</div>
-          <div class="stat-label">Leads Generated</div>
+          <div class="stat-num">176+</div>
+          <div class="stat-label">Leads Tracked</div>
         </div>
         <div class="stat-cell">
-          <div class="stat-num">94%</div>
-          <div class="stat-label">Email Accuracy</div>
+          <div class="stat-num">9</div>
+          <div class="stat-label">Target Industries</div>
         </div>
         <div class="stat-cell">
-          <div class="stat-num">12+</div>
-          <div class="stat-label">Data Sources</div>
+          <div class="stat-num">3–5×</div>
+          <div class="stat-label">Client ROAS Delivered</div>
         </div>
         <div class="stat-cell">
-          <div class="stat-num">&lt;3min</div>
-          <div class="stat-label">Time to First Lead</div>
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Contacts Verified</div>
         </div>
       </div>
     </div>
@@ -1050,68 +970,13 @@ footer { border-top: 1px solid var(--border); padding: 44px 0; }
 
 <div class="divider"></div>
 
-<!-- ── TESTIMONIALS ── -->
-<section id="testimonials">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow fade-in">Results</div>
-      <h2 class="section-h2 fade-in">What growth teams are saying</h2>
-    </div>
-    <div class="testimonials-grid">
-
-      <div class="testi-card fade-in">
-        <div class="testi-stars">
-          <span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span>
-        </div>
-        <div class="testi-quote">"We went from spending 8 hours a week manually finding dental leads to having 200+ verified contacts exported before Monday morning standup. LeadForge is now a core part of our outreach stack."</div>
-        <div class="testi-author">
-          <div class="testi-av">IF</div>
-          <div>
-            <div class="testi-name">Ian Fleni Sison</div>
-            <div class="testi-role">COO — AGLA Media</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="testi-card fade-in">
-        <div class="testi-stars">
-          <span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span>
-        </div>
-        <div class="testi-quote">"The email verification alone is worth it. Before LeadForge, our bounce rate was sitting at 18%. Now we're under 2% consistently. Our sender reputation has completely recovered."</div>
-        <div class="testi-author">
-          <div class="testi-av">MR</div>
-          <div>
-            <div class="testi-name">Maya Rodriguez</div>
-            <div class="testi-role">Head of Growth — ScaleOps</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="testi-card fade-in">
-        <div class="testi-stars">
-          <span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span>
-        </div>
-        <div class="testi-quote">"As a media buyer targeting MedSpas, the niche filtering is genuinely impressive. High-ticket, multi-location, modern website — three filters and I have 50 perfect-fit accounts to call on."</div>
-        <div class="testi-author">
-          <div class="testi-av">TK</div>
-          <div>
-            <div class="testi-name">Tom Kwon</div>
-            <div class="testi-role">Founder — Apex Digital</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
 <!-- ── AI OUTREACH GENERATOR ── -->
 <section id="generator">
   <div class="container">
     <div class="section-header">
       <div class="gen-section-label fade-in"><span class="gen-section-label-dot"></span>AI Outreach Engine</div>
       <h2 class="section-h2 fade-in">Generate a personalized message<br>for any lead in seconds</h2>
-      <p class="section-sub fade-in">Powered by Ian's exact background and industry-specific context. Fill in the lead details — get a ready-to-send LinkedIn note or cold email.</p>
+      <p class="section-sub fade-in">Pre-loaded with Ian's exact background and industry context. Fill in the lead details — get a ready-to-send LinkedIn note or cold email.</p>
     </div>
 
     <!-- Generator card -->
@@ -1156,18 +1021,18 @@ footer { border-top: 1px solid var(--border); padding: 44px 0; }
           <label class="gen-label">Channel</label>
           <div class="gen-toggle">
             <button class="gen-toggle-btn active" id="btn-linkedin" onclick="setChannel('linkedin')">
-              <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+              <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
               LinkedIn Note
             </button>
             <button class="gen-toggle-btn" id="btn-email" onclick="setChannel('email')">
-              <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
               Cold Email
             </button>
           </div>
         </div>
 
         <button class="gen-generate-btn" onclick="generateMessage()">
-          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="m13 2-3 14 4-4 4 4L13 2z"/><path d="m6 14-4 4 4-4zM18 6l4-4-4 4z"/></svg>
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="m13 2-3 14 4-4 4 4L13 2z"/><path d="m6 14-4 4 4-4zM18 6l4-4-4 4z"/></svg>
           Generate Message
         </button>
       </div>
@@ -1217,51 +1082,26 @@ footer { border-top: 1px solid var(--border); padding: 44px 0; }
   </div>
 </section>
 
-<!-- ── CTA ── -->
-<section id="cta">
-  <div class="cta-bg-glow"></div>
-  <div class="container">
-    <div class="cta-box fade-in">
-      <div class="hero-badge" style="display:inline-flex;margin-bottom:28px;">
-        <span class="badge-dot"></span>
-        Open Beta — Join Free
-      </div>
-      <h2 class="cta-h2">Start building your<br>pipeline today</h2>
-      <p class="cta-sub">Join media buyers, growth marketers, and agencies using LeadForge to fill their outreach queue with verified, high-intent B2B prospects — automatically.</p>
-      <div class="cta-btns">
-        <a href="#" class="btn-hero-primary">
-          Create Free Account
-          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
-        </a>
-        <a href="#" class="btn-hero-secondary">Book a Demo</a>
-      </div>
-      <p class="cta-note">Free forever up to 50 leads/month · No credit card · Cancel anytime</p>
-    </div>
-  </div>
-</section>
-
 <!-- ── FOOTER ── -->
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">
-      <div class="footer-logo-mark">LF</div>
-      <span class="footer-name">LeadForge</span>
+      <div class="footer-logo-mark">IFS</div>
+      <span class="footer-name">Ian Fleni Sison</span>
     </div>
     <div class="footer-links">
-      <a href="#" class="footer-link">Features</a>
-      <a href="#" class="footer-link">Pricing</a>
-      <a href="#" class="footer-link">Docs</a>
-      <a href="#" class="footer-link">Privacy</a>
-      <a href="#" class="footer-link">Terms</a>
+      <a href="index.html" class="footer-link">Lead Tracker</a>
+      <a href="#features"  class="footer-link">Capabilities</a>
+      <a href="#generator" class="footer-link">Generator</a>
     </div>
-    <span class="footer-copy">© 2026 LeadForge, Inc. All rights reserved.</span>
+    <span class="footer-copy">COO &amp; Head of Media Buyers — AGLA Media</span>
   </div>
 </footer>
 
 <script>
-/* ── Terminal animation ─────────────────── */
+/* ── Terminal animation ─────────────────────────── */
 const termLines = [
-  `<span class="t-prompt">$ </span><span class="t-cmd">forge search</span> <span class="t-cont">\\</span>`,
+  `<span class="t-prompt">ian@leadengine:~$ </span><span class="t-cmd">scrape run</span> <span class="t-cont">\\</span>`,
   `  <span class="t-flag">--niche</span><span class="t-eq">=</span><span class="t-str">"MedSpa,Dental,Aesthetics"</span> <span class="t-cont">\\</span>`,
   `  <span class="t-flag">--location</span><span class="t-eq">=</span><span class="t-str">"United States"</span> <span class="t-cont">\\</span>`,
   `  <span class="t-flag">--filters</span><span class="t-eq">=</span><span class="t-str">"high_ticket,multi_location"</span> <span class="t-cont">\\</span>`,
@@ -1270,15 +1110,14 @@ const termLines = [
 ];
 
 const outLines = [
-  { ms: 300,  html: `<span class="t-out-dim">⠸ Connecting to 12 data sources...</span>` },
-  { ms: 1100, html: `<span class="t-out-ok">✓</span><span class="t-out-dim"> Found 847 matching businesses</span>` },
-  { ms: 1900, html: `<span class="t-out-ok">✓</span><span class="t-out-dim"> Verified 612 email addresses (94.2%)</span>` },
-  { ms: 2700, html: `<span class="t-out-ok">✓</span><span class="t-out-dim"> Deduplicated → 831 unique records</span>` },
-  { ms: 3400, html: `<span class="t-out-ok">✓</span> <span style="color:var(--green);font-weight:600">Exported leads.json</span><span class="t-out-dim"> — 831 rows ready</span>` },
+  { html: `<span class="t-out-dim">⠸ Connecting to 12 data sources...</span>` },
+  { html: `<span class="t-out-ok">✓</span><span class="t-out-dim"> Found 847 matching businesses</span>` },
+  { html: `<span class="t-out-ok">✓</span><span class="t-out-dim"> Verified 612 email addresses (94.2%)</span>` },
+  { html: `<span class="t-out-ok">✓</span><span class="t-out-dim"> Deduplicated → 831 unique records</span>` },
+  { html: `<span class="t-out-ok">✓</span> <span style="color:var(--green);font-weight:600">Exported leads.json</span><span class="t-out-dim"> — 831 rows ready</span>` },
 ];
 
 const termBody = document.getElementById('termBody');
-const initCursor = document.getElementById('initCursor');
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
@@ -1292,7 +1131,6 @@ function makeLineEl(html) {
 function makeCursor() {
   const c = document.createElement('span');
   c.className = 't-cursor-block';
-  c.id = 'liveCursor';
   return c;
 }
 
@@ -1300,55 +1138,13 @@ async function runTerminal() {
   termBody.innerHTML = '';
   const cursor = makeCursor();
   termBody.appendChild(cursor);
-
-  await sleep(500);
-
-  for (let i = 0; i < termLines.length; i++) {
-    const lineEl = makeLineEl(termLines[i]);
-    lineEl.appendChild(cursor);
-    termBody.appendChild(lineEl);
-    await sleep(i === 0 ? 60 : 80 + Math.random() * 40);
-  }
-
-  /* blank line */
-  const blank = document.createElement('span');
-  blank.className = 't-line';
-  blank.innerHTML = '&nbsp;';
-  termBody.appendChild(blank);
-  cursor.remove();
-
-  await sleep(200);
-
-  /* output lines */
-  for (const { ms, html } of outLines) {
-    await sleep(ms - (outLines[outLines.indexOf({ ms, html })] || 0));
-    const ol = makeLineEl(html);
-    ol.style.opacity = '0';
-    ol.style.transform = 'translateY(5px)';
-    ol.style.transition = 'opacity .3s ease, transform .3s ease';
-    termBody.appendChild(ol);
-    await sleep(16);
-    ol.style.opacity = '1';
-    ol.style.transform = 'none';
-  }
-
-  await sleep(4200);
-  runTerminal();
-}
-
-/* Stagger output delays correctly */
-(async () => {
-  await sleep(800);
-  termBody.innerHTML = '';
-  const cursor = makeCursor();
-  termBody.appendChild(cursor);
-  await sleep(400);
+  await sleep(520);
 
   for (let i = 0; i < termLines.length; i++) {
     const lineEl = makeLineEl(termLines[i]);
     lineEl.appendChild(cursor);
     termBody.appendChild(lineEl);
-    await sleep(i === 0 ? 60 : 90);
+    await sleep(i === 0 ? 60 : 85 + Math.random() * 35);
   }
 
   const blank = document.createElement('span');
@@ -1356,112 +1152,111 @@ async function runTerminal() {
   termBody.appendChild(blank);
   cursor.remove();
 
-  const delays = [0, 800, 1600, 2400, 3100];
   for (let i = 0; i < outLines.length; i++) {
-    await sleep(i === 0 ? 200 : 800);
+    await sleep(i === 0 ? 220 : 820);
     const ol = makeLineEl(outLines[i].html);
-    ol.style.cssText = 'opacity:0;transform:translateY(5px);transition:opacity .35s ease,transform .35s ease';
+    ol.style.cssText = 'opacity:0;transform:translateY(4px);transition:opacity .32s ease,transform .32s ease';
     termBody.appendChild(ol);
-    await sleep(20);
+    await sleep(18);
     ol.style.opacity = '1';
     ol.style.transform = 'none';
   }
 
-  /* restart loop */
-  await sleep(4500);
-  setInterval(() => {}, 999999); /* prevent double-loop */
+  await sleep(4600);
   runTerminal();
-})();
+}
 
-/* ── Feature card mouse glow ─────────────── */
+runTerminal();
+
+/* ── Feature card mouse glow ──────────────────── */
 document.querySelectorAll('.feat-card').forEach(card => {
   card.addEventListener('mousemove', e => {
     const r = card.getBoundingClientRect();
-    card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+    card.style.setProperty('--mx', ((e.clientX - r.left) / r.width  * 100) + '%');
     card.style.setProperty('--my', ((e.clientY - r.top)  / r.height * 100) + '%');
   });
 });
 
-/* ── Scroll fade-in ──────────────────────── */
+/* ── Scroll fade-in ───────────────────────────── */
 const io = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1, rootMargin: '0px 0px -36px 0px' });
+}, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
 
 document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
 
-/* ── AI Outreach Generator ───────────────── */
+/* ── AI Outreach Generator ────────────────────── */
 const industryPresets = {
   'MedSpa': {
-    pain:      'likely relying on Groupon deals or running ads that attract price-shoppers instead of high-ticket clients',
-    pitch:     'filling injectable, laser, and body contouring slots',
-    pitchShort:'injectable and body contouring bookings',
-    platforms: 'Meta and TikTok',
-    subject:   (co) => `${co} — paid ads for injectables and body contouring`,
-    label:     'med spas',
+    pain:       'likely relying on Groupon deals or running ads that attract price-shoppers instead of high-ticket clients',
+    pitch:      'filling injectable, laser, and body contouring slots',
+    pitchShort: 'injectable and body contouring bookings',
+    platforms:  'Meta and TikTok',
+    subject:    (co) => `${co} — paid ads for injectables and body contouring`,
+    label:      'med spas',
   },
   'Dental': {
-    pain:      'likely running ads that attract cleaning patients instead of the veneer and implant cases they actually want',
-    pitch:     'targeting veneer, implant, and full-arch case inquiries — not cleaning volume',
-    pitchShort:'veneer and implant case inquiries',
-    platforms: 'Meta and Google',
-    subject:   (co) => `More cosmetic case bookings for ${co}`,
-    label:     'dental practices',
+    pain:       'likely running ads that attract cleaning patients instead of the veneer and implant cases they actually want',
+    pitch:      'targeting veneer, implant, and full-arch case inquiries — not cleaning volume',
+    pitchShort: 'veneer and implant case inquiries',
+    platforms:  'Meta and Google',
+    subject:    (co) => `More cosmetic case bookings for ${co}`,
+    label:      'dental practices',
   },
   'Marketing Agency': {
-    pain:      'handling overflow client work or niche verticals without specialist paid media capacity',
-    pitch:     'running white-label media buying under your brand',
-    pitchShort:'white-label media buying',
-    platforms: 'Meta, TikTok, and Google',
-    subject:   (co) => `White-label media buying — ${co}`,
-    label:     'agencies',
+    pain:       'handling overflow client work or niche verticals without specialist paid media capacity',
+    pitch:      'running white-label media buying under your brand',
+    pitchShort: 'white-label media buying',
+    platforms:  'Meta, TikTok, and Google',
+    subject:    (co) => `White-label media buying — ${co}`,
+    label:      'agencies',
   },
   'Wellness': {
-    pain:      'hitting a ceiling past referrals — paid ads driving general interest traffic that never converts to memberships',
-    pitch:     'filling memberships, retreats, and high-ticket programs with qualified buyers',
-    pitchShort:'membership and program enrollments',
-    platforms: 'Meta and TikTok',
-    subject:   (co) => `${co} — paid ads for memberships and programs`,
-    label:     'wellness brands',
+    pain:       'hitting a ceiling past referrals — paid ads driving general interest traffic that never converts to memberships',
+    pitch:      'filling memberships, retreats, and high-ticket programs with qualified buyers',
+    pitchShort: 'membership and program enrollments',
+    platforms:  'Meta and TikTok',
+    subject:    (co) => `${co} — paid ads for memberships and programs`,
+    label:      'wellness brands',
   },
   'Chiropractic': {
-    pain:      'dependent on referrals or running ads that pull insurance-driven volume with short visit windows',
-    pitch:     'targeting cash-pay and long-term wellness patients, not insurance cases',
-    pitchShort:'cash-pay and long-term wellness patients',
-    platforms: 'Meta and Google',
-    subject:   (co) => `More cash-pay patients for ${co}`,
-    label:     'chiropractic practices',
+    pain:       'dependent on referrals or running ads that pull insurance-driven volume with short visit windows',
+    pitch:      'targeting cash-pay and long-term wellness patients, not insurance cases',
+    pitchShort: 'cash-pay and long-term wellness patients',
+    platforms:  'Meta and Google',
+    subject:    (co) => `More cash-pay patients for ${co}`,
+    label:      'chiropractic practices',
   },
   'Aesthetics': {
-    pain:      'running awareness-only ad spend while the actual consultation pipeline stays empty',
-    pitch:     'targeting patients with real buying intent for procedures, not just top-of-funnel traffic',
-    pitchShort:'high-ticket consultation bookings',
-    platforms: 'Meta and TikTok',
-    subject:   (co) => `Filling more consultations at ${co}`,
-    label:     'aesthetic clinics',
+    pain:       'running awareness-only ad spend while the actual consultation pipeline stays empty',
+    pitch:      'targeting patients with real buying intent for procedures, not just top-of-funnel traffic',
+    pitchShort: 'high-ticket consultation bookings',
+    platforms:  'Meta and TikTok',
+    subject:    (co) => `Filling more consultations at ${co}`,
+    label:      'aesthetic clinics',
   },
   'Plastic Surgery': {
-    pain:      'using ad strategies that optimize too early in a decision cycle that takes weeks or months',
-    pitch:     'multi-touch campaigns structured around the full patient decision cycle — from awareness to booked consultation',
-    pitchShort:'consultation pipeline with multi-touch campaigns',
-    platforms: 'Meta and Google',
-    subject:   (co) => `Consultation pipeline for ${co}`,
-    label:     'plastic surgery practices',
+    pain:       'using ad strategies that optimize too early in a decision cycle that takes weeks or months',
+    pitch:      'multi-touch campaigns structured around the full patient decision cycle — from awareness to booked consultation',
+    pitchShort: 'consultation pipeline with multi-touch campaigns',
+    platforms:  'Meta and Google',
+    subject:    (co) => `Consultation pipeline for ${co}`,
+    label:      'plastic surgery practices',
   },
   'Orthodontics': {
-    pain:      'relying on family referrals with no paid strategy for adult Invisalign — a completely different purchase decision',
-    pitch:     'targeting adult Invisalign starts and new family cases in your specific market',
-    pitchShort:'adult Invisalign starts',
-    platforms: 'Meta and TikTok',
-    subject:   (co) => `More Invisalign starts for ${co}`,
-    label:     'orthodontic practices',
+    pain:       'relying on family referrals with no paid strategy for adult Invisalign — a completely different purchase decision',
+    pitch:      'targeting adult Invisalign starts and new family cases in your specific market',
+    pitchShort: 'adult Invisalign starts',
+    platforms:  'Meta and TikTok',
+    subject:    (co) => `More Invisalign starts for ${co}`,
+    label:      'orthodontic practices',
   },
   'Cosmetic Dentistry': {
-    pain:      'running ads optimized for volume that attract patients who can\'t afford the work',
-    pitch:     'targeting patients with real intent for veneers, implants, and smile makeovers — built around case value, not volume',
-    pitchShort:'veneer and smile makeover consults',
-    platforms: 'Meta and Google',
-    subject:   (co) => `More smile makeover consults at ${co}`,
-    label:     'cosmetic dental practices',
+    pain:       'running ads optimized for volume that attract patients who can\'t afford the work',
+    pitch:      'targeting patients with real intent for veneers, implants, and smile makeovers — built around case value, not volume',
+    pitchShort: 'veneer and smile makeover consults',
+    platforms:  'Meta and Google',
+    subject:    (co) => `More smile makeover consults at ${co}`,
+    label:      'cosmetic dental practices',
   },
 };
 
@@ -1482,9 +1277,9 @@ function esc(s) {
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-function ph(text) { return `<span class="gen-ph">${esc(text)}</span>`; }
-function hi(text) { return `<span class="gen-highlight">${esc(text)}</span>`; }
-function sig(text){ return `<span class="gen-sig">${esc(text)}</span>`; }
+function ph(text)  { return `<span class="gen-ph">${esc(text)}</span>`; }
+function hi(text)  { return `<span class="gen-highlight">${esc(text)}</span>`; }
+function sig(text) { return `<span class="gen-sig">${esc(text)}</span>`; }
 
 function generateMessage() {
   const company  = document.getElementById('g-company').value.trim();
@@ -1492,9 +1287,9 @@ function generateMessage() {
   const industry = document.getElementById('g-industry').value;
   const city     = document.getElementById('g-city').value.trim();
 
-  const co  = company  || null;
-  const cn  = contact  || null;
-  const ind = industry || null;
+  const co     = company  || null;
+  const cn     = contact  || null;
+  const ind    = industry || null;
   const preset = ind ? industryPresets[ind] : null;
 
   const outputEl = document.getElementById('gen-output-body');
@@ -1504,17 +1299,17 @@ function generateMessage() {
   if (emptyEl) emptyEl.style.display = 'none';
 
   if (activeChannel === 'linkedin') {
-    const coDisplay  = co  ? hi(co)  : ph('[Company]');
-    const cnDisplay  = cn  ? hi(cn)  : ph('[Contact]');
-    const indDisplay = ind ? hi(preset.label) : ph('[industry]');
-    const platDisplay= preset ? hi(preset.platforms) : ph('[platforms]');
-    const pitchDisplay = preset ? hi(preset.pitchShort) : ph('[pitch]');
+    const coDisplay    = co     ? hi(co)              : ph('[Company]');
+    const cnDisplay    = cn     ? hi(cn)              : ph('[Contact]');
+    const indDisplay   = preset ? hi(preset.label)    : ph('[industry]');
+    const platDisplay  = preset ? hi(preset.platforms) : ph('[platforms]');
+    const pitchDisplay = preset ? hi(preset.pitchShort): ph('[pitch]');
 
-    const rawCo   = co  || '[Company]';
-    const rawCn   = cn  || '[Contact]';
-    const rawInd  = ind ? preset.label : '[industry]';
-    const rawPlat = preset ? preset.platforms : '[platforms]';
-    const rawPitch= preset ? preset.pitchShort : '[pitch]';
+    const rawCo    = co     || '[Company]';
+    const rawCn    = cn     || '[Contact]';
+    const rawInd   = preset ? preset.label      : '[industry]';
+    const rawPlat  = preset ? preset.platforms  : '[platforms]';
+    const rawPitch = preset ? preset.pitchShort : '[pitch]';
 
     generatedRaw = `Hi ${rawCn}, I'm Ian — COO at AGLA Media. We run ${rawPlat} ads for ${rawInd}, averaging 3x–5x ROAS on ${rawPitch}. Saw ${rawCo}, think there's a fit. Worth connecting?`;
 
@@ -1525,35 +1320,32 @@ function generateMessage() {
     outputEl.innerHTML = `<div class="gen-body-text">Hi ${cnDisplay}, I'm Ian — ${hi('COO at AGLA Media')}. We run ${platDisplay} ads for ${indDisplay}, averaging ${hi('3x–5x ROAS')} on ${pitchDisplay}. Saw ${coDisplay}, think there's a fit. Worth connecting?</div>`;
 
   } else {
-    const coDisplay  = co  ? hi(co)  : ph('[Company]');
-    const cnDisplay  = cn  ? hi(cn)  : ph('[Contact]');
+    const coDisplay = co ? hi(co) : ph('[Company]');
+    const cnDisplay = cn ? hi(cn) : ph('[Contact]');
 
     if (!preset) {
-      const rawSubj = `[Company] — [Industry-specific subject]`;
-      generatedRaw = `Subject: ${rawSubj}\n\nHi [Contact],\n\nI'm Ian, COO & Head of Media Buyers at AGLA Media. [Industry context and pain point].\n\nWe run [platforms] campaigns [pitch]. Our clients average 3x–5x ROAS.\n\nWorth a 15-minute call to see if there's a fit?\n\nIan Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com`;
+      generatedRaw = `Subject: [Company] — [Industry-specific subject]\n\nHi [Contact],\n\nI'm Ian, COO & Head of Media Buyers at AGLA Media. [Industry context and pain point].\n\nWe run [platforms] campaigns [pitch]. Our clients average 3x–5x ROAS.\n\nWorth a 15-minute call to see if there's a fit?\n\nIan Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com`;
       outputEl.innerHTML = `
         <span class="gen-subject-label">Subject</span>
         <span class="gen-subject-value">${ph('[Company]')} — ${ph('[Industry-specific subject]')}</span>
-        <div class="gen-body-text">Hi ${ph('[Contact]')},\n\nI'm Ian, ${hi('COO & Head of Media Buyers at AGLA Media')}. ${ph('[Industry context and pain point]')}.\n\nWe run ${ph('[platforms]')} campaigns ${ph('[pitch]')}. Our clients average ${hi('3x–5x ROAS')}.\n\nWorth a 15-minute call to see if there's a fit?\n\n${sig('Ian Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com')}</div>`;
+        <div class="gen-body-text">Hi ${ph('[Contact]')},\n\nI'm Ian, ${hi('COO & Head of Media Buyers at AGLA Media')}. ${ph('[Industry context and pain point]')}.\n\nWe run ${ph('[platforms]')} campaigns ${ph('[pitch]')}. Our clients average ${hi('3x–5x ROAS')}.\n\nWorth a 15-minute call to see if there\'s a fit?\n\n${sig('Ian Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com')}</div>`;
       return;
     }
 
-    const rawCo   = co  || '[Company]';
-    const rawCn   = cn  || '[Contact]';
-    const subj    = preset.subject(rawCo);
-
-    const cityLine = city ? ` You're based in ${city}.` : '';
+    const rawCo = co || '[Company]';
+    const rawCn = cn || '[Contact]';
+    const subj  = preset.subject(rawCo);
     const painSentence = `${rawCo} is likely ${preset.pain}.`;
 
     generatedRaw = `Subject: ${subj}\n\nHi ${rawCn},\n\nI'm Ian, COO & Head of Media Buyers at AGLA Media. ${painSentence}\n\nWe run ${preset.platforms} campaigns ${preset.pitch}. Our clients average 3x–5x ROAS.\n\nWorth a 15-minute call to see if there's a fit?\n\nIan Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com`;
 
-    const painHTML    = `${coDisplay} is likely ${esc(preset.pain)}.`;
-    const pitchHTML   = `We run ${hi(preset.platforms)} campaigns ${esc(preset.pitch)}.`;
+    const painHTML  = `${coDisplay} is likely ${esc(preset.pain)}.`;
+    const pitchHTML = `We run ${hi(preset.platforms)} campaigns ${esc(preset.pitch)}.`;
 
     outputEl.innerHTML = `
       <span class="gen-subject-label">Subject</span>
       <span class="gen-subject-value">${esc(subj)}</span>
-      <div class="gen-body-text">Hi ${cnDisplay},\n\nI'm Ian, ${hi('COO & Head of Media Buyers at AGLA Media')}. ${painHTML}\n\n${pitchHTML} Our clients average ${hi('3x–5x ROAS')}.\n\nWorth a 15-minute call to see if there's a fit?\n\n${sig('Ian Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com')}</div>`;
+      <div class="gen-body-text">Hi ${cnDisplay},\n\nI'm Ian, ${hi('COO & Head of Media Buyers at AGLA Media')}. ${painHTML}\n\n${pitchHTML} Our clients average ${hi('3x–5x ROAS')}.\n\nWorth a 15-minute call to see if there\'s a fit?\n\n${sig('Ian Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com')}</div>`;
   }
 }
 
@@ -1566,7 +1358,7 @@ function copyGenMessage() {
   });
 }
 
-/* ── System Prompt Reference renderer ───── */
+/* ── System Prompt Reference ──────────────────── */
 const SYSTEM_PROMPT_RAW = `You are an expert paid media strategist and outreach copywriter. Write a cold outreach message for Ian Fleni Sison — a paid media strategist with 5+ years across TikTok, Meta, and Google Ads, currently serving as COO & Head of Media Buyers at AGLA Media. He consistently delivers 3x–5x ROAS for clients.
 
 LEAD DETAILS:
@@ -1616,11 +1408,13 @@ function renderPromptRef() {
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
   sectionHeads.forEach(h => {
-    html = html.replace(new RegExp(h.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'g'),
-      `<span class="pr-section-head">${h}</span>`);
+    html = html.replace(
+      new RegExp(h.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'g'),
+      `<span class="pr-section-head">${h}</span>`
+    );
   });
   html = html.replace(/\[([^\]]+)\]/g, '<span class="pr-ph">[$1]</span>');
-  html = html.replace(/^(— .+)$/gm, '<span class="pr-dash">$1</span>');
+  html = html.replace(/^(— .+)$/gm,   '<span class="pr-dash">$1</span>');
 
   el.innerHTML = html;
 }
