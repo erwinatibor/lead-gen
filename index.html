@@ -618,6 +618,116 @@
   .gen-modal-btn-sec:hover { border-color:rgba(255,255,255,.14); color:var(--text2); }
   .gen-copy { height:34px; padding:0 16px; white-space:nowrap; }
 
+  /* ══════════════════════════════════════════
+     THEME VARIABLES
+  ══════════════════════════════════════════ */
+
+  /* ── Navy + Gold ── */
+  body[data-theme="navy-gold"] {
+    --bg:         #030a1c;
+    --sidebar-bg: #05112a;
+    --surface:    #071633;
+    --surface2:   #0b1e42;
+    --border:     rgba(212,160,23,.12);
+    --border2:    rgba(212,160,23,.2);
+    --green:      #d4a017;
+    --green2:     #b5850d;
+    --green-glow: rgba(212,160,23,.08);
+    --text:       #eaf0ff;
+    --text2:      #8faad4;
+    --muted:      #4d6a94;
+    --muted2:     #223458;
+  }
+  body[data-theme="navy-gold"]::before {
+    background:
+      radial-gradient(ellipse 65% 60% at -5% 50%, rgba(15,40,110,.22) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 45% at 108% 80%, rgba(212,160,23,.08) 0%, transparent 55%),
+      radial-gradient(ellipse 35% 30% at 55% -5%, rgba(8,22,70,.18) 0%, transparent 50%);
+  }
+  body[data-theme="navy-gold"] .gen-modal { border-color:rgba(212,160,23,.3); box-shadow:0 24px 80px rgba(0,0,0,.75), 0 0 60px rgba(212,160,23,.05); }
+  body[data-theme="navy-gold"] .gen-modal-badge { background:rgba(212,160,23,.14); color:var(--green); border-color:rgba(212,160,23,.32); }
+
+  /* ── Dirty White ── */
+  body[data-theme="dirty-white"] {
+    --bg:         #f0ebe2;
+    --sidebar-bg: #e6e0d6;
+    --surface:    #dbd5cb;
+    --surface2:   #d0cac0;
+    --border:     rgba(0,0,0,.09);
+    --border2:    rgba(0,0,0,.15);
+    --green:      #2a6b4a;
+    --green2:     #1e5238;
+    --green-glow: rgba(42,107,74,.07);
+    --text:       #1e1a14;
+    --text2:      #3a3630;
+    --muted:      #76706a;
+    --muted2:     #aaa49e;
+  }
+  body[data-theme="dirty-white"]::before { background:none; }
+  body[data-theme="dirty-white"] ::-webkit-scrollbar-thumb { background:rgba(0,0,0,.18); }
+  body[data-theme="dirty-white"] ::-webkit-scrollbar-thumb:hover { background:rgba(0,0,0,.3); }
+  body[data-theme="dirty-white"] input[type="search"],
+  body[data-theme="dirty-white"] select { background:rgba(0,0,0,.06); border-color:rgba(0,0,0,.16); }
+  body[data-theme="dirty-white"] input[type="search"]:focus,
+  body[data-theme="dirty-white"] select:focus { box-shadow:0 0 0 2px rgba(42,107,74,.14); }
+  body[data-theme="dirty-white"] select option,
+  body[data-theme="dirty-white"] .status-sel option { background:#dbd5cb; color:#1e1a14; }
+  body[data-theme="dirty-white"] .gen-input { background:rgba(0,0,0,.06); border-color:rgba(0,0,0,.15); color:var(--text); }
+  body[data-theme="dirty-white"] .gen-select option { background:#dbd5cb; color:#1e1a14; }
+  body[data-theme="dirty-white"] .btn-ghost { background:rgba(0,0,0,.06); color:var(--muted); border-color:rgba(0,0,0,.15); }
+  body[data-theme="dirty-white"] .btn-ghost:hover { background:rgba(0,0,0,.1); border-color:rgba(0,0,0,.22); color:var(--text2); }
+  body[data-theme="dirty-white"] .gen-modal { border-color:rgba(42,107,74,.28); box-shadow:0 24px 80px rgba(0,0,0,.22); }
+  body[data-theme="dirty-white"] .gen-modal-backdrop { background:rgba(160,152,140,.6); }
+  body[data-theme="dirty-white"] .gen-modal-msg { background:rgba(0,0,0,.07); color:var(--text2); }
+  body[data-theme="dirty-white"] .gen-modal-badge { background:rgba(42,107,74,.12); color:var(--green); border-color:rgba(42,107,74,.28); }
+  body[data-theme="dirty-white"] .rp-icon-btn { background:rgba(0,0,0,.05); }
+  body[data-theme="dirty-white"] .notice-banner { background:rgba(235,230,220,.96); }
+  body[data-theme="dirty-white"] #toast { background:var(--surface); border-color:var(--green); color:var(--green); }
+
+  /* ── Semi Black ── */
+  body[data-theme="semi-black"] {
+    --bg:         #0c0c0c;
+    --sidebar-bg: #121212;
+    --surface:    #191919;
+    --surface2:   #202020;
+    --border:     rgba(255,255,255,.055);
+    --border2:    rgba(255,255,255,.09);
+    --green:      #c0c0c0;
+    --green2:     #909090;
+    --green-glow: rgba(190,190,190,.04);
+    --text:       #e6e6e6;
+    --text2:      #888888;
+    --muted:      #545454;
+    --muted2:     #303030;
+  }
+  body[data-theme="semi-black"]::before { background:none; }
+  body[data-theme="semi-black"] .btn-new-campaign { background:linear-gradient(135deg,#383838,#242424); color:#d8d8d8; box-shadow:none; }
+  body[data-theme="semi-black"] .btn-primary { background:rgba(200,200,200,.1); color:var(--text); box-shadow:none; border:1px solid rgba(200,200,200,.18); }
+  body[data-theme="semi-black"] .btn-generate { background:rgba(200,200,200,.09); color:var(--text); box-shadow:none; border:1px solid rgba(200,200,200,.17); }
+  body[data-theme="semi-black"] .btn-generate:hover { box-shadow:none; background:rgba(200,200,200,.14); }
+  body[data-theme="semi-black"] .sb-dot { background:var(--text2); box-shadow:none; animation:none; }
+  body[data-theme="semi-black"] .progress-fill { background:linear-gradient(90deg,#505050,#808080); box-shadow:none; }
+  body[data-theme="semi-black"] .gen-modal { border-color:rgba(200,200,200,.18); box-shadow:0 24px 80px rgba(0,0,0,.85); }
+  body[data-theme="semi-black"] .gen-modal-badge { background:rgba(200,200,200,.1); color:var(--text); border-color:rgba(200,200,200,.22); }
+  body[data-theme="semi-black"] .gen-copy { background:rgba(200,200,200,.08); border-color:rgba(200,200,200,.2); color:var(--text); }
+  body[data-theme="semi-black"] .gen-copy:hover { background:rgba(200,200,200,.15); }
+
+  /* ── Theme Switcher UI ── */
+  .theme-switcher { padding:8px 4px 2px; }
+  .theme-sw-label { font-size:8.5px; text-transform:uppercase; letter-spacing:.14em; color:var(--muted); font-family:'JetBrains Mono',monospace; margin-bottom:7px; }
+  .theme-sw-row { display:flex; align-items:center; gap:8px; }
+  .theme-swatch {
+    width:22px; height:22px; border-radius:50%;
+    border:2px solid transparent; cursor:pointer;
+    transition:transform .18s, box-shadow .18s; outline:none; flex-shrink:0; padding:0;
+  }
+  .theme-swatch:hover { transform:scale(1.2); }
+  .theme-swatch.active { box-shadow:0 0 0 2px var(--bg), 0 0 0 4px var(--green); }
+  .t-emerald { background:conic-gradient(#0c0e14 0% 65%, #00ffae 65% 100%); }
+  .t-navy    { background:linear-gradient(135deg, #03091a 50%, #d4a017 50%); }
+  .t-white   { background:#e8e2d8; border-color:#b8b2a8; }
+  .t-black   { background:#181818; border-color:#3c3c3c; }
+
   @media(max-width:768px) {
     body { overflow:auto; }
     .app-wrapper { flex-direction:column; height:auto; }
@@ -669,6 +779,15 @@
     </nav>
     <div class="sidebar-bottom">
       <button class="btn-new-campaign">+ New Campaign</button>
+      <div class="theme-switcher">
+        <div class="theme-sw-label">Theme</div>
+        <div class="theme-sw-row">
+          <button class="theme-swatch t-emerald" data-theme="" onclick="setTheme('')" title="Emerald Dark"></button>
+          <button class="theme-swatch t-navy"    data-theme="navy-gold"    onclick="setTheme('navy-gold')"    title="Navy + Gold"></button>
+          <button class="theme-swatch t-white"   data-theme="dirty-white"  onclick="setTheme('dirty-white')"  title="Dirty White"></button>
+          <button class="theme-swatch t-black"   data-theme="semi-black"   onclick="setTheme('semi-black')"   title="Semi Black"></button>
+        </div>
+      </div>
     </div>
   </aside>
 
@@ -2111,6 +2230,22 @@ function copyGenMessage() {
     }, 2200);
   }).catch(() => showToast('Copy failed — select manually'));
 }
+
+/* ─────────────── THEME SWITCHER ─────────────── */
+function setTheme(t) {
+  document.body.setAttribute('data-theme', t);
+  localStorage.setItem('appTheme', t);
+  document.querySelectorAll('.theme-swatch').forEach(s =>
+    s.classList.toggle('active', s.dataset.theme === t)
+  );
+}
+(function() {
+  const t = localStorage.getItem('appTheme') || '';
+  document.body.setAttribute('data-theme', t);
+  document.querySelectorAll('.theme-swatch').forEach(s =>
+    s.classList.toggle('active', s.dataset.theme === t)
+  );
+})();
 
 /* ─────────────── COPY COMMAND ─────────────── */
 function copyCommand() {
