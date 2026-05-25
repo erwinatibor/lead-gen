@@ -2049,9 +2049,7 @@ function generateOutreach() {
   const channelLabels = { 'li-note':'LinkedIn Note', 'li-dm':'LinkedIn DM', 'email':'Cold Email' };
   badge.textContent = channelLabels[channel] || channel;
 
-  const company = document.getElementById('genCompany').value.trim();
-  const contact = document.getElementById('genContact').value.trim();
-  titleEl.textContent = [contact, company].filter(Boolean).join(' · ') || 'Generated Message';
+  titleEl.textContent = [contact, company].filter(s => s && s !== '[Company]' && s !== '[Contact]').join(' · ') || 'Generated Message';
 
   if (channel === 'email' && subject) {
     subjectRow.classList.add('vis');
