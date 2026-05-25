@@ -1643,6 +1643,8 @@ ianentila27@gmail.com</div>
               <label class="gen-label">Sender</label>
               <select class="gen-select" id="genSender">
                 <option value="ian">Ian (Direct)</option>
+                <option value="rizzalyn">Rizzalyn (Proxy)</option>
+                <option value="rutchel">Rutchel (Proxy)</option>
                 <option value="junnel">Junnel (Proxy)</option>
               </select>
             </div>
@@ -2356,46 +2358,56 @@ const GEN_PRESETS = {
   'SaaS / Tech':                   { pain:'burning budget on broad awareness campaigns with poor trial-to-paid conversion', pitch:'driving qualified trials and demos through performance campaigns on Meta and Google', pitchShort:'trial & demo pipeline campaigns', platforms:'Meta and Google', subject:'Trial and demo pipeline for [company]' },
 };
 
+const SENDERS = {
+  ian:      { name:'Ian',      full:'Ian Fleni Sison',        role:'COO & Head of Media Buyers', email:'ianentila27@gmail.com',    direct:true  },
+  rizzalyn: { name:'Rizzalyn', full:'Rizzalyn Lolo',          role:'Outreach',                   email:'rizzalynlolo@gmail.com',   direct:false },
+  rutchel:  { name:'Rutchel',  full:'Rutchel Mar D. Reducto', role:'Outreach',                   email:'',                         direct:false },
+  junnel:   { name:'Junnel',   full:'Junnel (Jun) Tomales',   role:'Outreach',                   email:'juniqu3designs@gmail.com', direct:false },
+};
+
 function generateOutreach() {
   const company  = document.getElementById('genCompany').value.trim()  || '[Company]';
   const contact  = document.getElementById('genContact').value.trim()  || '[Contact]';
   const industry = document.getElementById('genIndustry').value;
   const channel  = document.getElementById('genChannel').value;
-  const sender   = document.getElementById('genSender').value;
+  const senderKey = document.getElementById('genSender').value;
   const city     = document.getElementById('genCity').value.trim();
   const extra    = document.getElementById('genContext').value.trim();
 
-  const p = industry ? GEN_PRESETS[industry] : null;
-  const platforms    = p ? p.platforms    : '[platforms]';
-  const pitchShort   = p ? p.pitchShort   : '[pitch]';
-  const pitch        = p ? p.pitch        : '[pitch]';
-  const pain         = p ? p.pain         : '[pain point]';
-  const indLabel     = industry || '[Industry]';
-  const rawSubject   = p ? p.subject.replace('[company]', company) : `${company} — paid ads for ${indLabel}`;
+  const s = SENDERS[senderKey] || SENDERS.ian;
 
-  const cityStr = city ? `, ${city}` : '';
+  const p = industry ? GEN_PRESETS[industry] : null;
+  const platforms  = p ? p.platforms  : '[platforms]';
+  const pitchShort = p ? p.pitchShort : '[pitch]';
+  const pitch      = p ? p.pitch      : '[pitch]';
+  const pain       = p ? p.pain       : '[pain point]';
+  const indLabel   = industry || '[Industry]';
+  const rawSubject = p ? p.subject.replace('[company]', company) : `${company} — paid ads for ${indLabel}`;
+
+  const cityStr  = city  ? `, ${city}`  : '';
   const extraStr = extra ? `\n\n${extra}` : '';
+  const emailLine = s.email ? `\n${s.email}` : '';
 
   let msg = '', subject = '';
 
   if (channel === 'li-note') {
-    if (sender === 'ian') {
+    if (s.direct) {
       msg = `Hi ${contact}, I'm Ian — COO at AGLA Media. We run ${platforms} ads for ${indLabel}s, averaging 3x–5x ROAS on ${pitchShort}. Saw ${company}, think there's a fit. Worth connecting?`;
     } else {
-      msg = `Hi ${contact}, I'm Junnel — I support Ian Fleni Sison (COO, AGLA Media). We run ${platforms} ads for ${indLabel}s, averaging 3x–5x ROAS. Saw ${company}${cityStr}, think there's a fit. Worth connecting?`;
+      msg = `Hi ${contact}, I'm ${s.name} — I support Ian Fleni Sison (COO, AGLA Media). We run ${platforms} ads for ${indLabel}s, averaging 3x–5x ROAS. Saw ${company}${cityStr}, think there's a fit. Worth connecting?`;
     }
   } else if (channel === 'li-dm') {
-    if (sender === 'ian') {
+    if (s.direct) {
       msg = `Hi ${contact},\n\nI'm Ian — COO at AGLA Media. We run ${platforms} ads for ${indLabel}s focused on ${pitch}, consistently hitting 3x–5x ROAS.\n\nSaw ${company}${cityStr} and thought there might be a fit. Open to a quick 15-minute call to explore?${extraStr}\n\nIan Fleni Sison\nCOO & Head of Media Buyers — AGLA Media`;
     } else {
-      msg = `Hi ${contact},\n\nI'm Junnel, reaching out on behalf of Ian Fleni Sison (COO at AGLA Media). We run ${platforms} ads for ${indLabel}s focused on ${pitch}, averaging 3x–5x ROAS.\n\nSaw ${company}${cityStr} and Ian thought there might be a fit. Would you be open to a quick 15-minute call?${extraStr}\n\nJunnel\nOn behalf of Ian Fleni Sison — AGLA Media`;
+      msg = `Hi ${contact},\n\nI'm ${s.name}, reaching out on behalf of Ian Fleni Sison (COO at AGLA Media). We run ${platforms} ads for ${indLabel}s focused on ${pitch}, averaging 3x–5x ROAS.\n\nSaw ${company}${cityStr} and Ian thought there might be a fit. Would you be open to a quick 15-minute call?${extraStr}\n\n${s.name}\nOn behalf of Ian Fleni Sison — AGLA Media`;
     }
   } else {
     subject = rawSubject;
-    if (sender === 'ian') {
+    if (s.direct) {
       msg = `Hi ${contact},\n\nI'm Ian, COO & Head of Media Buyers at AGLA Media. ${company}${cityStr} is a ${indLabel} that is likely ${pain}.\n\nWe run ${platforms} campaigns focused on ${pitch}. Our clients average 3x–5x ROAS.${extraStr}\n\nWorth a 15-minute call to see if there's a fit?\n\nIan Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com`;
     } else {
-      msg = `Hi ${contact},\n\nI'm Junnel — I help Ian Fleni Sison (COO & Head of Media Buyers at AGLA Media) with business development. ${company}${cityStr} is a ${indLabel} that is likely ${pain}.\n\nIan's team runs ${platforms} campaigns focused on ${pitch}. Clients average 3x–5x ROAS.${extraStr}\n\nWould you be open to a 15-minute call with Ian to see if there's a fit?\n\nJunnel\nOn behalf of Ian Fleni Sison — AGLA Media\nianentila27@gmail.com`;
+      msg = `Hi ${contact},\n\nI'm ${s.name} — I help Ian Fleni Sison (COO & Head of Media Buyers at AGLA Media) with business development. ${company}${cityStr} is a ${indLabel} that is likely ${pain}.\n\nIan's team runs ${platforms} campaigns focused on ${pitch}. Clients average 3x–5x ROAS.${extraStr}\n\nWould you be open to a 15-minute call with Ian to see if there's a fit?\n\n${s.name}\nOn behalf of Ian Fleni Sison — AGLA Media${emailLine}`;
     }
   }
 
