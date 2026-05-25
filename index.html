@@ -1609,15 +1609,26 @@ ianentila27@gmail.com</div>
               <label class="gen-label">Industry</label>
               <select class="gen-select" id="genIndustry">
                 <option value="">Select Industry…</option>
-                <option value="MedSpa">MedSpa</option>
-                <option value="Dental">Dental</option>
-                <option value="Marketing Agency">Marketing Agency</option>
-                <option value="Wellness">Wellness</option>
-                <option value="Chiropractic">Chiropractic</option>
-                <option value="Aesthetics">Aesthetics</option>
-                <option value="Plastic Surgery">Plastic Surgery</option>
-                <option value="Orthodontics">Orthodontics</option>
-                <option value="Cosmetic Dentistry">Cosmetic Dentistry</option>
+                <option value="Dental">🦷 Dental Clinic</option>
+                <option value="MedSpa">💆 MedSpa</option>
+                <option value="Cosmetic Dentistry">💎 Cosmetic Dentistry</option>
+                <option value="Orthodontics">😁 Orthodontics</option>
+                <option value="Plastic Surgery">🔬 Plastic Surgery</option>
+                <option value="Aesthetics">✨ Aesthetics Clinic</option>
+                <option value="Chiropractic">🦴 Chiropractic</option>
+                <option value="Wellness">💚 Wellness / Health</option>
+                <option value="Marketing Agency">📊 Marketing Agency (US/CA/AU)</option>
+                <option value="Marketing Agency (Philippines)">🇵🇭 Marketing Agency (Philippines)</option>
+                <option value="Ecommerce / DTC">🛒 Ecommerce / DTC</option>
+                <option value="Real Estate / PropTech">🏠 Real Estate / PropTech</option>
+                <option value="Insurance">🛡️ Insurance</option>
+                <option value="Finance / Fintech">💳 Finance / Fintech</option>
+                <option value="Home Services">🔧 Home Services</option>
+                <option value="Education / Online Courses">🎓 Education / Online Courses</option>
+                <option value="Legal / Law Firm">⚖️ Legal / Law Firm</option>
+                <option value="Restaurant / F&amp;B">🍽️ Restaurant / F&amp;B</option>
+                <option value="Gym / Fitness Studio">🏋️ Gym / Fitness Studio</option>
+                <option value="SaaS / Tech">💻 SaaS / Tech</option>
               </select>
             </div>
             <div class="gen-field">
@@ -2323,15 +2334,26 @@ showSaved();
 
 /* ─────────────── OUTREACH GENERATOR ─────────────── */
 const GEN_PRESETS = {
-  'MedSpa':            { pain:'relying on Groupon or ads that attract price-shoppers', pitch:'filling injectable, laser, and body contouring slots', pitchShort:'injectable & body contouring slots', platforms:'Meta and TikTok', subject:'[company] — paid ads for injectables and body contouring' },
-  'Dental':            { pain:'running ads that attract cleaning patients instead of cosmetic cases', pitch:'targeting veneer, implant, and full-arch case inquiries', pitchShort:'veneer & implant inquiries', platforms:'Meta and Google', subject:'More cosmetic bookings for [company]' },
-  'Marketing Agency':  { pain:'hitting overflow or niche verticals without specialist media buying capacity', pitch:'white-label media buying under your brand', pitchShort:'white-label media buying', platforms:'Meta, TikTok, and Google', subject:'White-label media buying — [company]' },
-  'Wellness':          { pain:'hitting a ceiling past referrals with general interest traffic', pitch:'filling memberships, retreats, and high-ticket programs', pitchShort:'memberships & high-ticket programs', platforms:'Meta and TikTok', subject:'[company] — paid ads for memberships and programs' },
-  'Chiropractic':      { pain:'relying on insurance-driven volume with short visit windows', pitch:'targeting cash-pay and long-term wellness patients', pitchShort:'cash-pay & wellness patients', platforms:'Meta and Google', subject:'More cash-pay patients for [company]' },
-  'Aesthetics':        { pain:'running a leaky acquisition funnel with awareness-only ad spend', pitch:'targeting patients with real buying intent for procedures', pitchShort:'high-intent procedure inquiries', platforms:'Meta and TikTok', subject:'Filling more consultations at [company]' },
-  'Plastic Surgery':   { pain:'using ad strategies that optimize too early in the patient decision cycle', pitch:'multi-touch campaigns structured around the full patient decision cycle', pitchShort:'full-cycle patient campaigns', platforms:'Meta and Google', subject:'Consultation pipeline for [company]' },
-  'Orthodontics':      { pain:'relying on family referrals with no adult Invisalign paid strategy', pitch:'targeting adult Invisalign starts and new family cases', pitchShort:'adult Invisalign & family starts', platforms:'Meta and TikTok', subject:'More Invisalign starts for [company]' },
-  'Cosmetic Dentistry':{ pain:'running ads optimized for volume that attract patients who can\'t afford the work', pitch:'targeting patients with intent for veneers, implants, and smile makeovers', pitchShort:'veneer & smile makeover patients', platforms:'Meta and Google', subject:'More smile makeover consults at [company]' },
+  'MedSpa':                        { pain:'relying on Groupon or ads that attract price-shoppers', pitch:'filling injectable, laser, and body contouring slots', pitchShort:'injectable & body contouring slots', platforms:'Meta and TikTok', subject:'[company] — paid ads for injectables and body contouring' },
+  'Dental':                        { pain:'running ads that attract cleaning patients instead of cosmetic cases', pitch:'targeting veneer, implant, and full-arch case inquiries', pitchShort:'veneer & implant inquiries', platforms:'Meta and Google', subject:'More cosmetic bookings for [company]' },
+  'Marketing Agency':              { pain:'hitting overflow or niche verticals without specialist media buying capacity', pitch:'white-label media buying under your brand', pitchShort:'white-label media buying', platforms:'Meta, TikTok, and Google', subject:'White-label media buying — [company]' },
+  'Marketing Agency (Philippines)':{ pain:'hitting a ceiling on local clients without international white-label capacity', pitch:'white-label media buying for your US and AU clients under your brand', pitchShort:'white-label media buying', platforms:'Meta, TikTok, and Google', subject:'White-label media buying — [company]' },
+  'Wellness':                      { pain:'hitting a ceiling past referrals with general interest traffic', pitch:'filling memberships, retreats, and high-ticket programs', pitchShort:'memberships & high-ticket programs', platforms:'Meta and TikTok', subject:'[company] — paid ads for memberships and programs' },
+  'Chiropractic':                  { pain:'relying on insurance-driven volume with short visit windows', pitch:'targeting cash-pay and long-term wellness patients', pitchShort:'cash-pay & wellness patients', platforms:'Meta and Google', subject:'More cash-pay patients for [company]' },
+  'Aesthetics':                    { pain:'running a leaky acquisition funnel with awareness-only ad spend', pitch:'targeting patients with real buying intent for procedures', pitchShort:'high-intent procedure inquiries', platforms:'Meta and TikTok', subject:'Filling more consultations at [company]' },
+  'Plastic Surgery':               { pain:'using ad strategies that optimize too early in the patient decision cycle', pitch:'multi-touch campaigns structured around the full patient decision cycle', pitchShort:'full-cycle patient campaigns', platforms:'Meta and Google', subject:'Consultation pipeline for [company]' },
+  'Orthodontics':                  { pain:'relying on family referrals with no adult Invisalign paid strategy', pitch:'targeting adult Invisalign starts and new family cases', pitchShort:'adult Invisalign & family starts', platforms:'Meta and TikTok', subject:'More Invisalign starts for [company]' },
+  'Cosmetic Dentistry':            { pain:'running ads optimized for volume that attract patients who can\'t afford the work', pitch:'targeting patients with intent for veneers, implants, and smile makeovers', pitchShort:'veneer & smile makeover patients', platforms:'Meta and Google', subject:'More smile makeover consults at [company]' },
+  'Ecommerce / DTC':               { pain:'spending on broad traffic that doesn\'t convert into repeat buyers', pitch:'scaling revenue through retention-focused Meta and TikTok campaigns', pitchShort:'DTC revenue scaling', platforms:'Meta and TikTok', subject:'Scaling paid acquisition for [company]' },
+  'Real Estate / PropTech':        { pain:'generating leads from ads that attract low-intent browsers instead of serious buyers', pitch:'targeting high-intent buyers and investors through Meta and Google campaigns', pitchShort:'high-intent buyer campaigns', platforms:'Meta and Google', subject:'More qualified leads for [company]' },
+  'Insurance':                     { pain:'running broad campaigns that attract low-quality leads who don\'t convert to policies', pitch:'targeting high-intent insurance shoppers across Meta and Google', pitchShort:'high-intent policy lead campaigns', platforms:'Meta and Google', subject:'Higher-quality insurance leads for [company]' },
+  'Finance / Fintech':             { pain:'acquiring users through expensive broad campaigns without strong LTV targeting', pitch:'acquiring high-value users through performance campaigns on Meta and Google', pitchShort:'high-LTV user acquisition', platforms:'Meta and Google', subject:'Performance campaigns for [company]' },
+  'Home Services':                 { pain:'relying on referrals and directories with no consistent paid acquisition system', pitch:'filling your calendar with qualified local jobs through Meta and Google ads', pitchShort:'local job calendar filling', platforms:'Meta and Google', subject:'More booked jobs for [company]' },
+  'Education / Online Courses':    { pain:'spending on awareness campaigns that don\'t convert into enrolled students', pitch:'driving enrollments through intent-based Meta and TikTok campaigns', pitchShort:'course enrollment campaigns', platforms:'Meta and TikTok', subject:'More enrollments for [company]' },
+  'Legal / Law Firm':              { pain:'getting clicks from people who don\'t qualify or can\'t afford representation', pitch:'targeting qualified case inquiries through Meta and Google campaigns', pitchShort:'qualified case lead campaigns', platforms:'Meta and Google', subject:'More qualified case inquiries for [company]' },
+  'Restaurant / F&B':             { pain:'relying on delivery apps and organic reach with no paid acquisition strategy', pitch:'driving dine-in reservations and catering inquiries through Meta and Instagram', pitchShort:'reservation & catering campaigns', platforms:'Meta and Instagram', subject:'More covers and reservations for [company]' },
+  'Gym / Fitness Studio':          { pain:'running seasonal promotions that attract price-sensitive members who churn quickly', pitch:'filling memberships with high-retention members through Meta and TikTok campaigns', pitchShort:'high-retention membership campaigns', platforms:'Meta and TikTok', subject:'More high-retention members for [company]' },
+  'SaaS / Tech':                   { pain:'burning budget on broad awareness campaigns with poor trial-to-paid conversion', pitch:'driving qualified trials and demos through performance campaigns on Meta and Google', pitchShort:'trial & demo pipeline campaigns', platforms:'Meta and Google', subject:'Trial and demo pipeline for [company]' },
 };
 
 function generateOutreach() {
