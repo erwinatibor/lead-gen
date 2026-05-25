@@ -2455,6 +2455,63 @@ const SENDERS = {
   junnel:   { name:'Junnel',   full:'Junnel (Jun) Tomales',   role:'Outreach',                   email:'juniqu3designs@gmail.com', direct:false },
 };
 
+/* ─────────────── OUTREACH AUTOFILL ─────────────── */
+(function() {
+  const genCompany = document.getElementById('genCompany');
+  let autofillTimeout;
+
+  genCompany.addEventListener('input', function() {
+    clearTimeout(autofillTimeout);
+    autofillTimeout = setTimeout(() => autofillFromLead(this.value.trim()), 300);
+  });
+
+  genCompany.addEventListener('paste', function() {
+    setTimeout(() => autofillFromLead(this.value.trim()), 50);
+  });
+})();
+
+function autofillFromLead(query) {
+  if (!query || query.length < 2) return;
+  const q = query.toLowerCase();
+
+  // exact match first, then starts-with, then includes
+  const lead =
+    LEADS.find(l => l.company.toLowerCase() === q) ||
+    LEADS.find(l => l.company.toLowerCase().startsWith(q)) ||
+    LEADS.find(l => l.company.toLowerCase().includes(q));
+
+  if (!lead) return;
+
+  const contactEl = document.getElementById('genContact');
+  const cityEl    = document.getElementById('genCity');
+  const ctxEl     = document.getElementById('genContext');
+
+  if (lead.contact && !contactEl.value.trim())
+    contactEl.value = lead.contact;
+
+  if (!cityEl.value.trim()) {
+    // build city string: use address if short enough, otherwise country
+    const addr = lead.address || '';
+    const parts = addr.split(',').map(s => s.trim()).filter(Boolean);
+    cityEl.value = parts.length >= 2
+      ? parts.slice(0,2).join(', ')
+      : (lead.country || '');
+  }
+
+  // add title/position to extra context if available and field is empty
+  if (lead.title && !ctxEl.value.trim())
+    ctxEl.value = lead.title;
+
+  // flash the filled fields
+  [document.getElementById('genContact'), document.getElementById('genCity'), document.getElementById('genContext')]
+    .forEach(el => {
+      if (!el) return;
+      el.style.transition = 'border-color .2s';
+      el.style.borderColor = 'var(--green)';
+      setTimeout(() => el.style.borderColor = '', 900);
+    });
+}
+
 function generateOutreach() {
   const company  = document.getElementById('genCompany').value.trim()  || '[Company]';
   const contact  = document.getElementById('genContact').value.trim()  || '[Contact]';
