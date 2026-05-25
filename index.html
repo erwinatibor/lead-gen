@@ -781,6 +781,24 @@
   .pm-copy-btn.copied { background:var(--blue); border-color:var(--blue); color:#fff; }
   @media(max-width:680px) { .pm-cards { grid-template-columns:1fr; } }
 
+  /* ── ASSIGNED DROPDOWN ── */
+  .assigned-sel { font-size:10px; padding:3px 5px; background:var(--surface); border:1px solid var(--border2); color:var(--muted); border-radius:5px; cursor:pointer; font-family:inherit; max-width:80px; }
+  .assigned-sel.has-val { color:var(--green); border-color:rgba(0,255,174,.35); font-weight:600; }
+
+  /* ── MEMBER SCOREBOARD ── */
+  .intel-member-section { margin-bottom:4px; }
+  .intel-member-label { font-size:9.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--green); font-family:'JetBrains Mono',monospace; margin-bottom:10px; display:block; }
+  .intel-member-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  .intel-member-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+  .intel-member-name { font-size:12px; font-weight:700; color:var(--text); margin-bottom:12px; }
+  .intel-member-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+  .intel-member-row:last-child { margin-bottom:0; }
+  .intel-member-row-label { font-size:10.5px; color:var(--muted); }
+  .intel-member-row-val { font-size:12px; font-weight:700; color:var(--text); font-family:'JetBrains Mono',monospace; }
+  .intel-member-row-val.green { color:var(--green); }
+  .intel-member-bar { height:3px; background:var(--border2); border-radius:2px; margin-top:10px; }
+  .intel-member-bar-fill { height:100%; border-radius:2px; background:var(--green); transition:width .4s; }
+
   /* ── AUTOMATIONS VIEW ── */
   .auto-body { padding:24px 28px 36px; width:100%; }
   .auto-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; width:100%; max-width:920px; margin:0 auto; }
@@ -994,6 +1012,7 @@
                 <th>LinkedIn</th>
                 <th>Email</th>
                 <th data-col="status">Status<span class="si">↕</span></th>
+                <th>Assigned</th>
                 <th>Notes</th>
                 <th>Done</th>
               </tr>
@@ -1592,6 +1611,10 @@ ianentila27@gmail.com</div>
             <div class="intel-stat-pct" id="iFullPct">email + li + name</div>
           </div>
         </div>
+        <div class="intel-member-section">
+          <span class="intel-member-label">Outreach Team — Lead Tracker</span>
+          <div class="intel-member-grid" id="intelMemberGrid"></div>
+        </div>
         <div class="intel-tables">
           <div class="intel-table-card">
             <div class="intel-table-title">By Industry</div>
@@ -2073,6 +2096,7 @@ function loadState() {
     if (!state[k].status) state[k].status = 'new';
     if (state[k].notes === undefined) state[k].notes = '';
     if (state[k].done === undefined) state[k].done = false;
+    if (state[k].assigned === undefined) state[k].assigned = '';
   });
 }
 
@@ -2214,6 +2238,15 @@ function render() {
         </select>
       </td>
       <td>
+        <select class="assigned-sel${s.assigned?' has-val':''}" data-action="assigned" data-id="${k}">
+          <option value="" ${!s.assigned?'selected':''}>— none</option>
+          <option value="ian"      ${s.assigned==='ian'      ?'selected':''}>Ian</option>
+          <option value="rizzalyn" ${s.assigned==='rizzalyn' ?'selected':''}>Rizzalyn</option>
+          <option value="rutchel"  ${s.assigned==='rutchel'  ?'selected':''}>Rutchel</option>
+          <option value="junnel"   ${s.assigned==='junnel'   ?'selected':''}>Junnel</option>
+        </select>
+      </td>
+      <td>
         <input class="notes-inp" type="text"
           value="${esc(s.notes)}"
           placeholder="Add note…"
@@ -2263,6 +2296,12 @@ document.getElementById('tbody').addEventListener('change', e => {
     const tr = el.closest('tr');
     tr.className = `row-${el.value}${state[id].done ? ' done-row' : ''}`;
     updateStats(document.querySelectorAll('#tbody tr').length);
+    persist();
+  }
+
+  if (action === 'assigned') {
+    state[id].assigned = el.value;
+    el.classList.toggle('has-val', !!el.value);
     persist();
   }
 
@@ -2609,6 +2648,38 @@ function renderIntelligence() {
   renderRows('intelIndustryRows', countBy('industry'));
   renderRows('intelCountryRows', countBy('country'));
   document.getElementById('settingsTotal').textContent = total;
+
+  // Member scoreboard
+  const MEMBER_DEFS = [
+    { key:'ian',      label:'Ian',      role:'Direct' },
+    { key:'rizzalyn', label:'Rizzalyn', role:'Proxy'  },
+    { key:'rutchel',  label:'Rutchel',  role:'Proxy'  },
+    { key:'junnel',   label:'Junnel',   role:'Proxy'  },
+  ];
+  const mStats = {};
+  MEMBER_DEFS.forEach(m => mStats[m.key] = { assigned:0, contacted:0, replied:0, done:0 });
+  LEADS.forEach(l => {
+    const s = state[String(l.id)];
+    if (!s || !s.assigned || !mStats[s.assigned]) return;
+    const ms = mStats[s.assigned];
+    ms.assigned++;
+    if (s.status === 'contacted') ms.contacted++;
+    if (s.status === 'replied')   ms.replied++;
+    if (s.done)                   ms.done++;
+  });
+  const maxAssigned = Math.max(1, ...MEMBER_DEFS.map(m => mStats[m.key].assigned));
+  document.getElementById('intelMemberGrid').innerHTML = MEMBER_DEFS.map(m => {
+    const ms = mStats[m.key];
+    const barPct = Math.round(ms.assigned / maxAssigned * 100);
+    return `<div class="intel-member-card">
+      <div class="intel-member-name">${m.label} <span style="font-size:9px;font-weight:400;color:var(--muted);margin-left:4px">${m.role}</span></div>
+      <div class="intel-member-row"><span class="intel-member-row-label">Assigned</span><span class="intel-member-row-val">${ms.assigned}</span></div>
+      <div class="intel-member-row"><span class="intel-member-row-label">Contacted</span><span class="intel-member-row-val green">${ms.contacted}</span></div>
+      <div class="intel-member-row"><span class="intel-member-row-label">Replied</span><span class="intel-member-row-val green">${ms.replied}</span></div>
+      <div class="intel-member-row"><span class="intel-member-row-label">Done</span><span class="intel-member-row-val green">${ms.done}</span></div>
+      <div class="intel-member-bar"><div class="intel-member-bar-fill" style="width:${barPct}%"></div></div>
+    </div>`;
+  }).join('');
 }
 
 
