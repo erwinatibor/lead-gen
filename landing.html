@@ -541,6 +541,216 @@ footer { border-top: 1px solid var(--border); padding: 44px 0; }
   .footer-inner { flex-direction: column; align-items: flex-start; }
 }
 
+/* ── AI OUTREACH GENERATOR ────────────────── */
+#generator { padding: 120px 0; }
+
+.gen-section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 12px 5px 8px; border-radius: 100px;
+  background: rgba(168,85,247,.1); border: 1px solid rgba(168,85,247,.25);
+  font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: #c084fc; margin-bottom: 16px;
+}
+.gen-section-label-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #c084fc; box-shadow: 0 0 8px #c084fc;
+  animation: blink-dot 2s ease-in-out infinite;
+}
+
+.gen-card {
+  display: grid; grid-template-columns: 2fr 3fr;
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 22px; overflow: hidden;
+  box-shadow: 0 0 80px rgba(0,210,100,.06), 0 40px 100px rgba(0,0,0,.5);
+  margin-bottom: 40px;
+}
+
+/* Form panel */
+.gen-form-panel {
+  padding: 36px 32px;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  display: flex; flex-direction: column; gap: 0;
+}
+.gen-panel-title {
+  font-size: 13px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .09em; color: var(--text3); margin-bottom: 28px;
+  display: flex; align-items: center; gap: 8px;
+}
+.gen-panel-title::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, var(--border), transparent);
+}
+
+.gen-field { margin-bottom: 18px; }
+.gen-label {
+  display: block; font-size: 11.5px; font-weight: 600;
+  color: var(--text2); margin-bottom: 7px; letter-spacing: .03em;
+}
+.gen-input, .gen-select {
+  width: 100%; padding: 10px 14px; border-radius: 10px;
+  background: #040810; color: var(--text);
+  border: 1px solid rgba(0,210,100,.15); outline: none;
+  font-family: 'Inter', sans-serif; font-size: 13.5px;
+  transition: border-color .18s, box-shadow .18s;
+  appearance: none; -webkit-appearance: none;
+}
+.gen-input::placeholder { color: var(--text3); }
+.gen-input:focus, .gen-select:focus {
+  border-color: rgba(0,210,100,.45);
+  box-shadow: 0 0 0 3px rgba(0,210,100,.08);
+}
+.gen-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23465060' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+  padding-right: 36px; cursor: pointer;
+}
+.gen-select option { background: #080d16; color: var(--text); }
+
+/* Channel toggle */
+.gen-toggle { display: flex; gap: 8px; }
+.gen-toggle-btn {
+  flex: 1; padding: 9px 12px; border-radius: 9px;
+  font-size: 12.5px; font-weight: 600; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.08);
+  background: transparent; color: var(--text3);
+  transition: all .18s; display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.gen-toggle-btn.active {
+  background: rgba(0,210,100,.12);
+  border-color: rgba(0,210,100,.35);
+  color: var(--green);
+}
+.gen-toggle-btn:hover:not(.active) { border-color: rgba(255,255,255,.16); color: var(--text2); }
+
+.gen-generate-btn {
+  width: 100%; margin-top: 8px; padding: 13px 20px;
+  border-radius: 11px; font-size: 15px; font-weight: 700;
+  background: var(--green); color: #000; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 0 28px rgba(0,210,100,.28), 0 4px 16px rgba(0,0,0,.4);
+  transition: all .22s; letter-spacing: -.01em;
+}
+.gen-generate-btn:hover {
+  background: var(--green2);
+  box-shadow: 0 0 44px rgba(0,210,100,.46), 0 6px 24px rgba(0,0,0,.5);
+  transform: translateY(-1px);
+}
+.gen-generate-btn:active { transform: none; }
+
+/* Output panel */
+.gen-output-panel {
+  display: flex; flex-direction: column;
+  background: #060a12;
+}
+.gen-output-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 22px;
+  background: rgba(255,255,255,.02);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.gen-output-bar-left { display: flex; align-items: center; gap: 10px; }
+.gen-output-bar-dots { display: flex; gap: 6px; }
+.gen-bar-dot { width: 10px; height: 10px; border-radius: 50%; }
+.gen-bar-dot.r { background: #ff5f57; }
+.gen-bar-dot.a { background: #febc2e; }
+.gen-bar-dot.g { background: #28c840; }
+.gen-output-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px; color: rgba(255,255,255,.25); letter-spacing: .03em;
+}
+.gen-output-bar-right { display: flex; align-items: center; gap: 10px; }
+.gen-char-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 6px;
+  transition: all .2s;
+}
+.gen-char-count.ok { background: rgba(0,210,100,.12); color: var(--green); border: 1px solid rgba(0,210,100,.2); }
+.gen-char-count.over { background: rgba(239,68,68,.12); color: #f87171; border: 1px solid rgba(239,68,68,.25); }
+.gen-char-count.hidden { display: none; }
+.gen-copy-btn {
+  padding: 5px 14px; border-radius: 7px; font-size: 12px; font-weight: 600;
+  background: rgba(0,210,100,.1); border: 1px solid rgba(0,210,100,.25);
+  color: var(--green); cursor: pointer; transition: all .18s;
+  font-family: 'Inter', sans-serif;
+}
+.gen-copy-btn:hover { background: rgba(0,210,100,.2); }
+.gen-copy-btn.copied { color: #4ade80; border-color: #4ade80; background: rgba(74,222,128,.1); }
+
+.gen-output-body {
+  flex: 1; padding: 24px 26px; overflow-y: auto;
+  font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.9;
+  min-height: 300px;
+}
+.gen-subject-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+  color: var(--text3); margin-bottom: 4px; display: block;
+}
+.gen-subject-value {
+  color: #fcd34d; font-size: 13.5px; font-weight: 600;
+  padding: 8px 14px; background: rgba(252,211,77,.06);
+  border: 1px solid rgba(252,211,77,.15); border-radius: 8px;
+  margin-bottom: 20px; display: block;
+}
+.gen-body-text {
+  color: var(--text2); white-space: pre-wrap; line-height: 2;
+}
+.gen-ph { color: #fcd34d; }
+.gen-highlight { color: var(--green); font-weight: 600; }
+.gen-sig { color: var(--text3); }
+.gen-empty-state {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: 100%; min-height: 280px; text-align: center; color: var(--text3);
+  gap: 12px;
+}
+.gen-empty-icon { font-size: 32px; opacity: .4; }
+.gen-empty-text { font-size: 13px; font-family: 'JetBrains Mono', monospace; }
+
+/* Prompt Reference Block */
+.prompt-ref-wrap {
+  background: #040810; border: 1px solid rgba(168,85,247,.2);
+  border-radius: 18px; overflow: hidden;
+  box-shadow: 0 0 60px rgba(168,85,247,.05), 0 30px 80px rgba(0,0,0,.5);
+}
+.prompt-ref-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 20px;
+  background: rgba(168,85,247,.05);
+  border-bottom: 1px solid rgba(168,85,247,.15);
+}
+.prompt-ref-bar-left { display: flex; align-items: center; gap: 10px; }
+.prompt-ref-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; font-weight: 600; color: rgba(192,132,252,.7); letter-spacing: .04em;
+}
+.prompt-ref-copy {
+  padding: 5px 14px; border-radius: 7px; font-size: 12px; font-weight: 600;
+  background: rgba(168,85,247,.1); border: 1px solid rgba(168,85,247,.25);
+  color: #c084fc; cursor: pointer; transition: all .18s; font-family: 'Inter', sans-serif;
+}
+.prompt-ref-copy:hover { background: rgba(168,85,247,.2); }
+.prompt-ref-copy.copied { color: #a78bfa; border-color: #a78bfa; }
+.prompt-ref-body {
+  padding: 28px 32px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; line-height: 2; color: rgba(255,255,255,.35);
+  white-space: pre-wrap; overflow-x: auto;
+  max-height: 520px; overflow-y: auto;
+}
+.pr-section-head { color: #c084fc; font-weight: 600; }
+.pr-ph  { color: #fcd34d; }
+.pr-key { color: #7dd3fc; }
+.pr-dash { color: rgba(255,255,255,.25); }
+.pr-rule { color: #6ee7b7; }
+
+@media (max-width: 960px) {
+  .gen-card { grid-template-columns: 1fr; }
+  .gen-form-panel { border-right: none; border-bottom: 1px solid var(--border); }
+  .prompt-ref-body { font-size: 11px; padding: 20px; }
+}
+
 </style>
 </head>
 <body>
@@ -895,6 +1105,118 @@ footer { border-top: 1px solid var(--border); padding: 44px 0; }
   </div>
 </section>
 
+<!-- ── AI OUTREACH GENERATOR ── -->
+<section id="generator">
+  <div class="container">
+    <div class="section-header">
+      <div class="gen-section-label fade-in"><span class="gen-section-label-dot"></span>AI Outreach Engine</div>
+      <h2 class="section-h2 fade-in">Generate a personalized message<br>for any lead in seconds</h2>
+      <p class="section-sub fade-in">Powered by Ian's exact background and industry-specific context. Fill in the lead details — get a ready-to-send LinkedIn note or cold email.</p>
+    </div>
+
+    <!-- Generator card -->
+    <div class="gen-card fade-in">
+
+      <!-- LEFT: Form -->
+      <div class="gen-form-panel">
+        <div class="gen-panel-title">Lead Details</div>
+
+        <div class="gen-field">
+          <label class="gen-label" for="g-company">Company Name</label>
+          <input class="gen-input" id="g-company" type="text" placeholder="e.g. Smile LA Dentistry" autocomplete="off">
+        </div>
+
+        <div class="gen-field">
+          <label class="gen-label" for="g-contact">Contact Name</label>
+          <input class="gen-input" id="g-contact" type="text" placeholder="e.g. Dr. Kourosh Y." autocomplete="off">
+        </div>
+
+        <div class="gen-field">
+          <label class="gen-label" for="g-industry">Industry</label>
+          <select class="gen-select" id="g-industry">
+            <option value="">— Select industry —</option>
+            <option value="MedSpa">MedSpa</option>
+            <option value="Dental">Dental</option>
+            <option value="Marketing Agency">Marketing Agency</option>
+            <option value="Wellness">Wellness</option>
+            <option value="Chiropractic">Chiropractic</option>
+            <option value="Aesthetics">Aesthetics</option>
+            <option value="Plastic Surgery">Plastic Surgery</option>
+            <option value="Orthodontics">Orthodontics</option>
+            <option value="Cosmetic Dentistry">Cosmetic Dentistry</option>
+          </select>
+        </div>
+
+        <div class="gen-field">
+          <label class="gen-label" for="g-city">City &amp; Country <span style="color:var(--text3);font-weight:400">(optional)</span></label>
+          <input class="gen-input" id="g-city" type="text" placeholder="e.g. Los Angeles, US" autocomplete="off">
+        </div>
+
+        <div class="gen-field">
+          <label class="gen-label">Channel</label>
+          <div class="gen-toggle">
+            <button class="gen-toggle-btn active" id="btn-linkedin" onclick="setChannel('linkedin')">
+              <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+              LinkedIn Note
+            </button>
+            <button class="gen-toggle-btn" id="btn-email" onclick="setChannel('email')">
+              <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+              Cold Email
+            </button>
+          </div>
+        </div>
+
+        <button class="gen-generate-btn" onclick="generateMessage()">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="m13 2-3 14 4-4 4 4L13 2z"/><path d="m6 14-4 4 4-4zM18 6l4-4-4 4z"/></svg>
+          Generate Message
+        </button>
+      </div>
+
+      <!-- RIGHT: Output -->
+      <div class="gen-output-panel">
+        <div class="gen-output-bar">
+          <div class="gen-output-bar-left">
+            <div class="gen-output-bar-dots">
+              <span class="gen-bar-dot r"></span>
+              <span class="gen-bar-dot a"></span>
+              <span class="gen-bar-dot g"></span>
+            </div>
+            <span class="gen-output-label" id="gen-channel-label">outreach — linkedin-note</span>
+          </div>
+          <div class="gen-output-bar-right">
+            <span class="gen-char-count hidden" id="gen-char-count">0 / 300</span>
+            <button class="gen-copy-btn" id="gen-copy-btn" onclick="copyGenMessage()">Copy</button>
+          </div>
+        </div>
+        <div class="gen-output-body" id="gen-output-body">
+          <div class="gen-empty-state" id="gen-empty">
+            <div class="gen-empty-icon">✦</div>
+            <div class="gen-empty-text">Fill in the fields and click Generate</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.gen-card -->
+
+    <!-- Prompt Reference -->
+    <div class="prompt-ref-wrap fade-in">
+      <div class="prompt-ref-bar">
+        <div class="prompt-ref-bar-left">
+          <div class="gen-output-bar-dots">
+            <span class="gen-bar-dot r"></span>
+            <span class="gen-bar-dot a"></span>
+            <span class="gen-bar-dot g"></span>
+          </div>
+          <span class="prompt-ref-title">system-prompt.txt — Outreach Copywriter Context</span>
+        </div>
+        <button class="prompt-ref-copy" id="prompt-ref-copy-btn" onclick="copySystemPrompt()">Copy Prompt</button>
+      </div>
+      <div class="prompt-ref-body" id="promptRefBody"></div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ── CTA ── -->
 <section id="cta">
   <div class="cta-bg-glow"></div>
@@ -1066,6 +1388,252 @@ const io = new IntersectionObserver(entries => {
 }, { threshold: 0.1, rootMargin: '0px 0px -36px 0px' });
 
 document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+/* ── AI Outreach Generator ───────────────── */
+const industryPresets = {
+  'MedSpa': {
+    pain:      'likely relying on Groupon deals or running ads that attract price-shoppers instead of high-ticket clients',
+    pitch:     'filling injectable, laser, and body contouring slots',
+    pitchShort:'injectable and body contouring bookings',
+    platforms: 'Meta and TikTok',
+    subject:   (co) => `${co} — paid ads for injectables and body contouring`,
+    label:     'med spas',
+  },
+  'Dental': {
+    pain:      'likely running ads that attract cleaning patients instead of the veneer and implant cases they actually want',
+    pitch:     'targeting veneer, implant, and full-arch case inquiries — not cleaning volume',
+    pitchShort:'veneer and implant case inquiries',
+    platforms: 'Meta and Google',
+    subject:   (co) => `More cosmetic case bookings for ${co}`,
+    label:     'dental practices',
+  },
+  'Marketing Agency': {
+    pain:      'handling overflow client work or niche verticals without specialist paid media capacity',
+    pitch:     'running white-label media buying under your brand',
+    pitchShort:'white-label media buying',
+    platforms: 'Meta, TikTok, and Google',
+    subject:   (co) => `White-label media buying — ${co}`,
+    label:     'agencies',
+  },
+  'Wellness': {
+    pain:      'hitting a ceiling past referrals — paid ads driving general interest traffic that never converts to memberships',
+    pitch:     'filling memberships, retreats, and high-ticket programs with qualified buyers',
+    pitchShort:'membership and program enrollments',
+    platforms: 'Meta and TikTok',
+    subject:   (co) => `${co} — paid ads for memberships and programs`,
+    label:     'wellness brands',
+  },
+  'Chiropractic': {
+    pain:      'dependent on referrals or running ads that pull insurance-driven volume with short visit windows',
+    pitch:     'targeting cash-pay and long-term wellness patients, not insurance cases',
+    pitchShort:'cash-pay and long-term wellness patients',
+    platforms: 'Meta and Google',
+    subject:   (co) => `More cash-pay patients for ${co}`,
+    label:     'chiropractic practices',
+  },
+  'Aesthetics': {
+    pain:      'running awareness-only ad spend while the actual consultation pipeline stays empty',
+    pitch:     'targeting patients with real buying intent for procedures, not just top-of-funnel traffic',
+    pitchShort:'high-ticket consultation bookings',
+    platforms: 'Meta and TikTok',
+    subject:   (co) => `Filling more consultations at ${co}`,
+    label:     'aesthetic clinics',
+  },
+  'Plastic Surgery': {
+    pain:      'using ad strategies that optimize too early in a decision cycle that takes weeks or months',
+    pitch:     'multi-touch campaigns structured around the full patient decision cycle — from awareness to booked consultation',
+    pitchShort:'consultation pipeline with multi-touch campaigns',
+    platforms: 'Meta and Google',
+    subject:   (co) => `Consultation pipeline for ${co}`,
+    label:     'plastic surgery practices',
+  },
+  'Orthodontics': {
+    pain:      'relying on family referrals with no paid strategy for adult Invisalign — a completely different purchase decision',
+    pitch:     'targeting adult Invisalign starts and new family cases in your specific market',
+    pitchShort:'adult Invisalign starts',
+    platforms: 'Meta and TikTok',
+    subject:   (co) => `More Invisalign starts for ${co}`,
+    label:     'orthodontic practices',
+  },
+  'Cosmetic Dentistry': {
+    pain:      'running ads optimized for volume that attract patients who can\'t afford the work',
+    pitch:     'targeting patients with real intent for veneers, implants, and smile makeovers — built around case value, not volume',
+    pitchShort:'veneer and smile makeover consults',
+    platforms: 'Meta and Google',
+    subject:   (co) => `More smile makeover consults at ${co}`,
+    label:     'cosmetic dental practices',
+  },
+};
+
+let activeChannel = 'linkedin';
+let generatedRaw  = '';
+
+function setChannel(ch) {
+  activeChannel = ch;
+  document.getElementById('btn-linkedin').classList.toggle('active', ch === 'linkedin');
+  document.getElementById('btn-email').classList.toggle('active', ch === 'email');
+  document.getElementById('gen-channel-label').textContent =
+    ch === 'linkedin' ? 'outreach — linkedin-note' : 'outreach — cold-email';
+  const cc = document.getElementById('gen-char-count');
+  cc.classList.toggle('hidden', ch !== 'linkedin');
+}
+
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function ph(text) { return `<span class="gen-ph">${esc(text)}</span>`; }
+function hi(text) { return `<span class="gen-highlight">${esc(text)}</span>`; }
+function sig(text){ return `<span class="gen-sig">${esc(text)}</span>`; }
+
+function generateMessage() {
+  const company  = document.getElementById('g-company').value.trim();
+  const contact  = document.getElementById('g-contact').value.trim();
+  const industry = document.getElementById('g-industry').value;
+  const city     = document.getElementById('g-city').value.trim();
+
+  const co  = company  || null;
+  const cn  = contact  || null;
+  const ind = industry || null;
+  const preset = ind ? industryPresets[ind] : null;
+
+  const outputEl = document.getElementById('gen-output-body');
+  const emptyEl  = document.getElementById('gen-empty');
+  const charEl   = document.getElementById('gen-char-count');
+
+  if (emptyEl) emptyEl.style.display = 'none';
+
+  if (activeChannel === 'linkedin') {
+    const coDisplay  = co  ? hi(co)  : ph('[Company]');
+    const cnDisplay  = cn  ? hi(cn)  : ph('[Contact]');
+    const indDisplay = ind ? hi(preset.label) : ph('[industry]');
+    const platDisplay= preset ? hi(preset.platforms) : ph('[platforms]');
+    const pitchDisplay = preset ? hi(preset.pitchShort) : ph('[pitch]');
+
+    const rawCo   = co  || '[Company]';
+    const rawCn   = cn  || '[Contact]';
+    const rawInd  = ind ? preset.label : '[industry]';
+    const rawPlat = preset ? preset.platforms : '[platforms]';
+    const rawPitch= preset ? preset.pitchShort : '[pitch]';
+
+    generatedRaw = `Hi ${rawCn}, I'm Ian — COO at AGLA Media. We run ${rawPlat} ads for ${rawInd}, averaging 3x–5x ROAS on ${rawPitch}. Saw ${rawCo}, think there's a fit. Worth connecting?`;
+
+    const charCount = generatedRaw.length;
+    charEl.textContent = `${charCount} / 300`;
+    charEl.className = 'gen-char-count ' + (charCount <= 300 ? 'ok' : 'over');
+
+    outputEl.innerHTML = `<div class="gen-body-text">Hi ${cnDisplay}, I'm Ian — ${hi('COO at AGLA Media')}. We run ${platDisplay} ads for ${indDisplay}, averaging ${hi('3x–5x ROAS')} on ${pitchDisplay}. Saw ${coDisplay}, think there's a fit. Worth connecting?</div>`;
+
+  } else {
+    const coDisplay  = co  ? hi(co)  : ph('[Company]');
+    const cnDisplay  = cn  ? hi(cn)  : ph('[Contact]');
+
+    if (!preset) {
+      const rawSubj = `[Company] — [Industry-specific subject]`;
+      generatedRaw = `Subject: ${rawSubj}\n\nHi [Contact],\n\nI'm Ian, COO & Head of Media Buyers at AGLA Media. [Industry context and pain point].\n\nWe run [platforms] campaigns [pitch]. Our clients average 3x–5x ROAS.\n\nWorth a 15-minute call to see if there's a fit?\n\nIan Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com`;
+      outputEl.innerHTML = `
+        <span class="gen-subject-label">Subject</span>
+        <span class="gen-subject-value">${ph('[Company]')} — ${ph('[Industry-specific subject]')}</span>
+        <div class="gen-body-text">Hi ${ph('[Contact]')},\n\nI'm Ian, ${hi('COO & Head of Media Buyers at AGLA Media')}. ${ph('[Industry context and pain point]')}.\n\nWe run ${ph('[platforms]')} campaigns ${ph('[pitch]')}. Our clients average ${hi('3x–5x ROAS')}.\n\nWorth a 15-minute call to see if there's a fit?\n\n${sig('Ian Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com')}</div>`;
+      return;
+    }
+
+    const rawCo   = co  || '[Company]';
+    const rawCn   = cn  || '[Contact]';
+    const subj    = preset.subject(rawCo);
+
+    const cityLine = city ? ` You're based in ${city}.` : '';
+    const painSentence = `${rawCo} is likely ${preset.pain}.`;
+
+    generatedRaw = `Subject: ${subj}\n\nHi ${rawCn},\n\nI'm Ian, COO & Head of Media Buyers at AGLA Media. ${painSentence}\n\nWe run ${preset.platforms} campaigns ${preset.pitch}. Our clients average 3x–5x ROAS.\n\nWorth a 15-minute call to see if there's a fit?\n\nIan Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com`;
+
+    const painHTML    = `${coDisplay} is likely ${esc(preset.pain)}.`;
+    const pitchHTML   = `We run ${hi(preset.platforms)} campaigns ${esc(preset.pitch)}.`;
+
+    outputEl.innerHTML = `
+      <span class="gen-subject-label">Subject</span>
+      <span class="gen-subject-value">${esc(subj)}</span>
+      <div class="gen-body-text">Hi ${cnDisplay},\n\nI'm Ian, ${hi('COO & Head of Media Buyers at AGLA Media')}. ${painHTML}\n\n${pitchHTML} Our clients average ${hi('3x–5x ROAS')}.\n\nWorth a 15-minute call to see if there's a fit?\n\n${sig('Ian Fleni Sison\nCOO & Head of Media Buyers — AGLA Media\nianentila27@gmail.com')}</div>`;
+  }
+}
+
+function copyGenMessage() {
+  if (!generatedRaw) return;
+  const btn = document.getElementById('gen-copy-btn');
+  navigator.clipboard.writeText(generatedRaw).then(() => {
+    btn.textContent = 'Copied!'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+/* ── System Prompt Reference renderer ───── */
+const SYSTEM_PROMPT_RAW = `You are an expert paid media strategist and outreach copywriter. Write a cold outreach message for Ian Fleni Sison — a paid media strategist with 5+ years across TikTok, Meta, and Google Ads, currently serving as COO & Head of Media Buyers at AGLA Media. He consistently delivers 3x–5x ROAS for clients.
+
+LEAD DETAILS:
+— Company: [company]
+— Contact name: [contact]
+— Industry: [industry label][city line if provided]
+— Channel: [channel label]
+— Sender: [sender description]
+[context block if provided]
+
+INDUSTRY CONTEXT:
+Pain point: [pain]
+Pitch angle: Ian specializes in [pitch]
+Desired outcome for this lead: [outcome]
+Goal of the message: [cta]
+KPIs to reference: [kpi]
+Platforms relevant: [platforms]
+
+IAN'S BACKGROUND (use these facts, do not invent new ones):
+— 5+ years in paid media
+— COO & Head of Media Buyers at AGLA Media (Mar 2025 – Present)
+— Built the media buying department from scratch
+— Delivers consistent 3x–5x ROAS across TikTok, Meta, and Google
+— Also specializes in search arbitrage for insurance, finance, home services, and education verticals
+— Based in General Santos, Philippines — works remotely with global clients
+— Contact: ianentila27@gmail.com | linkedin.com/in/ian-flenisison-563aa1240
+
+WRITING RULES — follow these exactly:
+— Direct, operator-minded tone. No hype. No fluff.
+— Specific outcomes over vague claims. If you reference a result, make it concrete.
+— Never use: "game-changer," "secret sauce," "crush it," "moving the needle," "synergy," "hack," "10x," "rockstar"
+— No emoji stacks. Clean copy only.
+— One clear call to action at the end — a 15-minute call.
+— Short. Every sentence must earn its place.
+— If cold email: include a subject line specific to [company], not generic.
+— If LinkedIn connection note: stay strictly under 300 characters total.
+
+Write the message now. Do not add commentary before or after — just the message itself.`;
+
+function renderPromptRef() {
+  const el = document.getElementById('promptRefBody');
+  const sectionHeads = [
+    'LEAD DETAILS:', 'INDUSTRY CONTEXT:', "IAN'S BACKGROUND (use these facts, do not invent new ones):",
+    'WRITING RULES — follow these exactly:'
+  ];
+  let html = SYSTEM_PROMPT_RAW
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  sectionHeads.forEach(h => {
+    html = html.replace(new RegExp(h.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'g'),
+      `<span class="pr-section-head">${h}</span>`);
+  });
+  html = html.replace(/\[([^\]]+)\]/g, '<span class="pr-ph">[$1]</span>');
+  html = html.replace(/^(— .+)$/gm, '<span class="pr-dash">$1</span>');
+
+  el.innerHTML = html;
+}
+
+renderPromptRef();
+
+function copySystemPrompt() {
+  const btn = document.getElementById('prompt-ref-copy-btn');
+  navigator.clipboard.writeText(SYSTEM_PROMPT_RAW).then(() => {
+    btn.textContent = 'Copied!'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy Prompt'; btn.classList.remove('copied'); }, 2000);
+  });
+}
 </script>
 
 </body>
