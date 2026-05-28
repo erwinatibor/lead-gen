@@ -604,23 +604,36 @@
     line-height:1.85; color:var(--text2); white-space:pre-wrap;
     max-height:55vh; overflow-y:auto;
   }
-  .gen-v2-block { display:none; flex-direction:column; gap:7px; }
-  .gen-v2-block.vis { display:flex; }
-  .gen-v2-label {
-    display:flex; align-items:center; gap:8px;
-    font-size:9.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
-    color:var(--muted); font-family:'JetBrains Mono',monospace;
+  /* 2-column note modal */
+  .gen-modal.dual { max-width:860px; }
+  .gen-modal-cols { display:flex; flex-direction:column; gap:12px; }
+  .gen-modal.dual .gen-modal-cols { flex-direction:row; gap:0; }
+  .gen-modal-col { display:flex; flex-direction:column; gap:8px; flex:1; min-width:0; }
+  .gen-modal.dual .gen-modal-col:first-child { padding-right:18px; border-right:1px solid var(--border); }
+  .gen-modal.dual .gen-modal-col:last-child  { padding-left:18px; }
+  .gen-col-hd { display:flex; align-items:center; justify-content:space-between; min-height:18px; }
+  .gen-col-label {
+    display:none; font-size:9px; font-weight:700; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--muted); font-family:'JetBrains Mono',monospace;
   }
-  .gen-v2-label::before { content:''; flex:1; height:1px; background:var(--border); }
-  .gen-v2-label::after  { content:''; flex:1; height:1px; background:var(--border); }
-  .gen-v2-footer { display:flex; align-items:center; justify-content:space-between; }
-  .gen-v2-copy {
-    padding:4px 12px; border-radius:7px; border:1px solid var(--border2);
-    background:transparent; color:var(--muted2); font-size:11px; cursor:pointer;
-    font-family:'JetBrains Mono',monospace; transition:all .15s;
+  .gen-modal.dual .gen-col-label { display:block; }
+  .gen-col-v2 { display:none; }
+  .gen-modal.dual .gen-col-v2 { display:flex; }
+  .gen-col-copy-btn {
+    display:flex; align-items:center; justify-content:center; gap:5px;
+    height:30px; padding:0 14px; border-radius:7px; font-size:10px; font-weight:600;
+    background:rgba(0,255,174,.08); border:1px solid rgba(0,255,174,.2); color:var(--green);
+    cursor:pointer; transition:all .18s; font-family:'JetBrains Mono',monospace;
+    letter-spacing:.05em; text-transform:uppercase; white-space:nowrap;
   }
-  .gen-v2-copy:hover { border-color:var(--green); color:var(--green); background:rgba(0,255,174,.06); }
-  .gen-v2-copy.copied { border-color:var(--green); color:var(--green); background:rgba(0,255,174,.1); }
+  .gen-col-copy-btn:hover { background:rgba(0,255,174,.16); box-shadow:0 0 8px rgba(0,255,174,.12); }
+  .gen-col-copy-btn.copied { background:rgba(0,255,174,.2); color:#a7f3d0; }
+  @media (max-width:640px) {
+    .gen-modal.dual { max-width:100%; }
+    .gen-modal.dual .gen-modal-cols { flex-direction:column; }
+    .gen-modal.dual .gen-modal-col:first-child { padding-right:0; border-right:none; border-bottom:1px solid var(--border); padding-bottom:14px; }
+    .gen-modal.dual .gen-modal-col:last-child  { padding-left:0; }
+  }
 
   .gen-modal-footer {
     display:flex; align-items:center; gap:10px;
@@ -1984,24 +1997,36 @@ ianentila27@gmail.com</div>
         <div class="gen-subject-label">Subject Line</div>
         <div class="gen-modal-subject-val" id="genModalSubjectVal"></div>
       </div>
-      <div class="gen-modal-msg" id="genOutput"></div>
-      <div class="gen-v2-block" id="genV2Block">
-        <div class="gen-v2-label">V2 · Under 200</div>
-        <div class="gen-modal-msg" id="genOutput2"></div>
-        <div class="gen-v2-footer">
-          <span class="gen-counter" id="genCounter2"></span>
-          <button class="gen-v2-copy" id="genCopyBtn2" onclick="copyGenMessage2()">Copy V2</button>
+      <div class="gen-modal-cols">
+        <!-- V1 column -->
+        <div class="gen-modal-col">
+          <div class="gen-col-hd">
+            <span class="gen-col-label">V1 · Under 300</span>
+            <span class="gen-counter" id="genCounter"></span>
+          </div>
+          <div class="gen-modal-msg" id="genOutput"></div>
+          <button class="gen-col-copy-btn" id="genCopyBtn" onclick="copyGenMessage()">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy
+          </button>
+        </div>
+        <!-- V2 column (LinkedIn Note only) -->
+        <div class="gen-modal-col gen-col-v2">
+          <div class="gen-col-hd">
+            <span class="gen-col-label">V2 · Under 200</span>
+            <span class="gen-counter" id="genCounter2"></span>
+          </div>
+          <div class="gen-modal-msg" id="genOutput2"></div>
+          <button class="gen-col-copy-btn" id="genCopyBtn2" onclick="copyGenMessage2()">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy
+          </button>
         </div>
       </div>
     </div>
     <div class="gen-modal-footer">
-      <span class="gen-counter" id="genCounter"></span>
-      <div style="display:flex;gap:8px;margin-left:auto">
+      <div style="margin-left:auto">
         <button class="gen-modal-btn-sec" onclick="closeGenModal()">Close</button>
-        <button class="gen-copy" id="genCopyBtn" onclick="copyGenMessage()">
-          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Copy Message
-        </button>
       </div>
     </div>
   </div>
@@ -2558,26 +2583,106 @@ showSaved();
 
 /* ─────────────── OUTREACH GENERATOR ─────────────── */
 const GEN_PRESETS = {
-  'MedSpa':                        { pain:'relying on Groupon or ads that attract price-shoppers', pitch:'filling injectable, laser, and body contouring slots', pitchShort:'injectable & body contouring slots', platforms:'Meta and TikTok', subject:'[Company]: paid ads for injectables and body contouring' },
-  'Dental':                        { pain:'running ads that attract cleaning patients instead of cosmetic cases', pitch:'targeting veneer, implant, and full-arch case inquiries', pitchShort:'veneer & implant inquiries', platforms:'Meta and Google', subject:'More cosmetic bookings for [company]' },
-  'Marketing Agency':              { pain:'hitting overflow or niche verticals without specialist media buying capacity', pitch:'white-label media buying under your brand', pitchShort:'white-label media buying', platforms:'Meta, TikTok, and Google', subject:'White-label media buying for [company]' },
-  'Marketing Agency (Philippines)':{ pain:'hitting a ceiling on local clients without international white-label capacity', pitch:'white-label media buying for your US and AU clients under your brand', pitchShort:'white-label media buying', platforms:'Meta, TikTok, and Google', subject:'White-label media buying for [company]' },
-  'Wellness':                      { pain:'hitting a ceiling past referrals with general interest traffic', pitch:'filling memberships, retreats, and high-ticket programs', pitchShort:'memberships & high-ticket programs', platforms:'Meta and TikTok', subject:'[Company]: paid ads for memberships and programs' },
-  'Chiropractic':                  { pain:'relying on insurance-driven volume with short visit windows', pitch:'targeting cash-pay and long-term wellness patients', pitchShort:'cash-pay & wellness patients', platforms:'Meta and Google', subject:'More cash-pay patients for [company]' },
-  'Aesthetics':                    { pain:'running a leaky acquisition funnel with awareness-only ad spend', pitch:'targeting patients with real buying intent for procedures', pitchShort:'high-intent procedure inquiries', platforms:'Meta and TikTok', subject:'Filling more consultations at [company]' },
-  'Plastic Surgery':               { pain:'using ad strategies that optimize too early in the patient decision cycle', pitch:'multi-touch campaigns structured around the full patient decision cycle', pitchShort:'full-cycle patient campaigns', platforms:'Meta and Google', subject:'Consultation pipeline for [company]' },
-  'Orthodontics':                  { pain:'relying on family referrals with no adult Invisalign paid strategy', pitch:'targeting adult Invisalign starts and new family cases', pitchShort:'adult Invisalign & family starts', platforms:'Meta and TikTok', subject:'More Invisalign starts for [company]' },
-  'Cosmetic Dentistry':            { pain:'running ads optimized for volume that attract patients who can\'t afford the work', pitch:'targeting patients with intent for veneers, implants, and smile makeovers', pitchShort:'veneer & smile makeover patients', platforms:'Meta and Google', subject:'More smile makeover consults at [company]' },
-  'Ecommerce / DTC':               { pain:'spending on broad traffic that doesn\'t convert into repeat buyers', pitch:'scaling revenue through retention-focused Meta and TikTok campaigns', pitchShort:'DTC revenue scaling', platforms:'Meta and TikTok', subject:'Scaling paid acquisition for [company]' },
-  'Real Estate / PropTech':        { pain:'generating leads from ads that attract low-intent browsers instead of serious buyers', pitch:'targeting high-intent buyers and investors through Meta and Google campaigns', pitchShort:'high-intent buyer campaigns', platforms:'Meta and Google', subject:'More qualified leads for [company]' },
-  'Insurance':                     { pain:'running broad campaigns that attract low-quality leads who don\'t convert to policies', pitch:'targeting high-intent insurance shoppers across Meta and Google', pitchShort:'high-intent policy lead campaigns', platforms:'Meta and Google', subject:'Higher-quality insurance leads for [company]' },
-  'Finance / Fintech':             { pain:'acquiring users through expensive broad campaigns without strong LTV targeting', pitch:'acquiring high-value users through performance campaigns on Meta and Google', pitchShort:'high-LTV user acquisition', platforms:'Meta and Google', subject:'Performance campaigns for [company]' },
-  'Home Services':                 { pain:'relying on referrals and directories with no consistent paid acquisition system', pitch:'filling your calendar with qualified local jobs through Meta and Google ads', pitchShort:'local job calendar filling', platforms:'Meta and Google', subject:'More booked jobs for [company]' },
-  'Education / Online Courses':    { pain:'spending on awareness campaigns that don\'t convert into enrolled students', pitch:'driving enrollments through intent-based Meta and TikTok campaigns', pitchShort:'course enrollment campaigns', platforms:'Meta and TikTok', subject:'More enrollments for [company]' },
-  'Legal / Law Firm':              { pain:'getting clicks from people who don\'t qualify or can\'t afford representation', pitch:'targeting qualified case inquiries through Meta and Google campaigns', pitchShort:'qualified case lead campaigns', platforms:'Meta and Google', subject:'More qualified case inquiries for [company]' },
-  'Restaurant / F&B':             { pain:'relying on delivery apps and organic reach with no paid acquisition strategy', pitch:'driving dine-in reservations and catering inquiries through Meta and Instagram', pitchShort:'reservation & catering campaigns', platforms:'Meta and Instagram', subject:'More covers and reservations for [company]' },
-  'Gym / Fitness Studio':          { pain:'running seasonal promotions that attract price-sensitive members who churn quickly', pitch:'filling memberships with high-retention members through Meta and TikTok campaigns', pitchShort:'high-retention membership campaigns', platforms:'Meta and TikTok', subject:'More high-retention members for [company]' },
-  'SaaS / Tech':                   { pain:'burning budget on broad awareness campaigns with poor trial-to-paid conversion', pitch:'driving qualified trials and demos through performance campaigns on Meta and Google', pitchShort:'trial & demo pipeline campaigns', platforms:'Meta and Google', subject:'Trial and demo pipeline for [company]' },
+  'MedSpa': {
+    pain:'relying on Groupon or ads that attract price-shoppers', pitch:'filling injectable, laser, and body contouring slots', pitchShort:'injectable & body contouring slots', platforms:'Meta and TikTok', subject:'[Company]: paid ads for injectables and body contouring',
+    noteV1:`We run Meta and TikTok ads for med spas filling injectable and body contouring slots, no Groupon plays. 3x–5x ROAS. Came across [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's a fit. We help med spas fill high-ticket slots through paid social, no discounting needed. Worth connecting?`,
+  },
+  'Dental': {
+    pain:'running ads that attract cleaning patients instead of cosmetic cases', pitch:'targeting veneer, implant, and full-arch case inquiries', pitchShort:'veneer & implant inquiries', platforms:'Meta and Google', subject:'More cosmetic bookings for [company]',
+    noteV1:`We run Meta and Google ads for dental practices targeting cosmetic patients, not cleaning volume. Veneers, implants, full-arch cases. 3x–5x ROAS. Came across [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's a fit. We help dental practices reach cosmetic case patients, not just cleaning volume. Worth connecting?`,
+  },
+  'Marketing Agency': {
+    pain:'hitting overflow or niche verticals without specialist media buying capacity', pitch:'white-label media buying under your brand', pitchShort:'white-label media buying', platforms:'Meta, TikTok, and Google', subject:'White-label media buying for [company]',
+    noteV1:`We provide white-label media buying across Meta, TikTok, and Google under your brand, full KPI reporting included. Good for overflow and niche verticals. Saw [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's a fit. We offer white-label media buying under your brand when you need overflow capacity. Worth connecting?`,
+  },
+  'Marketing Agency (Philippines)': {
+    pain:'hitting a ceiling on local clients without international white-label capacity', pitch:'white-label media buying for your US and AU clients under your brand', pitchShort:'white-label media buying', platforms:'Meta, TikTok, and Google', subject:'White-label media buying for [company]',
+    noteV1:`We support PH agencies serving US and AU clients with senior-level paid media across Meta, TikTok, and Google under your brand. Saw [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's a fit. We support PH agencies with international clients through senior-level white-label paid media. Worth connecting?`,
+  },
+  'Wellness': {
+    pain:'hitting a ceiling past referrals with general interest traffic', pitch:'filling memberships, retreats, and high-ticket programs', pitchShort:'memberships & high-ticket programs', platforms:'Meta and TikTok', subject:'[Company]: paid ads for memberships and programs',
+    noteV1:`We run Meta and TikTok campaigns for wellness brands filling memberships, retreats, and high-ticket programs past the referral ceiling. 3x–5x ROAS. Saw [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's a fit. We help wellness brands fill programs and memberships through paid social, past the referral ceiling. Worth connecting?`,
+  },
+  'Chiropractic': {
+    pain:'relying on insurance-driven volume with short visit windows', pitch:'targeting cash-pay and long-term wellness patients', pitchShort:'cash-pay & wellness patients', platforms:'Meta and Google', subject:'More cash-pay patients for [company]',
+    noteV1:`We run Meta and Google ads for chiro practices bringing in cash-pay, long-term wellness patients instead of insurance-heavy volume. 3x–5x ROAS. Saw [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's a fit. We help chiro practices attract cash-pay wellness patients, not insurance-driven volume. Worth connecting?`,
+  },
+  'Aesthetics': {
+    pain:'running a leaky acquisition funnel with awareness-only ad spend', pitch:'targeting patients with real buying intent for procedures', pitchShort:'high-intent procedure inquiries', platforms:'Meta and TikTok', subject:'Filling more consultations at [company]',
+    noteV1:`We run Meta and TikTok campaigns for aesthetics clinics reaching patients with real buying intent, not just awareness traffic. Consistently 3x–5x ROAS. Saw [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's an angle. We help aesthetics clinics reach patients with real buying intent, not just awareness traffic. Worth connecting?`,
+  },
+  'Plastic Surgery': {
+    pain:'using ad strategies that optimize too early in the patient decision cycle', pitch:'multi-touch campaigns structured around the full patient decision cycle', pitchShort:'full-cycle patient campaigns', platforms:'Meta and Google', subject:'Consultation pipeline for [company]',
+    noteV1:`We build multi-touch campaigns for plastic surgery practices structured around the full patient decision cycle, not just top-of-funnel clicks. 3x–5x ROAS. Saw [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's a fit. We build paid campaigns around the full patient decision cycle, not early-funnel only. Worth connecting?`,
+  },
+  'Orthodontics': {
+    pain:'relying on family referrals with no adult Invisalign paid strategy', pitch:'targeting adult Invisalign starts and new family cases', pitchShort:'adult Invisalign & family starts', platforms:'Meta and TikTok', subject:'More Invisalign starts for [company]',
+    noteV1:`We run Meta and TikTok ads for ortho practices targeting adult Invisalign patients and new family starts, not just waiting on referrals. 3x–5x ROAS. Saw [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's a fit. We target adult Invisalign starts and new family cases for ortho practices through paid social. Worth connecting?`,
+  },
+  'Cosmetic Dentistry': {
+    pain:'running ads optimized for volume that attract patients who can\'t afford the work', pitch:'targeting patients with intent for veneers, implants, and smile makeovers', pitchShort:'veneer & smile makeover patients', platforms:'Meta and Google', subject:'More smile makeover consults at [company]',
+    noteV1:`We run Meta and Google campaigns for cosmetic dentists targeting high-intent patients for veneers, implants, and smile makeovers, not volume leads. 3x–5x ROAS. Saw [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's a fit. We target patients with real intent for veneers and smile makeovers, not volume leads. Worth connecting?`,
+  },
+  'Ecommerce / DTC': {
+    pain:'spending on broad traffic that doesn\'t convert into repeat buyers', pitch:'scaling revenue through retention-focused Meta and TikTok campaigns', pitchShort:'DTC revenue scaling', platforms:'Meta and TikTok', subject:'Scaling paid acquisition for [company]',
+    noteV1:`We scale DTC brands through Meta and TikTok built around ROAS targets and CPA thresholds, not just broad spend increases. Clients average 3x–5x ROAS. Saw [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's an angle. We scale DTC revenue through Meta and TikTok structured around real ROAS and CPA targets. Worth connecting?`,
+  },
+  'Real Estate / PropTech': {
+    pain:'generating leads from ads that attract low-intent browsers instead of serious buyers', pitch:'targeting high-intent buyers and investors through Meta and Google campaigns', pitchShort:'high-intent buyer campaigns', platforms:'Meta and Google', subject:'More qualified leads for [company]',
+    noteV1:`We run Meta and Google campaigns for real estate businesses targeting qualified buyers and investors, not broad awareness traffic. Lead quality over volume. Saw [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's a fit. We target qualified buyers and investors through paid media, quality over volume. Worth connecting?`,
+  },
+  'Insurance': {
+    pain:'running broad campaigns that attract low-quality leads who don\'t convert to policies', pitch:'targeting high-intent insurance shoppers across Meta and Google', pitchShort:'high-intent policy lead campaigns', platforms:'Meta and Google', subject:'Higher-quality insurance leads for [company]',
+    noteV1:`We build paid media for insurance businesses targeting high-intent buyers through Meta and Google, structured around CPL and margin targets, not just click volume. Saw [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's a fit. We target high-intent insurance buyers through paid media, structured around real margin targets. Worth connecting?`,
+  },
+  'Finance / Fintech': {
+    pain:'acquiring users through expensive broad campaigns without strong LTV targeting', pitch:'acquiring high-value users through performance campaigns on Meta and Google', pitchShort:'high-LTV user acquisition', platforms:'Meta and Google', subject:'Performance campaigns for [company]',
+    noteV1:`We run performance campaigns for finance brands targeting high-value users with ROAS and LTV tracking built in from day one, not bolted on after. Saw [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's an angle. We run paid campaigns for finance brands with LTV and CPA tracking built in from day one. Worth connecting?`,
+  },
+  'Home Services': {
+    pain:'relying on referrals and directories with no consistent paid acquisition system', pitch:'filling your calendar with qualified local jobs through Meta and Google ads', pitchShort:'local job calendar filling', platforms:'Meta and Google', subject:'More booked jobs for [company]',
+    noteV1:`We run Google and Meta campaigns for home service businesses filling calendars with booked jobs, not just lead forms that go nowhere. 3x–5x ROAS. Saw [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's a fit. We help home service businesses fill their calendars with booked jobs, not just leads. Worth connecting?`,
+  },
+  'Education / Online Courses': {
+    pain:'spending on awareness campaigns that don\'t convert into enrolled students', pitch:'driving enrollments through intent-based Meta and TikTok campaigns', pitchShort:'course enrollment campaigns', platforms:'Meta and TikTok', subject:'More enrollments for [company]',
+    noteV1:`We run full-funnel paid campaigns for education brands focused on actual enrollments, not top-of-funnel clicks. CPA tied to course LTV. 3x–5x ROAS. Saw [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's a fit. We drive course enrollments through paid media with CPA tied to LTV, not just awareness clicks. Worth connecting?`,
+  },
+  'Legal / Law Firm': {
+    pain:'getting clicks from people who don\'t qualify or can\'t afford representation', pitch:'targeting qualified case inquiries through Meta and Google campaigns', pitchShort:'qualified case lead campaigns', platforms:'Meta and Google', subject:'More qualified case inquiries for [company]',
+    noteV1:`We run paid media for law firms built around case quality, not click volume. Google Search and Meta, attribution tracked all the way to signed clients. Saw [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's a fit. We help law firms get qualified case inquiries through paid ads, tracked to signed clients. Worth connecting?`,
+  },
+  'Restaurant / F&B': {
+    pain:'relying on delivery apps and organic reach with no paid acquisition strategy', pitch:'driving dine-in reservations and catering inquiries through Meta and Instagram', pitchShort:'reservation & catering campaigns', platforms:'Meta and Instagram', subject:'More covers and reservations for [company]',
+    noteV1:`We run paid social for restaurants driving reservations and actual orders, not just reach and impressions. Facebook, Instagram, and Google. 3x–5x ROAS. Saw [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's a fit. We help restaurants fill tables and drive orders through paid social, not just build reach. Worth connecting?`,
+  },
+  'Gym / Fitness Studio': {
+    pain:'running seasonal promotions that attract price-sensitive members who churn quickly', pitch:'filling memberships with high-retention members through Meta and TikTok campaigns', pitchShort:'high-retention membership campaigns', platforms:'Meta and TikTok', subject:'More high-retention members for [company]',
+    noteV1:`We run Meta and TikTok ads for fitness studios attracting long-term members, not just promo sign-ups who cancel after the deal ends. 3x–5x ROAS. Saw [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's a fit. We help fitness studios attract high-LTV members through paid social, not short-term promo sign-ups. Worth connecting?`,
+  },
+  'SaaS / Tech': {
+    pain:'burning budget on broad awareness campaigns with poor trial-to-paid conversion', pitch:'driving qualified trials and demos through performance campaigns on Meta and Google', pitchShort:'trial & demo pipeline campaigns', platforms:'Meta and Google', subject:'Trial and demo pipeline for [company]',
+    noteV1:`We run paid campaigns for SaaS products focused on trial-to-paid conversion, not just sign-up volume. CPA tied to LTV. 3x–5x ROAS. Saw [COMPANY] and thought there could be a fit. Open to connecting?`,
+    noteV2:`Saw [COMPANY] and thought there's a fit. We help SaaS teams acquire paying customers through paid ads with CPA tied to LTV, not just free trials. Worth connecting?`,
+  },
 };
 
 const SENDERS = {
@@ -2667,14 +2772,23 @@ function generateOutreach() {
   const extraStr = extra ? `\n\n${extra}` : '';
   const emailLine = s.email ? `\n${s.email}` : '';
 
-  let msg = '', subject = '';
+  let msg = '', msg2 = '', subject = '';
 
   if (channel === 'li-note') {
-    if (s.direct) {
-      msg = `Hi ${contact}, I'm Ian from AGLA Media. We help ${indLabel}s with ${pitchShort}, averaging 3x–5x ROAS. Came across ${company} and thought there could be a good fit. Open to connecting?`;
-    } else {
-      msg = `Hi ${contact}, I'm ${s.name}, working alongside Ian Sison from AGLA Media. We help ${indLabel}s with ${pitchShort}, averaging 3x–5x ROAS. Came across ${company} and thought there could be a good fit. Open to connecting?`;
-    }
+    const intro1 = s.direct
+      ? `Hi ${contact}, I'm Ian from AGLA Media.`
+      : `Hi ${contact}, I'm ${s.name}, working alongside Ian Sison at AGLA Media.`;
+    const intro2 = s.direct
+      ? `Hi ${contact}, I'm Ian from AGLA Media.`
+      : `Hi ${contact}, I'm ${s.name} from AGLA Media.`;
+    const body1 = p
+      ? p.noteV1.replace('[COMPANY]', company)
+      : `We help ${indLabel}s with ${pitchShort}, averaging 3x–5x ROAS. Came across ${company} and thought there could be a fit. Open to connecting?`;
+    const body2 = p
+      ? p.noteV2.replace('[COMPANY]', company)
+      : `Saw ${company} and thought there's a fit. We work with ${indLabel}s on ${pitchShort}. Worth connecting?`;
+    msg  = `${intro1} ${body1}`;
+    msg2 = `${intro2} ${body2}`;
   } else if (channel === 'li-dm') {
     if (s.direct) {
       msg = `Hi ${contact},\n\nI'm Ian, COO at AGLA Media. We run ${platforms} ads for ${indLabel}s focused on ${pitch}, consistently hitting 3x–5x ROAS.\n\nSaw ${company}${cityStr} and thought there might be a fit. Open to a quick 15-minute call to explore?${extraStr}\n\nIan Fleni Sison\nCOO & Head of Media Buyers at AGLA Media`;
@@ -2690,22 +2804,19 @@ function generateOutreach() {
     }
   }
 
-  // V2 — short under-200 variant (LinkedIn Note only)
-  let msg2 = '';
-  if (channel === 'li-note') {
-    msg2 = `Hi ${contact}, I'm ${s.name} from AGLA Media. We help ${indLabel}s grow through ${pitchShort}. Came across ${company} and thought there could be a fit. Open to connecting?`;
-  }
-
   // populate modal
+  const modalEl    = document.querySelector('.gen-modal');
   const outEl      = document.getElementById('genOutput');
+  const out2El     = document.getElementById('genOutput2');
   const counterEl  = document.getElementById('genCounter');
+  const counter2El = document.getElementById('genCounter2');
   const subjectRow = document.getElementById('genModalSubject');
   const subjectVal = document.getElementById('genModalSubjectVal');
   const badge      = document.getElementById('genModalBadge');
   const titleEl    = document.getElementById('genModalTitle');
-  const v2Block    = document.getElementById('genV2Block');
-  const out2El     = document.getElementById('genOutput2');
-  const counter2El = document.getElementById('genCounter2');
+
+  // dual 2-column layout for li-note only
+  modalEl.classList.toggle('dual', channel === 'li-note');
 
   outEl.textContent = msg;
 
@@ -2713,10 +2824,9 @@ function generateOutreach() {
     out2El.textContent = msg2;
     counter2El.textContent = `${msg2.length} / 200`;
     counter2El.className = 'gen-counter ' + (msg2.length <= 200 ? 'ok' : 'over');
-    v2Block.classList.add('vis');
   } else {
-    v2Block.classList.remove('vis');
     out2El.textContent = '';
+    counter2El.textContent = '';
   }
 
   const channelLabels = { 'li-note':'LinkedIn Note', 'li-dm':'LinkedIn DM', 'email':'Cold Email' };
@@ -2779,7 +2889,7 @@ function copyGenMessage() {
     btn.innerHTML = '<svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
     btn.classList.add('copied');
     setTimeout(() => {
-      btn.innerHTML = '<svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Message';
+      btn.innerHTML = '<svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy';
       btn.classList.remove('copied');
     }, 2200);
   }).catch(() => showToast('Copy failed, select manually'));
