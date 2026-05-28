@@ -2784,9 +2784,7 @@ function generateOutreach() {
     const body1 = p
       ? p.noteV1.replace('[COMPANY]', company)
       : `We help ${indLabel}s with ${pitchShort}, averaging 3x–5x ROAS. Came across ${company} and thought there could be a fit. Open to connecting?`;
-    const body2 = p
-      ? p.noteV2.replace('[COMPANY]', company)
-      : `Saw ${company} and thought there's a fit. We work with ${indLabel}s on ${pitchShort}. Worth connecting?`;
+    const body2 = `We help ${indLabel}s grow through ${pitchShort}. Came across ${company} and thought there could be a fit. Open to connecting?`;
     msg  = `${intro1} ${body1}`;
     msg2 = `${intro2} ${body2}`;
   } else if (channel === 'li-dm') {
