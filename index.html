@@ -3024,8 +3024,15 @@ Body: Hi ${contact}, + 3 short paragraphs + CTA for 15-min call. Return ONLY the
 
 function truncateMsg(text, limit) {
   if (!text || text.length <= limit) return text;
+  // find the last sentence-ending punctuation at or before the limit
+  let lastEnd = -1;
+  for (let i = Math.min(text.length - 1, limit); i >= 0; i--) {
+    if ('.?!'.includes(text[i])) { lastEnd = i + 1; break; }
+  }
+  if (lastEnd > 0) return text.slice(0, lastEnd).trimEnd();
+  // fallback: cut at last word boundary
   const cut = text.lastIndexOf(' ', limit);
-  return (cut > limit * 0.6 ? text.slice(0, cut) : text.slice(0, limit)).trimEnd();
+  return (cut > 0 ? text.slice(0, cut) : text.slice(0, limit)).trimEnd();
 }
 
 function showGenModal(msg, msg2, subject, channel, contact, company) {
