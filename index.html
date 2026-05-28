@@ -829,10 +829,10 @@
   @media(max-width:680px) { .pm-cards { grid-template-columns:1fr; } }
 
   /* ── ASSIGNED DROPDOWN ── */
-  .th-assigned { width:80px; min-width:80px; }
-  .td-assigned { width:80px; min-width:80px; padding:6px 8px; cursor:default; }
-  .assigned-sel { font-size:10px; padding:3px 6px; background:var(--surface); border:1px solid var(--border2); color:var(--muted); border-radius:5px; cursor:pointer; font-family:inherit; width:100%; }
-  .assigned-sel.has-val { color:var(--green); border-color:rgba(0,255,174,.35); font-weight:600; }
+  .th-assigned { width:44px; min-width:44px; padding:9px 4px; }
+  .td-assigned { width:44px; min-width:44px; padding:5px 4px; cursor:default; }
+  .assigned-sel { font-size:9.5px; padding:2px 2px 2px 4px; background:var(--surface); border:1px solid var(--border2); color:var(--muted); border-radius:5px; cursor:pointer; font-family:inherit; width:100%; min-width:0; appearance:none; background-image:none; }
+  .assigned-sel.has-val { color:var(--green); border-color:rgba(0,255,174,.35); font-weight:700; }
 
   /* ── MEMBER SCOREBOARD ── */
   .intel-member-section { margin-bottom:4px; }
@@ -925,6 +925,16 @@
   .co-fill-btn:hover { background:var(--green); color:#000; }
   tr:hover .co-fill-btn { display:inline-flex; }
 
+  /* ── TABLET: hide Address, Position, Phone, LinkedIn ── */
+  @media(max-width:1024px) {
+    th:nth-child(6), td:nth-child(6),
+    th:nth-child(8), td:nth-child(8),
+    th:nth-child(9), td:nth-child(9),
+    th:nth-child(10), td:nth-child(10) { display:none; }
+    table { min-width:620px; }
+  }
+
+  /* ── MOBILE ── */
   @media(max-width:768px) {
     body { overflow:auto; }
     .app-wrapper { flex-direction:column; height:auto; }
@@ -935,7 +945,7 @@
     .main-content { overflow:auto; height:auto; }
     .workspace { flex-direction:column; overflow:visible; height:auto; }
     .table-section { overflow:visible; height:auto; }
-    .table-inner-wrap { overflow-x:auto; }
+    .table-inner-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
     .right-panel { width:100%; border-left:none; border-top:1px solid var(--border); height:auto; }
     .view-panel.active { flex:none; overflow-y:visible; }
     .gen-row-3 { grid-template-columns:1fr; }
@@ -944,6 +954,25 @@
     .pm-cards { grid-template-columns:1fr; }
     .intel-member-grid { grid-template-columns:repeat(2,1fr); }
     .co-fill-btn { display:inline-flex; }
+    /* also hide Country and Email on mobile */
+    th:nth-child(5), td:nth-child(5),
+    th:nth-child(11), td:nth-child(11) { display:none; }
+    table { min-width:480px; }
+    td { padding:7px 8px; }
+    th { padding:7px 8px; }
+    .topbar-stats { display:none; }
+    .table-toolbar { gap:6px; padding:7px 10px; }
+  }
+
+  /* ── PHONE: keep only Assigned / # / Company / Status / Done ── */
+  @media(max-width:480px) {
+    th:nth-child(4), td:nth-child(4),
+    th:nth-child(7), td:nth-child(7),
+    th:nth-child(13), td:nth-child(13) { display:none; }
+    table { min-width:320px; }
+    td.td-company { max-width:140px; }
+    .co-fill-btn { display:none; }
+    .topbar { padding:0 10px; }
   }
 </style>
 </head>
@@ -2402,12 +2431,12 @@ function render() {
 
     tr.innerHTML = `
       <td class="td-assigned">
-        <select class="assigned-sel${s.assigned?' has-val':''}" data-action="assigned" data-id="${k}">
+        <select class="assigned-sel${s.assigned?' has-val':''}" data-action="assigned" data-id="${k}" title="${s.assigned||'Unassigned'}">
           <option value="" ${!s.assigned?'selected':''}>—</option>
-          <option value="ian"      ${s.assigned==='ian'      ?'selected':''}>Ian</option>
-          <option value="rizzalyn" ${s.assigned==='rizzalyn' ?'selected':''}>Rizzalyn</option>
-          <option value="rutchel"  ${s.assigned==='rutchel'  ?'selected':''}>Rutchel</option>
-          <option value="junnel"   ${s.assigned==='junnel'   ?'selected':''}>Junnel</option>
+          <option value="ian"      ${s.assigned==='ian'      ?'selected':''}>I</option>
+          <option value="rizzalyn" ${s.assigned==='rizzalyn' ?'selected':''}>Ri</option>
+          <option value="rutchel"  ${s.assigned==='rutchel'  ?'selected':''}>Ru</option>
+          <option value="junnel"   ${s.assigned==='junnel'   ?'selected':''}>Ju</option>
         </select>
       </td>
       <td class="td-num">${l.id}</td>
