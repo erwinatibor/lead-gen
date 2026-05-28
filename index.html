@@ -2726,6 +2726,46 @@ const SENDERS = {
   junnel:   { name:'Junnel',   full:'Junnel (Jun) Tomales',   role:'Outreach',                   email:'juniqu3designs@gmail.com', direct:false },
 };
 
+/* ─────────────── INDUSTRY DETECTION ─────────────── */
+const INDUSTRY_DETECT = [
+  { keys:['cosmetic dent','smile makeover','smile design','veneer'],                             val:'Cosmetic Dentistry' },
+  { keys:['orthodont','invisalign','aligner','braces'],                                           val:'Orthodontics' },
+  { keys:['dental','dentist','dentistry','dds','dmd','teeth','tooth'],                            val:'Dental' },
+  { keys:['plastic surg','rhinoplasty','augmentation','liposuction','tummy tuck','facelift'],     val:'Plastic Surgery' },
+  { keys:['medspa','med spa','medical spa','medi-spa','medispa','medi spa'],                      val:'MedSpa' },
+  { keys:['aesthetics','aesthetic','skin clinic','dermatolog'],                                   val:'Aesthetics' },
+  { keys:['chiro','chiropract','spine center','spinal'],                                          val:'Chiropractic' },
+  { keys:['wellness','holistic','naturopath','integrative health','functional medicine'],         val:'Wellness' },
+  { keys:['gym','fitness studio','crossfit','pilates','boxing gym','martial arts','bjj'],         val:'Gym / Fitness Studio' },
+  { keys:['restaurant','bistro','brasserie','eatery','diner','cafe','kitchen','grill','bar & grill'], val:'Restaurant / F&B' },
+  { keys:['real estate','realtor','realty','proptech'],                                           val:'Real Estate / PropTech' },
+  { keys:['law firm','attorney','lawyers','solicitor'],                                           val:'Legal / Law Firm' },
+  { keys:['insurance','insure'],                                                                  val:'Insurance' },
+  { keys:['fintech','financial services','lending','credit union'],                               val:'Finance / Fintech' },
+  { keys:['plumbing','hvac','electrical','roofing','landscaping','cleaning service','handyman'],  val:'Home Services' },
+  { keys:['academy','e-learning','online course','bootcamp','training center','online school'],   val:'Education / Online Courses' },
+  { keys:['ecommerce','e-commerce','shopify store','direct to consumer'],                         val:'Ecommerce / DTC' },
+  { keys:['software','saas','.io','technologies','tech platform','techno'],                       val:'SaaS / Tech' },
+  { keys:['marketing agency','media agency','digital agency','advertising agency','creative agency'], val:'Marketing Agency' },
+];
+
+function detectAndSetIndustry(name) {
+  if (!name || name.length < 3) return;
+  const n = name.toLowerCase();
+  for (const { keys, val } of INDUSTRY_DETECT) {
+    if (keys.some(k => n.includes(k))) {
+      const sel = document.getElementById('genIndustry');
+      if (sel.value !== val) {
+        sel.value = val;
+        sel.style.transition = 'border-color .2s';
+        sel.style.borderColor = 'var(--accent)';
+        setTimeout(() => sel.style.borderColor = '', 900);
+      }
+      return;
+    }
+  }
+}
+
 /* ─────────────── OUTREACH AUTOFILL ─────────────── */
 (function() {
   const genCompany = document.getElementById('genCompany');
@@ -2733,16 +2773,22 @@ const SENDERS = {
 
   genCompany.addEventListener('input', function() {
     clearTimeout(autofillTimeout);
-    autofillTimeout = setTimeout(() => autofillFromLead(this.value.trim()), 300);
+    autofillTimeout = setTimeout(() => {
+      const matched = autofillFromLead(this.value.trim());
+      if (!matched) detectAndSetIndustry(this.value.trim());
+    }, 300);
   });
 
   genCompany.addEventListener('paste', function() {
-    setTimeout(() => autofillFromLead(this.value.trim()), 50);
+    setTimeout(() => {
+      const matched = autofillFromLead(this.value.trim());
+      if (!matched) detectAndSetIndustry(this.value.trim());
+    }, 50);
   });
 })();
 
 function autofillFromLead(query) {
-  if (!query || query.length < 2) return;
+  if (!query || query.length < 2) return false;
   const q = query.toLowerCase();
 
   // exact match first, then starts-with, then includes
@@ -2751,7 +2797,7 @@ function autofillFromLead(query) {
     LEADS.find(l => l.company.toLowerCase().startsWith(q)) ||
     LEADS.find(l => l.company.toLowerCase().includes(q));
 
-  if (!lead) return;
+  if (!lead) return false;
 
   const contactEl = document.getElementById('genContact');
   const cityEl    = document.getElementById('genCity');
@@ -2773,6 +2819,15 @@ function autofillFromLead(query) {
   if (lead.title && !ctxEl.value.trim())
     ctxEl.value = lead.title;
 
+  // set industry from lead data
+  if (lead.industry) {
+    const sel = document.getElementById('genIndustry');
+    sel.value = lead.industry;
+    sel.style.transition = 'border-color .2s';
+    sel.style.borderColor = 'var(--accent)';
+    setTimeout(() => sel.style.borderColor = '', 900);
+  }
+
   // flash the filled fields
   [document.getElementById('genContact'), document.getElementById('genCity'), document.getElementById('genContext')]
     .forEach(el => {
@@ -2781,6 +2836,7 @@ function autofillFromLead(query) {
       el.style.borderColor = 'var(--green)';
       setTimeout(() => el.style.borderColor = '', 900);
     });
+  return true;
 }
 
 function updateAiModeUI() {
