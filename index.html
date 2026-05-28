@@ -3062,28 +3062,52 @@ async function callGroqAPI(apiKey, provider, { channel, contact, company, indust
     const budget1 = 295 - intro1.length;
     const minV2 = 190 - intro2.length;
     const maxV2 = 200 - intro2.length;
-    systemPrompt = `You are an expert B2B outreach copywriter. Write LinkedIn connection notes for AGLA Media, a paid social agency. Rules: sound human, natural, and confident. Do NOT sound salesy or spammy. Do NOT use generic buzzwords. Focus on connection first, not pitching. Mention the company naturally. Personalize by industry. Never use em dashes. Return ONLY valid JSON.`;
-    userPrompt = `Write two LinkedIn connection note bodies. Return ONLY: {"v1":"...","v2":"..."}
+    systemPrompt = `You are an expert B2B outreach copywriter.
 
-Prospect: ${contact} at ${company}${cityNote}
-Industry: ${indLabel}
-Platforms: ${platforms}
-Service: ${pitchShort}
-Pain point: ${pain}${extraNote}
+Your task is to generate short, natural, human-written LinkedIn outreach messages using ONLY the lead information provided.
 
-V1 body (appended after "${intro1}"):
-- HARD LIMIT: ${budget1} characters maximum. Do NOT exceed this. Count every character.
+Rules:
+- Do NOT hallucinate or invent information
+- Do NOT mention services the lead does not clearly offer
+- Do NOT make fake claims
+- Do NOT sound AI-generated, robotic, or overly formal
+- Keep the tone conversational, professional, and confident
+- Avoid buzzwords and marketing fluff
+- Do NOT include emojis
+- Do NOT repeat names or company names unnecessarily
+- Do NOT use hard selling
+- Focus on connection first, not pitching
+- Never use em dashes
+
+Avoid phrases like: "I hope you're doing well", "I came across your impressive company", "synergy", "scale your business", "revolutionize", generic compliments, fake personalization, long introductions, overexplaining services.
+
+Use ONLY: lead name, company name, industry, and any extra context provided.
+
+Return ONLY valid JSON — no extra text.`;
+
+    userPrompt = `Write two LinkedIn connection note bodies for this prospect. Return ONLY: {"v1":"...","v2":"..."}
+
+Lead info:
+- Name: ${contact}
+- Company: ${company}${cityNote}
+- Industry: ${indLabel}
+- Service/result: ${pitchShort}
+- Pain point: ${pain}${extraNote}
+
+V1 body (appended after the greeting "${intro1}"):
+- HARD LIMIT: ${budget1} characters maximum for the body. Count every character.
 - Pitch-first: start with "We run..." or "We help..."
-- End with "Came across ${company} and thought there could be a fit. Open to connecting?" or a natural variant
+- End with "Came across ${company} and thought there could be a fit. Open to connecting?" or a natural, non-generic variant
+- Personalize to ${indLabel} — mention something specific to the industry if relevant
 
-V2 body (appended after "${intro2}"):
-- STRICT character count: between ${minV2} and ${maxV2} characters (this is the body only, not including the intro)
-- Use this exact structure: "We help [industry] grow through [service/results]. Came across [Company] and thought there could be a fit. Open to connecting?"
-- Replace [industry] with a natural label for ${indLabel}s, [service/results] with a specific result or service, [Company] with ${company}
-- Sound confident, personalized, and human — not templated
-- No buzzwords, no em dashes
+V2 body (appended after the greeting "${intro2}"):
+- HARD LIMIT: body must be between ${minV2} and ${maxV2} characters only
+- Structure: "We help [industry label] grow through [specific result]. Came across ${company} and thought there could be a fit. Open to connecting?"
+- Short, confident, human — not templated or scripted
+- If industry is dental: mention patient inquiries, veneers, implants, or Meta/Google ads naturally ONLY if relevant
+- If information is missing: keep the message simple and avoid assumptions
 
-HARD LIMIT: V1 body must be under ${budget1} chars. V2 body must be ${minV2}–${maxV2} chars. Exceeding these limits is not allowed. Count every character before responding.
+COUNT CHARACTERS CAREFULLY. V1 body must be under ${budget1} chars. V2 body must be ${minV2}–${maxV2} chars. Exceeding is not allowed.
 Return ONLY the JSON object.`;
 
   } else if (channel === 'li-dm') {
