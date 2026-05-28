@@ -390,6 +390,18 @@
   }
   .btn-generate:hover { box-shadow:0 0 36px rgba(0,255,174,.45); transform:translateY(-1px); }
   .btn-generate:active { transform:translateY(0); }
+  .btn-generate:disabled { opacity:.55; cursor:not-allowed; transform:none; box-shadow:none; }
+
+  .gen-ai-row { display:flex; flex-direction:column; gap:8px; }
+  .gen-ai-toggle-wrap { display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none; width:fit-content; }
+  .gen-ai-toggle-wrap input[type="checkbox"] { position:absolute; opacity:0; width:0; height:0; }
+  .gen-ai-track { position:relative; width:36px; height:20px; background:var(--border); border-radius:10px; transition:background .2s; flex-shrink:0; }
+  .gen-ai-thumb { position:absolute; top:2px; left:2px; width:16px; height:16px; background:#fff; border-radius:50%; transition:transform .2s; box-shadow:0 1px 3px rgba(0,0,0,.3); }
+  .gen-ai-toggle-wrap input:checked ~ .gen-ai-track { background:var(--accent); }
+  .gen-ai-toggle-wrap input:checked ~ .gen-ai-track .gen-ai-thumb { transform:translateX(16px); }
+  .gen-ai-lbl { font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; display:flex; align-items:center; gap:6px; }
+  .gen-ai-badge { background:rgba(16,185,129,.15); color:var(--accent); border:1px solid rgba(16,185,129,.25); border-radius:4px; padding:1px 5px; font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
+  .gen-ai-key { font-family:var(--font-mono); font-size:12px; }
 
   .gen-divider { height:1px; background:var(--border); margin:2px 0; }
 
@@ -1785,7 +1797,18 @@ ianentila27@gmail.com</div>
             <textarea class="gen-input gen-textarea" id="genContext" placeholder="Personalization notes…" rows="3"></textarea>
           </div>
 
-          <button class="btn-generate" onclick="generateOutreach()">
+          <div class="gen-ai-row">
+            <label class="gen-ai-toggle-wrap">
+              <input type="checkbox" id="aiModeToggle" onchange="updateAiModeUI()">
+              <span class="gen-ai-track"><span class="gen-ai-thumb"></span></span>
+              <span class="gen-ai-lbl">AI Mode <span class="gen-ai-badge">Groq</span></span>
+            </label>
+            <div class="gen-ai-key-wrap" id="aiKeyWrap" style="display:none">
+              <input class="gen-input gen-ai-key" type="password" id="groqApiKey" placeholder="gsk_...  Groq API key" autocomplete="off">
+            </div>
+          </div>
+
+          <button class="btn-generate" id="genBtn" onclick="generateOutreach()">
             <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             Generate Message
           </button>
@@ -2749,7 +2772,158 @@ function autofillFromLead(query) {
     });
 }
 
-function generateOutreach() {
+function updateAiModeUI() {
+  const on = document.getElementById('aiModeToggle').checked;
+  document.getElementById('aiKeyWrap').style.display = on ? '' : 'none';
+}
+
+async function callGroqAPI(apiKey, { channel, contact, company, industry, senderKey, city, extra }) {
+  const s = SENDERS[senderKey] || SENDERS.ian;
+  const p = GEN_PRESETS[industry] || null;
+  const indLabel   = industry  || 'business';
+  const platforms  = p?.platforms  || 'Meta and Google';
+  const pitchShort = p?.pitchShort || 'paid media campaigns';
+  const pitch      = p?.pitch      || 'driving qualified leads';
+  const pain       = p?.pain       || 'poor ROI on ad spend';
+  const cityNote   = city ? ` in ${city}` : '';
+  const extraNote  = extra ? `\nAdditional context: ${extra}` : '';
+
+  let systemPrompt, userPrompt;
+
+  if (channel === 'li-note') {
+    const intro1 = s.direct
+      ? `Hi ${contact}, I'm Ian from AGLA Media.`
+      : `Hi ${contact}, I'm ${s.name}, working alongside Ian Sison at AGLA Media.`;
+    const intro2 = s.direct
+      ? `Hi ${contact}, I'm Ian from AGLA Media.`
+      : `Hi ${contact}, I'm ${s.name} from AGLA Media.`;
+    const budget1 = 295 - intro1.length;
+    const budget2 = 195 - intro2.length;
+    systemPrompt = `You write LinkedIn connection request notes for AGLA Media, a paid social agency. Write natural, non-salesy copy that sounds human. Never use em dashes. Return ONLY valid JSON.`;
+    userPrompt = `Write two LinkedIn connection note bodies for this prospect. Return ONLY: {"v1":"...","v2":"..."}
+
+Prospect: ${contact} at ${company}${cityNote}
+Industry: ${indLabel}
+Platforms: ${platforms}
+Service: ${pitchShort}
+Pain point: ${pain}${extraNote}
+
+V1 body (after intro "${intro1}"):
+- Under ${budget1} characters
+- Pitch-first, start with "We run..." or "We help..."
+- End with "Came across ${company} and thought there could be a fit. Open to connecting?" or natural variant
+
+V2 body (after intro "${intro2}"):
+- Under ${budget2} characters
+- Mention ${company} by name
+- Very short and punchy
+
+Return ONLY the JSON object.`;
+
+  } else if (channel === 'li-dm') {
+    const senderLine = s.direct
+      ? `I'm Ian, COO at AGLA Media.`
+      : `I'm ${s.name}, reaching out on behalf of Ian Fleni Sison (COO at AGLA Media).`;
+    const closing = s.direct
+      ? `Ian Fleni Sison\nCOO & Head of Media Buyers at AGLA Media`
+      : `${s.name}\nOn behalf of Ian Fleni Sison at AGLA Media`;
+    systemPrompt = `You write professional but personable LinkedIn DMs for AGLA Media. 3-4 short paragraphs. Never use em dashes. Return ONLY valid JSON.`;
+    userPrompt = `Write a LinkedIn DM. Return ONLY: {"msg":"..."}
+
+Opening: "Hi ${contact},"
+Sender line: "${senderLine}"
+Prospect: ${contact} at ${company}${cityNote}
+Industry: ${indLabel} | Platforms: ${platforms} | Service: ${pitch} | ROAS: 3x-5x${extraNote}
+Closing (use exactly): "${closing}"
+
+3-4 short paragraphs, CTA for 15-min call. Return ONLY the JSON.`;
+
+  } else {
+    const fromLine = s.direct
+      ? `Ian Fleni Sison\nCOO & Head of Media Buyers at AGLA Media\nianentila27@gmail.com`
+      : `${s.name}\nOn behalf of Ian Fleni Sison at AGLA Media${s.email ? '\n' + s.email : ''}`;
+    const subject = p ? p.subject.replace('[company]', company) : `${company}: paid ads for ${indLabel}`;
+    systemPrompt = `You write cold outreach emails for AGLA Media, a paid social agency. Professional and direct. Never use em dashes. Return ONLY valid JSON.`;
+    userPrompt = `Write a cold email. Return ONLY: {"subject":"...","msg":"..."}
+
+Recipient: ${contact} at ${company}${cityNote}
+Industry: ${indLabel} | Pain: ${pain} | Service: ${pitch} | Platforms: ${platforms} | ROAS: 3x-5x${extraNote}
+Suggested subject: "${subject}"
+Sign-off (use exactly): "${fromLine}"
+
+Body: Hi ${contact}, + 3 short paragraphs + CTA for 15-min call. Return ONLY the JSON.`;
+  }
+
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+    body: JSON.stringify({
+      model: 'llama-3.3-70b-versatile',
+      messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userPrompt }],
+      temperature: 0.72,
+      max_tokens: 700
+    })
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || `Groq ${res.status}`);
+  }
+  const data = await res.json();
+  const text = data.choices[0].message.content.trim();
+  const match = text.match(/\{[\s\S]*\}/);
+  if (!match) throw new Error('No JSON in response');
+  return JSON.parse(match[0]);
+}
+
+function showGenModal(msg, msg2, subject, channel, contact, company) {
+  const modalEl    = document.querySelector('.gen-modal');
+  const outEl      = document.getElementById('genOutput');
+  const out2El     = document.getElementById('genOutput2');
+  const counterEl  = document.getElementById('genCounter');
+  const counter2El = document.getElementById('genCounter2');
+  const subjectRow = document.getElementById('genModalSubject');
+  const subjectVal = document.getElementById('genModalSubjectVal');
+  const badge      = document.getElementById('genModalBadge');
+  const titleEl    = document.getElementById('genModalTitle');
+
+  modalEl.classList.toggle('dual', channel === 'li-note');
+  outEl.textContent = msg;
+
+  if (msg2) {
+    out2El.textContent = msg2;
+    counter2El.textContent = `${msg2.length} / 200`;
+    counter2El.className = 'gen-counter ' + (msg2.length <= 200 ? 'ok' : 'over');
+  } else {
+    out2El.textContent = '';
+    counter2El.textContent = '';
+  }
+
+  const channelLabels = { 'li-note':'LinkedIn Note', 'li-dm':'LinkedIn DM', 'email':'Cold Email' };
+  badge.textContent = channelLabels[channel] || channel;
+  titleEl.textContent = [contact, company].filter(s => s && s !== '[Company]' && s !== '[Contact]').join(' · ') || 'Generated Message';
+
+  if (channel === 'email' && subject) {
+    subjectRow.classList.add('vis');
+    subjectVal.textContent = subject;
+  } else {
+    subjectRow.classList.remove('vis');
+    subjectVal.textContent = '';
+  }
+
+  if (channel === 'li-note') {
+    const len = msg.length;
+    counterEl.textContent = `${len} / 300`;
+    counterEl.className = 'gen-counter ' + (len <= 300 ? 'ok' : 'over');
+  } else {
+    counterEl.textContent = `${msg.length} chars`;
+    counterEl.className = 'gen-counter';
+  }
+
+  document.getElementById('genModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+async function generateOutreach() {
   const company  = document.getElementById('genCompany').value.trim()  || '[Company]';
   const contact  = document.getElementById('genContact').value.trim()  || '[Contact]';
   const industry = document.getElementById('genIndustry').value;
@@ -2771,6 +2945,38 @@ function generateOutreach() {
   const cityStr  = city  ? `, ${city}`  : '';
   const extraStr = extra ? `\n\n${extra}` : '';
   const emailLine = s.email ? `\n${s.email}` : '';
+
+  // AI mode path
+  if (document.getElementById('aiModeToggle')?.checked) {
+    const apiKey = (document.getElementById('groqApiKey')?.value || '').trim();
+    if (!apiKey) { alert('Enter your Groq API key to use AI Mode.'); return; }
+    const btn = document.getElementById('genBtn');
+    const origHTML = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Generating…`;
+    try {
+      const result = await callGroqAPI(apiKey, { channel, contact, company, industry, senderKey, city, extra });
+      let aiMsg = '', aiMsg2 = '', aiSubject = '';
+      if (channel === 'li-note') {
+        const intro1 = s.direct ? `Hi ${contact}, I'm Ian from AGLA Media.` : `Hi ${contact}, I'm ${s.name}, working alongside Ian Sison at AGLA Media.`;
+        const intro2 = s.direct ? `Hi ${contact}, I'm Ian from AGLA Media.` : `Hi ${contact}, I'm ${s.name} from AGLA Media.`;
+        aiMsg  = `${intro1} ${result.v1}`;
+        aiMsg2 = `${intro2} ${result.v2}`;
+      } else if (channel === 'li-dm') {
+        aiMsg = result.msg;
+      } else {
+        aiSubject = result.subject;
+        aiMsg = result.msg;
+      }
+      showGenModal(aiMsg, aiMsg2, aiSubject, channel, contact, company);
+      return;
+    } catch(e) {
+      console.warn('Groq API error, falling back to preset:', e.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = origHTML;
+    }
+  }
 
   let msg = '', msg2 = '', subject = '';
 
@@ -2802,59 +3008,7 @@ function generateOutreach() {
     }
   }
 
-  // populate modal
-  const modalEl    = document.querySelector('.gen-modal');
-  const outEl      = document.getElementById('genOutput');
-  const out2El     = document.getElementById('genOutput2');
-  const counterEl  = document.getElementById('genCounter');
-  const counter2El = document.getElementById('genCounter2');
-  const subjectRow = document.getElementById('genModalSubject');
-  const subjectVal = document.getElementById('genModalSubjectVal');
-  const badge      = document.getElementById('genModalBadge');
-  const titleEl    = document.getElementById('genModalTitle');
-
-  // dual 2-column layout for li-note only
-  modalEl.classList.toggle('dual', channel === 'li-note');
-
-  outEl.textContent = msg;
-
-  if (msg2) {
-    out2El.textContent = msg2;
-    counter2El.textContent = `${msg2.length} / 200`;
-    counter2El.className = 'gen-counter ' + (msg2.length <= 200 ? 'ok' : 'over');
-  } else {
-    out2El.textContent = '';
-    counter2El.textContent = '';
-  }
-
-  const channelLabels = { 'li-note':'LinkedIn Note', 'li-dm':'LinkedIn DM', 'email':'Cold Email' };
-  badge.textContent = channelLabels[channel] || channel;
-
-  titleEl.textContent = [contact, company].filter(s => s && s !== '[Company]' && s !== '[Contact]').join(' · ') || 'Generated Message';
-
-  if (channel === 'email' && subject) {
-    subjectRow.classList.add('vis');
-    subjectVal.textContent = subject;
-  } else {
-    subjectRow.classList.remove('vis');
-    subjectVal.textContent = '';
-  }
-
-  if (channel === 'li-note') {
-    const len = msg.length;
-    counterEl.textContent = `${len} / 300`;
-    counterEl.className = 'gen-counter ' + (len <= 300 ? 'ok' : 'over');
-  } else {
-    counterEl.textContent = `${msg.length} chars`;
-    counterEl.className = 'gen-counter';
-  }
-
-  openGenModal();
-}
-
-function openGenModal() {
-  document.getElementById('genModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  showGenModal(msg, msg2, subject, channel, contact, company);
 }
 
 function closeGenModal() {
