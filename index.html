@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lead Tracker | Ian Fleni Sison</title>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <style>
   :root {
     --bg:         #0c0e14;
@@ -974,9 +976,54 @@
     .co-fill-btn { display:none; }
     .topbar { padding:0 10px; }
   }
+
+  /* ── AUTH GATE ── */
+  .auth-gate {
+    position:fixed; inset:0; background:rgba(7,9,18,.97);
+    display:flex; align-items:center; justify-content:center;
+    z-index:9999; backdrop-filter:blur(8px);
+  }
+  .auth-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:16px; padding:36px 32px; width:100%; max-width:340px;
+    display:flex; flex-direction:column; gap:14px; text-align:center;
+    box-shadow:0 0 60px rgba(0,255,174,.08);
+  }
+  .auth-logo { font-size:11px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); font-family:'JetBrains Mono',monospace; }
+  .auth-title { font-size:20px; font-weight:700; color:var(--text); }
+  .auth-desc { font-size:12px; color:var(--muted); line-height:1.5; }
+  .auth-input {
+    background:var(--surface); border:1px solid var(--border2); color:var(--text);
+    border-radius:9px; padding:10px 14px; font-size:14px; font-family:inherit;
+    outline:none; text-align:center; letter-spacing:.12em; transition:border-color .2s;
+  }
+  .auth-input:focus { border-color:var(--accent); box-shadow:0 0 0 2px rgba(0,255,174,.12); }
+  .auth-btn {
+    background:linear-gradient(135deg,var(--accent),var(--green2)); color:#000;
+    border:none; border-radius:9px; padding:11px; font-size:13px; font-weight:700;
+    cursor:pointer; transition:all .2s; font-family:inherit;
+  }
+  .auth-btn:hover { box-shadow:0 0 24px rgba(0,255,174,.35); transform:translateY(-1px); }
+  .auth-err { font-size:11px; color:var(--red); min-height:16px; }
+  .sync-dot { width:6px; height:6px; border-radius:50%; background:var(--muted); flex-shrink:0; transition:background .3s; }
+  .sync-dot.live { background:var(--accent); box-shadow:0 0 6px var(--accent); }
 </style>
 </head>
 <body>
+
+<!-- AUTH GATE -->
+<div class="auth-gate" id="authGate">
+  <div class="auth-card">
+    <div class="auth-logo">AGLA Media</div>
+    <div class="auth-title">Team Access</div>
+    <div class="auth-desc">Enter the team access code your administrator shared with you.</div>
+    <input class="auth-input" type="password" id="authCodeInput" placeholder="Access code" maxlength="32"
+      onkeydown="if(event.key==='Enter')submitAuthCode()">
+    <button class="auth-btn" onclick="submitAuthCode()">Enter</button>
+    <div class="auth-err" id="authErr"></div>
+  </div>
+</div>
+
 <div class="app-wrapper">
 
   <!-- SIDEBAR -->
@@ -1061,9 +1108,12 @@
         </div>
       </div>
       <div class="topbar-actions">
-        <div id="saveIndicator">
+        <div id="saveIndicator" style="display:flex;align-items:center;gap:8px">
           <div class="save-dot"></div>
           <span id="saveText">Not saved yet</span>
+          <span style="color:var(--border2);font-size:10px">|</span>
+          <div class="sync-dot" id="syncDot" title="Firebase sync"></div>
+          <span id="syncText" style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace">offline</span>
         </div>
         <button class="btn btn-ghost" id="btnReset">
           <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -2292,32 +2342,106 @@ let state = {};   // keyed by String(id)
 let sortCol = 'id', sortDir = 1;
 let notesTimers = {};  // debounce timers per lead id
 
-/* ─────────────── STORAGE ─────────────── */
-function loadState() {
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (raw) state = JSON.parse(raw);
-  } catch(e) { state = {}; }
+/* ─────────────── FIREBASE ─────────────── */
+const TEAM_CODE = 'AGLA2025'; // share this with your 4 friends
 
-  // ensure every lead has an entry
+const firebaseConfig = {
+  apiKey: "AIzaSyB4I0gjGzfV9ftSlWB1rMXjjTezifbImAM",
+  authDomain: "personal-tracker-job-hunting.firebaseapp.com",
+  projectId: "personal-tracker-job-hunting",
+  storageBucket: "personal-tracker-job-hunting.firebasestorage.app",
+  messagingSenderId: "514779613838",
+  appId: "1:514779613838:web:08929a532c1d624ff797df"
+};
+firebase.initializeApp(firebaseConfig);
+const db          = firebase.firestore();
+const STATE_DOC   = db.doc('agla/leadState');
+const CONFIG_DOC  = db.doc('agla/config');
+
+function setSyncStatus(live, label) {
+  const dot  = document.getElementById('syncDot');
+  const text = document.getElementById('syncText');
+  if (dot)  dot.classList.toggle('live', live);
+  if (text) text.textContent = label;
+}
+
+function submitAuthCode() {
+  const code = document.getElementById('authCodeInput').value.trim();
+  if (code === TEAM_CODE) {
+    localStorage.setItem('agla_auth', TEAM_CODE);
+    document.getElementById('authGate').style.display = 'none';
+    initApp();
+  } else {
+    document.getElementById('authErr').textContent = 'Incorrect code. Try again.';
+    document.getElementById('authCodeInput').value = '';
+    document.getElementById('authCodeInput').focus();
+  }
+}
+
+function checkAuth() {
+  if (localStorage.getItem('agla_auth') === TEAM_CODE) {
+    document.getElementById('authGate').style.display = 'none';
+    initApp();
+  }
+  // else: gate stays visible, user must enter code
+}
+
+/* ─────────────── STORAGE ─────────────── */
+function ensureStateDefaults() {
   LEADS.forEach(l => {
     const k = String(l.id);
-    if (!state[k]) state[k] = {status:'new', notes:'', done:false};
-    // migrate older keys that might be missing fields
-    if (!state[k].status) state[k].status = 'new';
-    if (state[k].notes === undefined) state[k].notes = '';
-    if (state[k].done === undefined) state[k].done = false;
+    if (!state[k]) state[k] = {status:'new', notes:'', done:false, assigned:''};
+    if (!state[k].status)              state[k].status   = 'new';
+    if (state[k].notes === undefined)  state[k].notes    = '';
+    if (state[k].done === undefined)   state[k].done     = false;
     if (state[k].assigned === undefined) state[k].assigned = '';
   });
 }
 
-function persist() {
+function loadState() {
+  // load localStorage immediately so table renders fast
   try {
-    localStorage.setItem(KEY, JSON.stringify(state));
-    showSaved();
-  } catch(e) {
-    console.warn('localStorage save failed', e);
-  }
+    const raw = localStorage.getItem(KEY);
+    if (raw) state = JSON.parse(raw);
+  } catch(e) { state = {}; }
+  ensureStateDefaults();
+
+  // then open real-time Firestore listener
+  STATE_DOC.onSnapshot(doc => {
+    if (doc.exists) {
+      const data = doc.data();
+      Object.assign(state, data);
+      ensureStateDefaults();
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+      render();
+      showSaved();
+      setSyncStatus(true, 'synced');
+    } else {
+      // first time — push local state to Firestore
+      STATE_DOC.set(state).catch(e => console.warn('Firestore init write failed', e));
+    }
+  }, err => {
+    console.warn('Firestore listener error', err);
+    setSyncStatus(false, 'offline');
+  });
+}
+
+function persist() {
+  // local save first (instant)
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+  showSaved();
+  setSyncStatus(false, 'saving…');
+  // then cloud sync
+  STATE_DOC.set(state)
+    .then(() => setSyncStatus(true, 'synced'))
+    .catch(e => { console.warn('Firestore write failed', e); setSyncStatus(false, 'offline'); });
+}
+
+function initApp() {
+  loadState();
+  render();
+  showSaved();
+  initAiKeys();
 }
 
 // save on tab close / refresh
@@ -2643,9 +2767,7 @@ function toggleNotice() {
 }
 
 /* ─────────────── INIT ─────────────── */
-loadState();
-render();
-showSaved();
+checkAuth();
 
 /* ─────────────── OUTREACH GENERATOR ─────────────── */
 const GEN_PRESETS = {
@@ -2885,26 +3007,35 @@ function updateAiModeUI() {
 
 function saveAiKey() {
   const provider = document.getElementById('aiProvider').value;
-  const key = document.getElementById('aiApiKey').value;
-  if (key) {
-    localStorage.setItem(`agla_ai_key_${provider}`, key);
-    updateSavedBadge();
-  }
+  const key = document.getElementById('aiApiKey').value.trim();
+  if (!key) return;
+  // save locally
+  localStorage.setItem(`agla_ai_key_${provider}`, key);
+  // save to Firestore so all team members get it
+  CONFIG_DOC.set({ [`ai_key_${provider}`]: key }, { merge: true })
+    .then(() => { updateSavedBadge(); setSyncStatus(true, 'synced'); })
+    .catch(e => { console.warn('Config write failed', e); updateSavedBadge(); });
 }
 
 function updateSavedBadge() {
   const provider = document.getElementById('aiProvider').value;
-  const saved = !!localStorage.getItem(`agla_ai_key_${provider}`);
+  const saved = !!(localStorage.getItem(`agla_ai_key_${provider}`));
   const badge = document.getElementById('aiKeySaved');
   badge.style.display = saved ? '' : 'none';
 }
 
 function initAiKeys() {
-  ['groq','openrouter'].forEach(p => {
-    const k = localStorage.getItem(`agla_ai_key_${p}`);
-    if (k) console.log(`AI key loaded for ${p}`);
-  });
-  // pre-fill key for current provider if page already has toggle state
+  // listen for config changes — auto-updates all team members
+  CONFIG_DOC.onSnapshot(doc => {
+    if (!doc.exists) return;
+    const data = doc.data();
+    ['groq','openrouter'].forEach(p => {
+      const k = data[`ai_key_${p}`];
+      if (k) localStorage.setItem(`agla_ai_key_${p}`, k);
+    });
+    // refresh input if AI panel is open
+    updateAiModeUI();
+  }, err => console.warn('Config listener error', err));
   updateAiModeUI();
 }
 
@@ -3618,9 +3749,6 @@ document.addEventListener('click', function(e) {
   pill.classList.add('active');
   renderPmCards(pill.dataset.industry);
 });
-
-/* ─────────────── AI KEY INIT ─────────────── */
-initAiKeys();
 
 /* ─────────────── COPY COMMAND ─────────────── */
 function copyCommand() {
