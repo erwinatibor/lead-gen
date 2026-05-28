@@ -393,15 +393,19 @@
   .btn-generate:disabled { opacity:.55; cursor:not-allowed; transform:none; box-shadow:none; }
 
   .gen-ai-row { display:flex; flex-direction:column; gap:8px; }
-  .gen-ai-toggle-wrap { display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none; width:fit-content; }
+  .gen-ai-top-row { display:flex; align-items:center; gap:12px; }
+  .gen-ai-toggle-wrap { display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none; }
   .gen-ai-toggle-wrap input[type="checkbox"] { position:absolute; opacity:0; width:0; height:0; }
   .gen-ai-track { position:relative; width:36px; height:20px; background:var(--border); border-radius:10px; transition:background .2s; flex-shrink:0; }
   .gen-ai-thumb { position:absolute; top:2px; left:2px; width:16px; height:16px; background:#fff; border-radius:50%; transition:transform .2s; box-shadow:0 1px 3px rgba(0,0,0,.3); }
   .gen-ai-toggle-wrap input:checked ~ .gen-ai-track { background:var(--accent); }
   .gen-ai-toggle-wrap input:checked ~ .gen-ai-track .gen-ai-thumb { transform:translateX(16px); }
-  .gen-ai-lbl { font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; display:flex; align-items:center; gap:6px; }
-  .gen-ai-badge { background:rgba(16,185,129,.15); color:var(--accent); border:1px solid rgba(16,185,129,.25); border-radius:4px; padding:1px 5px; font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
-  .gen-ai-key { font-family:var(--font-mono); font-size:12px; }
+  .gen-ai-lbl { font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; }
+  .gen-ai-provider { background:var(--card2); border:1px solid var(--border); color:var(--text2); border-radius:6px; padding:3px 8px; font-size:11px; font-weight:600; cursor:pointer; outline:none; }
+  .gen-ai-provider:focus { border-color:var(--accent); }
+  .gen-ai-key-wrap { position:relative; display:flex; align-items:center; gap:8px; }
+  .gen-ai-key { font-family:var(--font-mono); font-size:12px; flex:1; }
+  .gen-ai-saved { font-size:10px; font-weight:600; color:var(--accent); text-transform:uppercase; letter-spacing:.05em; white-space:nowrap; }
 
   .gen-divider { height:1px; background:var(--border); margin:2px 0; }
 
@@ -1798,13 +1802,20 @@ ianentila27@gmail.com</div>
           </div>
 
           <div class="gen-ai-row">
-            <label class="gen-ai-toggle-wrap">
-              <input type="checkbox" id="aiModeToggle" onchange="updateAiModeUI()">
-              <span class="gen-ai-track"><span class="gen-ai-thumb"></span></span>
-              <span class="gen-ai-lbl">AI Mode <span class="gen-ai-badge">OpenRouter</span></span>
-            </label>
+            <div class="gen-ai-top-row">
+              <label class="gen-ai-toggle-wrap">
+                <input type="checkbox" id="aiModeToggle" onchange="updateAiModeUI()">
+                <span class="gen-ai-track"><span class="gen-ai-thumb"></span></span>
+                <span class="gen-ai-lbl">AI Mode</span>
+              </label>
+              <select class="gen-ai-provider" id="aiProvider" onchange="updateAiModeUI()">
+                <option value="openrouter">OpenRouter</option>
+                <option value="groq">Groq</option>
+              </select>
+            </div>
             <div class="gen-ai-key-wrap" id="aiKeyWrap" style="display:none">
-              <input class="gen-input gen-ai-key" type="password" id="groqApiKey" placeholder="sk-or-...  OpenRouter API key" autocomplete="off">
+              <input class="gen-input gen-ai-key" type="password" id="aiApiKey" placeholder="Paste API key…" autocomplete="off" oninput="saveAiKey()">
+              <span class="gen-ai-saved" id="aiKeySaved" style="display:none">Saved</span>
             </div>
           </div>
 
@@ -2773,11 +2784,43 @@ function autofillFromLead(query) {
 }
 
 function updateAiModeUI() {
-  const on = document.getElementById('aiModeToggle').checked;
+  const on       = document.getElementById('aiModeToggle').checked;
+  const provider = document.getElementById('aiProvider').value;
   document.getElementById('aiKeyWrap').style.display = on ? '' : 'none';
+  if (on) {
+    const placeholders = { groq: 'gsk_...  Groq API key', openrouter: 'sk-or-...  OpenRouter API key' };
+    document.getElementById('aiApiKey').placeholder = placeholders[provider] || 'Paste API key…';
+    document.getElementById('aiApiKey').value = localStorage.getItem(`agla_ai_key_${provider}`) || '';
+    updateSavedBadge();
+  }
 }
 
-async function callGroqAPI(apiKey, { channel, contact, company, industry, senderKey, city, extra }) { // OpenRouter
+function saveAiKey() {
+  const provider = document.getElementById('aiProvider').value;
+  const key = document.getElementById('aiApiKey').value;
+  if (key) {
+    localStorage.setItem(`agla_ai_key_${provider}`, key);
+    updateSavedBadge();
+  }
+}
+
+function updateSavedBadge() {
+  const provider = document.getElementById('aiProvider').value;
+  const saved = !!localStorage.getItem(`agla_ai_key_${provider}`);
+  const badge = document.getElementById('aiKeySaved');
+  badge.style.display = saved ? '' : 'none';
+}
+
+function initAiKeys() {
+  ['groq','openrouter'].forEach(p => {
+    const k = localStorage.getItem(`agla_ai_key_${p}`);
+    if (k) console.log(`AI key loaded for ${p}`);
+  });
+  // pre-fill key for current provider if page already has toggle state
+  updateAiModeUI();
+}
+
+async function callGroqAPI(apiKey, provider, { channel, contact, company, industry, senderKey, city, extra }) {
   const s = SENDERS[senderKey] || SENDERS.ian;
   const p = GEN_PRESETS[industry] || null;
   const indLabel   = industry  || 'business';
@@ -2854,16 +2897,23 @@ Sign-off (use exactly): "${fromLine}"
 Body: Hi ${contact}, + 3 short paragraphs + CTA for 15-min call. Return ONLY the JSON.`;
   }
 
-  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+  const isGroq = provider === 'groq';
+  const endpoint = isGroq
+    ? 'https://api.groq.com/openai/v1/chat/completions'
+    : 'https://openrouter.ai/api/v1/chat/completions';
+  const model = isGroq
+    ? 'llama-3.3-70b-versatile'
+    : 'meta-llama/llama-3.3-70b-instruct';
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${apiKey}`,
+    ...(!isGroq && { 'HTTP-Referer': window.location.href, 'X-Title': 'AGLA Media Lead Gen' })
+  };
+  const res = await fetch(endpoint, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`,
-      'HTTP-Referer': window.location.href,
-      'X-Title': 'AGLA Media Lead Gen'
-    },
+    headers,
     body: JSON.stringify({
-      model: 'meta-llama/llama-3.3-70b-instruct',
+      model,
       messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userPrompt }],
       temperature: 0.72,
       max_tokens: 700
@@ -2871,7 +2921,7 @@ Body: Hi ${contact}, + 3 short paragraphs + CTA for 15-min call. Return ONLY the
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(err.error?.message || `OpenRouter ${res.status}`);
+    throw new Error(err.error?.message || `${isGroq ? 'Groq' : 'OpenRouter'} ${res.status}`);
   }
   const data = await res.json();
   const text = data.choices[0].message.content.trim();
@@ -2953,14 +3003,15 @@ async function generateOutreach() {
 
   // AI mode path
   if (document.getElementById('aiModeToggle')?.checked) {
-    const apiKey = (document.getElementById('groqApiKey')?.value || '').trim();
-    if (!apiKey) { alert('Enter your OpenRouter API key to use AI Mode.'); return; }
+    const provider = document.getElementById('aiProvider').value;
+    const apiKey = (document.getElementById('aiApiKey')?.value || '').trim();
+    if (!apiKey) { alert(`Enter your ${provider === 'groq' ? 'Groq' : 'OpenRouter'} API key to use AI Mode.`); return; }
     const btn = document.getElementById('genBtn');
     const origHTML = btn.innerHTML;
     btn.disabled = true;
     btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Generating…`;
     try {
-      const result = await callGroqAPI(apiKey, { channel, contact, company, industry, senderKey, city, extra });
+      const result = await callGroqAPI(apiKey, provider, { channel, contact, company, industry, senderKey, city, extra });
       let aiMsg = '', aiMsg2 = '', aiSubject = '';
       if (channel === 'li-note') {
         const intro1 = s.direct ? `Hi ${contact}, I'm Ian from AGLA Media.` : `Hi ${contact}, I'm ${s.name}, working alongside Ian Sison at AGLA Media.`;
@@ -3461,6 +3512,9 @@ document.addEventListener('click', function(e) {
   pill.classList.add('active');
   renderPmCards(pill.dataset.industry);
 });
+
+/* ─────────────── AI KEY INIT ─────────────── */
+initAiKeys();
 
 /* ─────────────── COPY COMMAND ─────────────── */
 function copyCommand() {
