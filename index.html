@@ -829,8 +829,8 @@
   @media(max-width:680px) { .pm-cards { grid-template-columns:1fr; } }
 
   /* ── ASSIGNED DROPDOWN ── */
-  .th-assigned { width:44px; min-width:44px; padding:9px 4px; }
-  .td-assigned { width:44px; min-width:44px; padding:5px 4px; cursor:default; }
+  .th-assigned { width:76px; min-width:76px; padding:9px 6px; }
+  .td-assigned { width:76px; min-width:76px; padding:5px 6px; cursor:default; }
   .assigned-sel { font-size:9.5px; padding:2px 2px 2px 4px; background:var(--surface); border:1px solid var(--border2); color:var(--muted); border-radius:5px; cursor:pointer; font-family:inherit; width:100%; min-width:0; appearance:none; background-image:none; }
   .assigned-sel.has-val { color:var(--green); border-color:rgba(0,255,174,.35); font-weight:700; }
 
@@ -2433,10 +2433,10 @@ function render() {
       <td class="td-assigned">
         <select class="assigned-sel${s.assigned?' has-val':''}" data-action="assigned" data-id="${k}" title="${s.assigned||'Unassigned'}">
           <option value="" ${!s.assigned?'selected':''}>—</option>
-          <option value="ian"      ${s.assigned==='ian'      ?'selected':''}>I</option>
-          <option value="rizzalyn" ${s.assigned==='rizzalyn' ?'selected':''}>Ri</option>
-          <option value="rutchel"  ${s.assigned==='rutchel'  ?'selected':''}>Ru</option>
-          <option value="junnel"   ${s.assigned==='junnel'   ?'selected':''}>Ju</option>
+          <option value="ian"      ${s.assigned==='ian'      ?'selected':''}>Ian</option>
+          <option value="rizzalyn" ${s.assigned==='rizzalyn' ?'selected':''}>Rizzalyn</option>
+          <option value="rutchel"  ${s.assigned==='rutchel'  ?'selected':''}>Rutchel</option>
+          <option value="junnel"   ${s.assigned==='junnel'   ?'selected':''}>Junnel</option>
         </select>
       </td>
       <td class="td-num">${l.id}</td>
