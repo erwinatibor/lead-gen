@@ -413,6 +413,7 @@
   .gen-counter { font-size:10px; font-weight:600; font-family:'JetBrains Mono',monospace; color:var(--muted); }
   .gen-counter.over { color:var(--red); }
   .gen-counter.ok   { color:var(--green); }
+  .gen-counter.warn { color:#f59e0b; }
 
   .gen-subject-row {
     display:none; flex-direction:column; gap:4px;
@@ -2047,7 +2048,7 @@ ianentila27@gmail.com</div>
         <!-- V2 column (LinkedIn Note only) -->
         <div class="gen-modal-col gen-col-v2">
           <div class="gen-col-hd">
-            <span class="gen-col-label">V2 · Under 200</span>
+            <span class="gen-col-label">V2 · 190–200 chars</span>
             <span class="gen-counter" id="genCounter2"></span>
           </div>
           <div class="gen-modal-msg" id="genOutput2"></div>
@@ -2897,9 +2898,10 @@ async function callGroqAPI(apiKey, provider, { channel, contact, company, indust
       ? `Hi ${contact}, I'm Ian from AGLA Media.`
       : `Hi ${contact}, I'm ${s.name} from AGLA Media.`;
     const budget1 = 295 - intro1.length;
-    const budget2 = 195 - intro2.length;
-    systemPrompt = `You write LinkedIn connection request notes for AGLA Media, a paid social agency. Write natural, non-salesy copy that sounds human. Never use em dashes. Return ONLY valid JSON.`;
-    userPrompt = `Write two LinkedIn connection note bodies for this prospect. Return ONLY: {"v1":"...","v2":"..."}
+    const minV2 = 190 - intro2.length;
+    const maxV2 = 200 - intro2.length;
+    systemPrompt = `You are an expert B2B outreach copywriter. Write LinkedIn connection notes for AGLA Media, a paid social agency. Rules: sound human, natural, and confident. Do NOT sound salesy or spammy. Do NOT use generic buzzwords. Focus on connection first, not pitching. Mention the company naturally. Personalize by industry. Never use em dashes. Return ONLY valid JSON.`;
+    userPrompt = `Write two LinkedIn connection note bodies. Return ONLY: {"v1":"...","v2":"..."}
 
 Prospect: ${contact} at ${company}${cityNote}
 Industry: ${indLabel}
@@ -2907,16 +2909,19 @@ Platforms: ${platforms}
 Service: ${pitchShort}
 Pain point: ${pain}${extraNote}
 
-V1 body (after intro "${intro1}"):
+V1 body (appended after "${intro1}"):
 - Under ${budget1} characters
-- Pitch-first, start with "We run..." or "We help..."
-- End with "Came across ${company} and thought there could be a fit. Open to connecting?" or natural variant
+- Pitch-first: start with "We run..." or "We help..."
+- End with "Came across ${company} and thought there could be a fit. Open to connecting?" or a natural variant
 
-V2 body (after intro "${intro2}"):
-- Under ${budget2} characters
-- Mention ${company} by name
-- Very short and punchy
+V2 body (appended after "${intro2}"):
+- STRICT character count: between ${minV2} and ${maxV2} characters (this is the body only, not including the intro)
+- Use this exact structure: "We help [industry] grow through [service/results]. Came across [Company] and thought there could be a fit. Open to connecting?"
+- Replace [industry] with a natural label for ${indLabel}s, [service/results] with a specific result or service, [Company] with ${company}
+- Sound confident, personalized, and human — not templated
+- No buzzwords, no em dashes
 
+Count characters carefully. Body must be ${minV2}–${maxV2} chars.
 Return ONLY the JSON object.`;
 
   } else if (channel === 'li-dm') {
@@ -3002,8 +3007,9 @@ function showGenModal(msg, msg2, subject, channel, contact, company) {
 
   if (msg2) {
     out2El.textContent = msg2;
-    counter2El.textContent = `${msg2.length} / 200`;
-    counter2El.className = 'gen-counter ' + (msg2.length <= 200 ? 'ok' : 'over');
+    const l2 = msg2.length;
+    counter2El.textContent = `${l2} / 200`;
+    counter2El.className = 'gen-counter ' + (l2 > 200 ? 'over' : l2 >= 190 ? 'ok' : 'warn');
   } else {
     out2El.textContent = '';
     counter2El.textContent = '';
@@ -3102,7 +3108,7 @@ async function generateOutreach() {
     const body1 = p
       ? p.noteV1.replace('[COMPANY]', company)
       : `We help ${indLabel}s with ${pitchShort}, averaging 3x–5x ROAS. Came across ${company} and thought there could be a fit. Open to connecting?`;
-    const body2 = `We help ${indLabel}s grow through ${pitchShort}. Came across ${company} and thought there could be a fit. Open to connecting?`;
+    const body2 = `We help ${indLabel}s grow through ${pitchShort} on ${platforms}. Came across ${company} and thought there could be a fit. Open to connecting?`;
     msg  = `${intro1} ${body1}`;
     msg2 = `${intro2} ${body2}`;
   } else if (channel === 'li-dm') {
