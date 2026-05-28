@@ -829,7 +829,9 @@
   @media(max-width:680px) { .pm-cards { grid-template-columns:1fr; } }
 
   /* ── ASSIGNED DROPDOWN ── */
-  .assigned-sel { font-size:10px; padding:3px 5px; background:var(--surface); border:1px solid var(--border2); color:var(--muted); border-radius:5px; cursor:pointer; font-family:inherit; max-width:80px; }
+  .th-assigned { width:80px; min-width:80px; }
+  .td-assigned { width:80px; min-width:80px; padding:6px 8px; cursor:default; }
+  .assigned-sel { font-size:10px; padding:3px 6px; background:var(--surface); border:1px solid var(--border2); color:var(--muted); border-radius:5px; cursor:pointer; font-family:inherit; width:100%; }
   .assigned-sel.has-val { color:var(--green); border-color:rgba(0,255,174,.35); font-weight:600; }
 
   /* ── MEMBER SCOREBOARD ── */
@@ -1100,6 +1102,7 @@
           <table id="leadsTable">
             <thead>
               <tr>
+                <th class="th-assigned">Assigned</th>
                 <th data-col="id">#<span class="si">↕</span></th>
                 <th data-col="company">Company<span class="si">↕</span></th>
                 <th data-col="industry">Industry<span class="si">↕</span></th>
@@ -1111,7 +1114,6 @@
                 <th>LinkedIn</th>
                 <th>Email</th>
                 <th data-col="status">Status<span class="si">↕</span></th>
-                <th>Assigned</th>
                 <th>Notes</th>
                 <th>Done</th>
               </tr>
@@ -2399,6 +2401,15 @@ function render() {
       : `<span class="no-data">—</span>`;
 
     tr.innerHTML = `
+      <td class="td-assigned">
+        <select class="assigned-sel${s.assigned?' has-val':''}" data-action="assigned" data-id="${k}">
+          <option value="" ${!s.assigned?'selected':''}>—</option>
+          <option value="ian"      ${s.assigned==='ian'      ?'selected':''}>Ian</option>
+          <option value="rizzalyn" ${s.assigned==='rizzalyn' ?'selected':''}>Rizzalyn</option>
+          <option value="rutchel"  ${s.assigned==='rutchel'  ?'selected':''}>Rutchel</option>
+          <option value="junnel"   ${s.assigned==='junnel'   ?'selected':''}>Junnel</option>
+        </select>
+      </td>
       <td class="td-num">${l.id}</td>
       <td class="td-company"><div class="company-cell"><div class="co-avatar ${avatarClass}">${initials}</div>${companyCellInner}<button class="co-fill-btn" data-action="fill-gen" data-id="${k}" title="Load in Outreach Generator">→ Gen</button></div></td>
       <td><span class="tag ${IND_CLS[l.industry]||'tag-agency'}">${l.industry}</span></td>
@@ -2415,15 +2426,6 @@ function render() {
           <option value="contacted" ${s.status==='contacted' ?'selected':''}>◆ Contacted</option>
           <option value="replied"   ${s.status==='replied'   ?'selected':''}>✓ Replied</option>
           <option value="notint"    ${s.status==='notint'    ?'selected':''}>✕ Not Interested</option>
-        </select>
-      </td>
-      <td>
-        <select class="assigned-sel${s.assigned?' has-val':''}" data-action="assigned" data-id="${k}">
-          <option value="" ${!s.assigned?'selected':''}>None</option>
-          <option value="ian"      ${s.assigned==='ian'      ?'selected':''}>Ian</option>
-          <option value="rizzalyn" ${s.assigned==='rizzalyn' ?'selected':''}>Rizzalyn</option>
-          <option value="rutchel"  ${s.assigned==='rutchel'  ?'selected':''}>Rutchel</option>
-          <option value="junnel"   ${s.assigned==='junnel'   ?'selected':''}>Junnel</option>
         </select>
       </td>
       <td>
