@@ -1801,10 +1801,10 @@ ianentila27@gmail.com</div>
             <label class="gen-ai-toggle-wrap">
               <input type="checkbox" id="aiModeToggle" onchange="updateAiModeUI()">
               <span class="gen-ai-track"><span class="gen-ai-thumb"></span></span>
-              <span class="gen-ai-lbl">AI Mode <span class="gen-ai-badge">Groq</span></span>
+              <span class="gen-ai-lbl">AI Mode <span class="gen-ai-badge">OpenRouter</span></span>
             </label>
             <div class="gen-ai-key-wrap" id="aiKeyWrap" style="display:none">
-              <input class="gen-input gen-ai-key" type="password" id="groqApiKey" placeholder="gsk_...  Groq API key" autocomplete="off">
+              <input class="gen-input gen-ai-key" type="password" id="groqApiKey" placeholder="sk-or-...  OpenRouter API key" autocomplete="off">
             </div>
           </div>
 
@@ -2777,7 +2777,7 @@ function updateAiModeUI() {
   document.getElementById('aiKeyWrap').style.display = on ? '' : 'none';
 }
 
-async function callGroqAPI(apiKey, { channel, contact, company, industry, senderKey, city, extra }) {
+async function callGroqAPI(apiKey, { channel, contact, company, industry, senderKey, city, extra }) { // OpenRouter
   const s = SENDERS[senderKey] || SENDERS.ian;
   const p = GEN_PRESETS[industry] || null;
   const indLabel   = industry  || 'business';
@@ -2854,11 +2854,16 @@ Sign-off (use exactly): "${fromLine}"
 Body: Hi ${contact}, + 3 short paragraphs + CTA for 15-min call. Return ONLY the JSON.`;
   }
 
-  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+      'HTTP-Referer': window.location.href,
+      'X-Title': 'AGLA Media Lead Gen'
+    },
     body: JSON.stringify({
-      model: 'llama-3.3-70b-versatile',
+      model: 'meta-llama/llama-3.3-70b-instruct',
       messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userPrompt }],
       temperature: 0.72,
       max_tokens: 700
@@ -2866,7 +2871,7 @@ Body: Hi ${contact}, + 3 short paragraphs + CTA for 15-min call. Return ONLY the
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(err.error?.message || `Groq ${res.status}`);
+    throw new Error(err.error?.message || `OpenRouter ${res.status}`);
   }
   const data = await res.json();
   const text = data.choices[0].message.content.trim();
@@ -2949,7 +2954,7 @@ async function generateOutreach() {
   // AI mode path
   if (document.getElementById('aiModeToggle')?.checked) {
     const apiKey = (document.getElementById('groqApiKey')?.value || '').trim();
-    if (!apiKey) { alert('Enter your Groq API key to use AI Mode.'); return; }
+    if (!apiKey) { alert('Enter your OpenRouter API key to use AI Mode.'); return; }
     const btn = document.getElementById('genBtn');
     const origHTML = btn.innerHTML;
     btn.disabled = true;
@@ -2971,7 +2976,7 @@ async function generateOutreach() {
       showGenModal(aiMsg, aiMsg2, aiSubject, channel, contact, company);
       return;
     } catch(e) {
-      console.warn('Groq API error, falling back to preset:', e.message);
+      console.warn('OpenRouter API error, falling back to preset:', e.message);
     } finally {
       btn.disabled = false;
       btn.innerHTML = origHTML;
