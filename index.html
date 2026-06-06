@@ -1174,7 +1174,7 @@
       <div class="sb-avatar"><img src="logo.png" alt="AGLA Media"></div>
       <div>
         <div class="sb-name">AGLA Media</div>
-        <div class="sb-status" id="sbStatus"><span class="sb-dot"></span>Ian · COO</div>
+        <div class="sb-status" id="sbStatus"><span class="sb-dot"></span>Loading…</div>
       </div>
     </div>
     <nav class="sidebar-nav">
@@ -3367,6 +3367,19 @@ function toggleNotice() {
 }
 
 /* ─────────────── INIT ─────────────── */
+// Pre-fill chip from localStorage before checkAuth to avoid flash of "You"
+(function() {
+  const saved = localStorage.getItem('agla_user');
+  if (saved && USERS[saved]) {
+    const u = USERS[saved];
+    const av = document.getElementById('cuAvatar');
+    const nm = document.getElementById('cuName');
+    const sb = document.getElementById('sbStatus');
+    if (av) { av.textContent = u.initials; av.style.background = u.color; }
+    if (nm) nm.textContent = u.name;
+    if (sb) sb.innerHTML = `<span class="sb-dot"></span>${u.name} · ${u.role}`;
+  }
+})();
 checkAuth();
 
 /* ─────────────── OUTREACH GENERATOR ─────────────── */
