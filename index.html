@@ -2685,7 +2685,16 @@ function switchIdentity() {
 
 function checkAuth() {
   if (localStorage.getItem('agla_auth') === TEAM_CODE) {
-    initApp();
+    if (currentUser && USERS[currentUser]) {
+      initApp();
+    } else {
+      // Auth valid but no identity saved — show user picker
+      document.getElementById('authCardWrap').style.maxWidth = '500px';
+      document.getElementById('authStep1').style.display = 'none';
+      buildUserGrid();
+      document.getElementById('authStep2').style.display = 'flex';
+      document.getElementById('authGate').style.display = 'flex';
+    }
   } else {
     document.getElementById('authGate').style.display = 'flex';
   }
