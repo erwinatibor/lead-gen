@@ -2247,6 +2247,10 @@ ianentila27@gmail.com</div>
             <button class="settings-btn" onclick="pullFromCloud()">↓ Pull</button>
           </div>
           <div class="settings-data-row">
+            <span class="settings-data-label">Recover assignments from audit log</span>
+            <button class="settings-btn" style="background:var(--green);color:#000;font-weight:700" onclick="recoverFromAuditLog()">⟳ Recover</button>
+          </div>
+          <div class="settings-data-row">
             <span class="settings-data-label">Copy assignments to clipboard (manual transfer)</span>
             <button class="settings-btn" onclick="copyStateJSON()">Copy State</button>
           </div>
@@ -2882,6 +2886,51 @@ function pullFromCloud() {
       setSyncStatus(false, 'offline');
       showToast('Cannot reach Firestore — check network');
     }
+  });
+}
+
+function recoverFromAuditLog() {
+  showToast('Reading audit log…');
+  AUDIT_COL.get().then(snap => {
+    if (snap.empty) { showToast('Audit log is empty — no assignments to recover'); return; }
+    // Build a map: leadId → last-known assignment (sort by timestamp)
+    const docs = [];
+    snap.forEach(d => docs.push(d.data()));
+    docs.sort((a, b) => (a.timestamp || '').localeCompare(b.timestamp || ''));
+
+    const lastAssignment = {};
+    docs.forEach(d => {
+      const id = String(d.leadId);
+      if (d.action === 'assigned' || d.action === 'reassigned') {
+        lastAssignment[id] = d.newOwner || '';
+      } else if (d.action === 'unassigned') {
+        lastAssignment[id] = '';
+      }
+    });
+
+    let count = 0;
+    Object.entries(lastAssignment).forEach(([id, assignee]) => {
+      if (!state[id]) return;
+      state[id].assigned   = assignee;
+      state[id].locked     = !!assignee;
+      state[id].assignedBy = assignee ? (state[id].assignedBy || '') : '';
+      if (assignee) count++;
+    });
+
+    ensureStateDefaults();
+    firestoreSynced = true;
+    STATE_DOC.set(state)
+      .then(() => {
+        try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+        render();
+        showSaved();
+        setSyncStatus(true, 'synced');
+        showToast(`✓ Recovered ${count} assigned leads from audit log!`);
+      })
+      .catch(() => showToast('Recovery read OK but Firestore write failed — check rules'));
+  }).catch(e => {
+    showToast('Could not read audit log — check Firestore rules');
+    console.warn('recoverFromAuditLog error', e);
   });
 }
 
