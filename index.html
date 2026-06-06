@@ -3231,11 +3231,10 @@ function initApp() {
   showSaved();
   initAiKeys();
   setTimeout(updateUserUI, 0);
-  // Sign in anonymously so Firestore rules can require request.auth != null
-  auth.signInAnonymously().catch(() => {});
-  auth.onAuthStateChanged(user => {
-    if (user) loadState();
-  });
+  // Try anonymous auth; fall back to direct loadState if auth isn't enabled
+  auth.signInAnonymously()
+    .then(() => loadState())
+    .catch(() => loadState()); // auth not enabled → still load Firestore
 }
 
 // save on tab close / refresh
