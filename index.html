@@ -1122,6 +1122,10 @@
           <span style="color:var(--border2);font-size:10px">|</span>
           <div class="sync-dot" id="syncDot" title="Firebase sync"></div>
           <span id="syncText" style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace">offline</span>
+          <button onclick="pushToCloud()" title="Push your local data to cloud — use this once if mobile shows empty data"
+            style="background:rgba(0,255,174,.08);border:1px solid rgba(0,255,174,.2);color:var(--accent);border-radius:5px;padding:2px 8px;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap">
+            ↑ Push
+          </button>
         </div>
         <button class="btn btn-ghost" id="btnReset">
           <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -2407,31 +2411,37 @@ function ensureStateDefaults() {
 }
 
 function loadState() {
-  // load localStorage immediately so table renders fast
+  // seed from localStorage for instant render while Firestore loads
   try {
     const raw = localStorage.getItem(KEY);
     if (raw) state = JSON.parse(raw);
   } catch(e) { state = {}; }
   ensureStateDefaults();
 
-  // then open real-time Firestore listener
+  // Firestore is the single source of truth — replace state entirely on each snapshot
   STATE_DOC.onSnapshot(doc => {
     if (doc.exists) {
-      const data = doc.data();
-      Object.assign(state, data);
+      state = doc.data();           // Firestore wins completely
       ensureStateDefaults();
       try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
       render();
       showSaved();
       setSyncStatus(true, 'synced');
     } else {
-      // first time — push local state to Firestore
-      STATE_DOC.set(state).catch(e => console.warn('Firestore init write failed', e));
+      // Firestore document doesn't exist yet — push local data as initial upload
+      pushToCloud();
     }
   }, err => {
     console.warn('Firestore listener error', err);
     setSyncStatus(false, 'offline');
   });
+}
+
+function pushToCloud() {
+  setSyncStatus(false, 'uploading…');
+  STATE_DOC.set(state)
+    .then(() => { setSyncStatus(true, 'synced'); showToast('Data uploaded to cloud'); })
+    .catch(e => { setSyncStatus(false, 'failed'); showToast('Upload failed — check connection'); });
 }
 
 function persist() {
