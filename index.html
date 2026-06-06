@@ -2584,6 +2584,7 @@ const STATUS_CLS = {new:'s-new',contacted:'s-contacted',replied:'s-replied',noti
 
 /* ─────────────── STATE ─────────────── */
 let state = {};   // keyed by String(id)
+let firestoreSynced = false; // guard: never push to Firestore before first snapshot
 let sortCol = 'id', sortDir = 1;
 let notesTimers = {};  // debounce timers per lead id
 
@@ -2772,6 +2773,7 @@ function loadState() {
 
       if (firstSync) {
         firstSync = false;
+        firestoreSynced = true;
         // Merge local + Firestore: pick non-empty value per field per lead
         const merged = mergeStates(state, fsData);
         const mergedRich = dataRichness(merged);
@@ -2904,8 +2906,10 @@ function persist() {
   // local save first (instant)
   try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
   showSaved();
+  // Only push to Firestore after we've received the first snapshot —
+  // prevents an early refresh from overwriting Firestore with empty defaults
+  if (!firestoreSynced) return;
   setSyncStatus(false, 'saving…');
-  // then cloud sync
   STATE_DOC.set(state)
     .then(() => setSyncStatus(true, 'synced'))
     .catch(e => { console.warn('Firestore write failed', e); setSyncStatus(false, 'offline'); });
