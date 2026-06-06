@@ -1007,11 +1007,12 @@
   }
   .auth-input:focus { border-color:var(--accent); box-shadow:0 0 0 2px rgba(0,255,174,.12); }
   .auth-btn {
-    background:linear-gradient(135deg,var(--accent),var(--green2)); color:#000;
-    border:none; border-radius:9px; padding:11px; font-size:13px; font-weight:700;
-    cursor:pointer; transition:all .2s; font-family:inherit;
+    background:linear-gradient(135deg,#00ffae,#00d084); color:#000;
+    border:none; border-radius:9px; padding:12px; font-size:14px; font-weight:800;
+    cursor:pointer; transition:all .2s; font-family:inherit; letter-spacing:.02em;
+    box-shadow:0 4px 18px rgba(0,255,174,.25);
   }
-  .auth-btn:hover { box-shadow:0 0 24px rgba(0,255,174,.35); transform:translateY(-1px); }
+  .auth-btn:hover { box-shadow:0 0 28px rgba(0,255,174,.45); transform:translateY(-1px); }
   .auth-err { font-size:11px; color:var(--red); min-height:16px; }
   .sync-dot { width:6px; height:6px; border-radius:50%; background:var(--muted); flex-shrink:0; transition:background .3s; }
   .sync-dot.live { background:var(--accent); box-shadow:0 0 6px var(--accent); }
@@ -2639,11 +2640,11 @@ function submitAuthCode() {
       document.getElementById('authGate').style.display = 'none';
       initApp();
     } else {
+      // First time — ask who they are, then enter app
       document.getElementById('authCardWrap').style.maxWidth = '500px';
       document.getElementById('authStep1').style.display = 'none';
       buildUserGrid();
-      const s2 = document.getElementById('authStep2');
-      s2.style.display = 'flex';
+      document.getElementById('authStep2').style.display = 'flex';
     }
   } else {
     document.getElementById('authErr').textContent = 'Incorrect code. Try again.';
@@ -2684,18 +2685,10 @@ function switchIdentity() {
 
 function checkAuth() {
   if (localStorage.getItem('agla_auth') === TEAM_CODE) {
-    if (currentUser) {
-      document.getElementById('authGate').style.display = 'none';
-      initApp();
-    } else {
-      // Code valid but no user selected — show step 2
-      document.getElementById('authCardWrap').style.maxWidth = '500px';
-      document.getElementById('authStep1').style.display = 'none';
-      buildUserGrid();
-      document.getElementById('authStep2').style.display = 'flex';
-    }
+    document.getElementById('authGate').style.display = 'none';
+    initApp();
   }
-  // else: gate stays visible
+  // else: gate stays visible, user must enter code
 }
 
 /* ─────────────── STORAGE ─────────────── */
