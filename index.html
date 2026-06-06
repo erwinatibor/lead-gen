@@ -2604,7 +2604,10 @@ const firebaseConfig = {
   appId: "1:514779613838:web:08929a532c1d624ff797df"
 };
 firebase.initializeApp(firebaseConfig);
-const db          = firebase.firestore();
+const db = firebase.firestore();
+// Cache Firestore data in IndexedDB so the first snapshot on every refresh
+// fires immediately from local cache instead of waiting for the server.
+db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
 const STATE_DOC   = db.doc('agla/leadState');
 const CONFIG_DOC  = db.doc('agla/config');
 const AUDIT_COL   = db.collection('aglaAudit');
