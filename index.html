@@ -2890,48 +2890,54 @@ function pullFromCloud() {
 }
 
 function recoverFromAuditLog() {
-  showToast('Reading audit log…');
-  AUDIT_COL.get().then(snap => {
-    if (snap.empty) { showToast('Audit log is empty — no assignments to recover'); return; }
-    // Build a map: leadId → last-known assignment (sort by timestamp)
-    const docs = [];
-    snap.forEach(d => docs.push(d.data()));
-    docs.sort((a, b) => (a.timestamp || '').localeCompare(b.timestamp || ''));
-
-    const lastAssignment = {};
-    docs.forEach(d => {
-      const id = String(d.leadId);
-      if (d.action === 'assigned' || d.action === 'reassigned') {
-        lastAssignment[id] = d.newOwner || '';
-      } else if (d.action === 'unassigned') {
-        lastAssignment[id] = '';
-      }
-    });
-
-    let count = 0;
-    Object.entries(lastAssignment).forEach(([id, assignee]) => {
-      if (!state[id]) return;
-      state[id].assigned   = assignee;
-      state[id].locked     = !!assignee;
-      state[id].assignedBy = assignee ? (state[id].assignedBy || '') : '';
-      if (assignee) count++;
-    });
-
-    ensureStateDefaults();
-    firestoreSynced = true;
-    STATE_DOC.set(state)
-      .then(() => {
+  showToast('Checking Firestore…');
+  // Step 1: check if leadState already has assignment data
+  STATE_DOC.get().then(doc => {
+    if (doc.exists) {
+      const fsData = doc.data();
+      const fsAssigned = Object.values(fsData).filter(v => v && v.assigned).length;
+      if (fsAssigned > 0) {
+        // Data is actually there — just pull it
+        state = fsData;
+        ensureStateDefaults();
+        firestoreSynced = true;
         try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
-        render();
-        showSaved();
-        setSyncStatus(true, 'synced');
-        showToast(`✓ Recovered ${count} assigned leads from audit log!`);
-      })
-      .catch(() => showToast('Recovery read OK but Firestore write failed — check rules'));
-  }).catch(e => {
-    showToast('Could not read audit log — check Firestore rules');
-    console.warn('recoverFromAuditLog error', e);
-  });
+        render(); showSaved(); setSyncStatus(true, 'synced');
+        showToast(`✓ Found ${fsAssigned} assignments in Firestore — restored!`);
+        return;
+      }
+    }
+    // Step 2: Firestore is empty — try audit log (limit to 500 newest entries)
+    showToast('Scanning audit log…');
+    AUDIT_COL.limit(500).get().then(snap => {
+      if (snap.empty) { showToast('No audit records found — assignments must be re-entered manually'); return; }
+      const docs = [];
+      snap.forEach(d => docs.push(d.data()));
+      docs.sort((a, b) => (a.timestamp || '').localeCompare(b.timestamp || ''));
+      const last = {};
+      docs.forEach(d => {
+        const id = String(d.leadId);
+        if (d.action === 'assigned' || d.action === 'reassigned') last[id] = d.newOwner || '';
+        else if (d.action === 'unassigned') last[id] = '';
+      });
+      let count = 0;
+      Object.entries(last).forEach(([id, assignee]) => {
+        if (!state[id]) return;
+        state[id].assigned = assignee;
+        state[id].locked   = !!assignee;
+        if (assignee) count++;
+      });
+      ensureStateDefaults();
+      firestoreSynced = true;
+      STATE_DOC.set(state)
+        .then(() => {
+          try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+          render(); showSaved(); setSyncStatus(true, 'synced');
+          showToast(count > 0 ? `✓ Recovered ${count} assignments from audit log!` : 'Audit log found but 0 assignments — re-enter manually');
+        })
+        .catch(() => showToast('Read OK but write failed — check Firestore rules'));
+    }).catch(e => { showToast('Audit log read failed — check Firestore rules'); console.warn(e); });
+  }).catch(e => { showToast('Cannot reach Firestore — check network'); console.warn(e); });
 }
 
 function copyStateJSON() {
