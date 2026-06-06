@@ -2410,6 +2410,14 @@ function ensureStateDefaults() {
   });
 }
 
+function dataRichness(obj) {
+  return LEADS.reduce((n, l) => {
+    const d = obj[String(l.id)];
+    if (!d) return n;
+    return n + (d.assigned ? 3 : 0) + (d.status && d.status !== 'new' ? 2 : 0) + (d.notes ? 1 : 0) + (d.done ? 1 : 0);
+  }, 0);
+}
+
 function loadState() {
   // seed from localStorage for instant render while Firestore loads
   try {
@@ -2418,17 +2426,37 @@ function loadState() {
   } catch(e) { state = {}; }
   ensureStateDefaults();
 
-  // Firestore is the single source of truth — replace state entirely on each snapshot
+  let firstSync = true;
+
   STATE_DOC.onSnapshot(doc => {
     if (doc.exists) {
-      state = doc.data();           // Firestore wins completely
+      const fsData = doc.data();
+
+      if (firstSync) {
+        firstSync = false;
+        const localScore = dataRichness(state);
+        const fsScore    = dataRichness(fsData);
+
+        if (localScore > fsScore) {
+          // Local has more data (e.g. assignments made before Firebase) — push local to cloud
+          setSyncStatus(false, 'uploading…');
+          STATE_DOC.set(state)
+            .then(() => { setSyncStatus(true, 'synced'); showToast('Local data pushed to cloud'); })
+            .catch(() => setSyncStatus(false, 'offline'));
+          return; // keep using local state; next snapshot will confirm
+        }
+      }
+
+      // Firestore wins for all subsequent snapshots
+      state = fsData;
       ensureStateDefaults();
       try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
       render();
       showSaved();
       setSyncStatus(true, 'synced');
+
     } else {
-      // Firestore document doesn't exist yet — push local data as initial upload
+      firstSync = false;
       pushToCloud();
     }
   }, err => {
