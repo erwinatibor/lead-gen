@@ -781,6 +781,7 @@
   #viewDashboard.hidden { display:none !important; }
   .view-panel { display:none; flex:1; overflow-y:auto; flex-direction:column; min-height:0; }
   .view-panel.active { display:flex; }
+  .main-content:has(#viewHistory.active) { overflow-y:auto; }
 
   /* ── VIEW SHARED ── */
   .view-header { padding:22px 24px 12px; flex-shrink:0; border-bottom:1px solid var(--border); }
@@ -1105,7 +1106,7 @@
   .rmodal-foot { padding:14px 20px; border-top:1px solid var(--border); display:flex; gap:8px; justify-content:flex-end; }
 
   /* ── HISTORY VIEW ── */
-  .history-view { padding:20px 24px; display:flex; flex-direction:column; gap:16px; overflow-y:auto; }
+  .history-view { padding:20px 24px; flex:none !important; height:auto !important; display:flex; flex-direction:column; gap:16px; overflow-y:visible; }
   .history-view-header { display:flex; align-items:flex-start; justify-content:space-between; }
   .history-view-title { font-size:17px; font-weight:800; color:var(--text); letter-spacing:-.02em; }
   .history-view-desc { font-size:11px; color:var(--muted); margin-top:2px; }
