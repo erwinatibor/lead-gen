@@ -2656,6 +2656,26 @@ function setSyncStatus(live, label) {
   if (text) text.textContent = label;
   const isBad = !live && (label === 'rules!' || label === 'offline' || label === 'failed');
   if (err) err.style.display = isBad ? 'inline' : 'none';
+  if (live) hideOfflineBanner();
+}
+
+function showOfflineBanner(isRules) {
+  let el = document.getElementById('offlineBanner');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'offlineBanner';
+    el.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#7f1d1d;color:#fecaca;font-family:\'JetBrains Mono\',monospace;font-size:11px;padding:8px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #ef4444;';
+    document.body.appendChild(el);
+  }
+  if (isRules) {
+    el.innerHTML = `<strong style="color:#fca5a5">⚠ Firebase Rules Expired</strong> — Go to <a href="https://console.firebase.google.com/project/personal-tracker-job-hunting/firestore/rules" target="_blank" style="color:#fbbf24;text-decoration:underline">Firebase Console → Rules</a> and publish: <code style="background:#450a0a;padding:2px 6px;border-radius:3px;color:#fcd34d">allow read, write: if true;</code> <button onclick="hideOfflineBanner()" style="margin-left:auto;background:none;border:none;color:#fca5a5;cursor:pointer;font-size:14px">✕</button>`;
+  } else {
+    el.innerHTML = `<strong style="color:#fca5a5">⚠ Firestore Offline</strong> — Check: 1) <a href="https://console.firebase.google.com/project/personal-tracker-job-hunting/firestore/rules" target="_blank" style="color:#fbbf24;text-decoration:underline">Firebase Rules</a> &nbsp;2) Network connection &nbsp;3) <a href="https://status.firebase.google.com" target="_blank" style="color:#fbbf24;text-decoration:underline">Firebase Status</a> <button onclick="hideOfflineBanner()" style="margin-left:auto;background:none;border:none;color:#fca5a5;cursor:pointer;font-size:14px">✕</button>`;
+  }
+}
+function hideOfflineBanner() {
+  const el = document.getElementById('offlineBanner');
+  if (el) el.remove();
 }
 
 function buildUserGrid() {
@@ -2842,13 +2862,50 @@ function loadState() {
       }
     }
   }, err => {
-    console.warn('Firestore listener error', err);
-    if (err.code === 'permission-denied') {
-      setSyncStatus(false, 'rules!');
-      showToast('Firestore rules expired — go to Firebase Console → Firestore → Rules → set: allow read, write: if true');
-    } else {
-      setSyncStatus(false, 'offline');
-    }
+    console.warn('Firestore listener error', err.code, err);
+    const isRules = err.code === 'permission-denied';
+    setSyncStatus(false, isRules ? 'rules!' : 'offline');
+    showOfflineBanner(isRules);
+    // Try to serve data from IndexedDB cache even without network
+    STATE_DOC.get({ source: 'cache' }).then(doc => {
+      if (doc.exists) {
+        const cached = doc.data();
+        const cachedRich = dataRichness(cached);
+        if (cachedRich > dataRichness(state)) {
+          state = mergeStates(state, cached);
+          ensureStateDefaults();
+          try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+          render();
+          showToast('Loaded ' + Object.values(state).filter(v=>v&&v.assigned).length + ' assignments from offline cache');
+        }
+      }
+    }).catch(() => {});
+    // Also try recovering from cached audit log
+    AUDIT_COL.limit(1000).get({ source: 'cache' }).then(snap => {
+      if (snap.empty || dataRichness(state) > 0) return;
+      const docs = [];
+      snap.forEach(d => docs.push(d.data()));
+      if (docs.length === 0) return;
+      docs.sort((a,b) => (a.timestamp||'').localeCompare(b.timestamp||''));
+      const last = {};
+      docs.forEach(d => {
+        const id = String(d.leadId);
+        if (d.action === 'assigned' || d.action === 'reassigned') last[id] = d.newOwner || '';
+        else if (d.action === 'unassigned') last[id] = '';
+      });
+      let count = 0;
+      Object.entries(last).forEach(([id, assignee]) => {
+        if (!state[id]) return;
+        state[id].assigned = assignee;
+        state[id].locked   = !!assignee;
+        if (assignee) count++;
+      });
+      if (count === 0) return;
+      ensureStateDefaults();
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+      render();
+      showToast('✓ Restored ' + count + ' assignments from cached audit log');
+    }).catch(() => {});
   });
 }
 
@@ -2895,10 +2952,7 @@ function pullFromCloud() {
 
 function autoRecoverFromAudit() {
   setSyncStatus(false, 'restoring…');
-  AUDIT_COL.limit(1000).get().then(snap => {
-    if (snap.empty) { setSyncStatus(true, 'synced'); return; }
-    const docs = [];
-    snap.forEach(d => docs.push(d.data()));
+  function applyAuditDocs(docs) {
     docs.sort((a,b) => (a.timestamp||'').localeCompare(b.timestamp||''));
     const last = {};
     docs.forEach(d => {
@@ -2915,13 +2969,29 @@ function autoRecoverFromAudit() {
     });
     if (count === 0) { setSyncStatus(true, 'synced'); return; }
     ensureStateDefaults();
-    STATE_DOC.set(state).then(() => {
-      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
-      render();
-      setSyncStatus(true, 'synced');
-      showToast('✓ Restored ' + count + ' assignments from audit log');
-    }).catch(() => setSyncStatus(true, 'synced'));
-  }).catch(() => setSyncStatus(true, 'synced'));
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+    render();
+    showToast('✓ Restored ' + count + ' assignments from audit log');
+    // Try writing to Firestore; silently ignore if offline
+    STATE_DOC.set(state)
+      .then(() => setSyncStatus(true, 'synced'))
+      .catch(() => setSyncStatus(false, 'offline'));
+  }
+  // Try network first, fallback to cache
+  AUDIT_COL.limit(1000).get().then(snap => {
+    const docs = [];
+    snap.forEach(d => docs.push(d.data()));
+    if (docs.length === 0) { setSyncStatus(true, 'synced'); return; }
+    applyAuditDocs(docs);
+  }).catch(() => {
+    // Network failed — try IndexedDB cache
+    AUDIT_COL.limit(1000).get({ source: 'cache' }).then(snap => {
+      const docs = [];
+      snap.forEach(d => docs.push(d.data()));
+      if (docs.length === 0) { setSyncStatus(false, 'offline'); return; }
+      applyAuditDocs(docs);
+    }).catch(() => setSyncStatus(false, 'offline'));
+  });
 }
 
 function recoverFromAuditLog() {
