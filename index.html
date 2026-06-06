@@ -2659,18 +2659,19 @@ function setSyncStatus(live, label) {
   if (live) hideOfflineBanner();
 }
 
-function showOfflineBanner(isRules) {
+function showOfflineBanner(isRules, errCode) {
   let el = document.getElementById('offlineBanner');
   if (!el) {
     el = document.createElement('div');
     el.id = 'offlineBanner';
-    el.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#7f1d1d;color:#fecaca;font-family:\'JetBrains Mono\',monospace;font-size:11px;padding:8px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #ef4444;';
+    el.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#7f1d1d;color:#fecaca;font-family:\'JetBrains Mono\',monospace;font-size:11px;padding:8px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #ef4444;flex-wrap:wrap;';
     document.body.appendChild(el);
   }
+  const codeTag = errCode ? `<code style="background:#450a0a;padding:1px 5px;border-radius:3px;color:#fcd34d;font-size:10px">${errCode}</code>` : '';
   if (isRules) {
-    el.innerHTML = `<strong style="color:#fca5a5">⚠ Firebase Rules Expired</strong> — Go to <a href="https://console.firebase.google.com/project/personal-tracker-job-hunting/firestore/rules" target="_blank" style="color:#fbbf24;text-decoration:underline">Firebase Console → Rules</a> and publish: <code style="background:#450a0a;padding:2px 6px;border-radius:3px;color:#fcd34d">allow read, write: if true;</code> <button onclick="hideOfflineBanner()" style="margin-left:auto;background:none;border:none;color:#fca5a5;cursor:pointer;font-size:14px">✕</button>`;
+    el.innerHTML = `<strong style="color:#fca5a5">⚠ Firebase Rules Expired</strong> ${codeTag} — Go to <a href="https://console.firebase.google.com/project/personal-tracker-job-hunting/firestore/rules" target="_blank" style="color:#fbbf24;text-decoration:underline">Firebase Console → Rules</a> and publish: <code style="background:#450a0a;padding:2px 6px;border-radius:3px;color:#fcd34d">allow read, write: if true;</code> <button onclick="hideOfflineBanner()" style="margin-left:auto;background:none;border:none;color:#fca5a5;cursor:pointer;font-size:14px">✕</button>`;
   } else {
-    el.innerHTML = `<strong style="color:#fca5a5">⚠ Firestore Offline</strong> — Check: 1) <a href="https://console.firebase.google.com/project/personal-tracker-job-hunting/firestore/rules" target="_blank" style="color:#fbbf24;text-decoration:underline">Firebase Rules</a> &nbsp;2) Network connection &nbsp;3) <a href="https://status.firebase.google.com" target="_blank" style="color:#fbbf24;text-decoration:underline">Firebase Status</a> <button onclick="hideOfflineBanner()" style="margin-left:auto;background:none;border:none;color:#fca5a5;cursor:pointer;font-size:14px">✕</button>`;
+    el.innerHTML = `<strong style="color:#fca5a5">⚠ Firestore Offline</strong> ${codeTag} — <a href="https://console.firebase.google.com/project/personal-tracker-job-hunting/firestore/rules" target="_blank" style="color:#fbbf24;text-decoration:underline">Check Rules</a> &nbsp;|&nbsp; <a href="https://status.firebase.google.com" target="_blank" style="color:#fbbf24;text-decoration:underline">Firebase Status</a> &nbsp;|&nbsp; <button onclick="restoreViaREST()" style="background:#b91c1c;border:none;color:#fef2f2;cursor:pointer;padding:2px 8px;border-radius:4px;font-size:10px;font-family:inherit">⟳ Force Load via HTTP</button> <button onclick="hideOfflineBanner()" style="margin-left:auto;background:none;border:none;color:#fca5a5;cursor:pointer;font-size:14px">✕</button>`;
   }
 }
 function hideOfflineBanner() {
@@ -2865,47 +2866,32 @@ function loadState() {
     console.warn('Firestore listener error', err.code, err);
     const isRules = err.code === 'permission-denied';
     setSyncStatus(false, isRules ? 'rules!' : 'offline');
-    showOfflineBanner(isRules);
-    // Try to serve data from IndexedDB cache even without network
+    showOfflineBanner(isRules, err.code || 'unavailable');
+    // 1. Try IndexedDB cache (works offline if data was previously cached)
     STATE_DOC.get({ source: 'cache' }).then(doc => {
       if (doc.exists) {
         const cached = doc.data();
-        const cachedRich = dataRichness(cached);
-        if (cachedRich > dataRichness(state)) {
+        if (dataRichness(cached) > dataRichness(state)) {
           state = mergeStates(state, cached);
           ensureStateDefaults();
           try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
           render();
           showToast('Loaded ' + Object.values(state).filter(v=>v&&v.assigned).length + ' assignments from offline cache');
+          return;
         }
       }
-    }).catch(() => {});
-    // Also try recovering from cached audit log
-    AUDIT_COL.limit(1000).get({ source: 'cache' }).then(snap => {
-      if (snap.empty || dataRichness(state) > 0) return;
-      const docs = [];
-      snap.forEach(d => docs.push(d.data()));
-      if (docs.length === 0) return;
-      docs.sort((a,b) => (a.timestamp||'').localeCompare(b.timestamp||''));
-      const last = {};
-      docs.forEach(d => {
-        const id = String(d.leadId);
-        if (d.action === 'assigned' || d.action === 'reassigned') last[id] = d.newOwner || '';
-        else if (d.action === 'unassigned') last[id] = '';
-      });
-      let count = 0;
-      Object.entries(last).forEach(([id, assignee]) => {
-        if (!state[id]) return;
-        state[id].assigned = assignee;
-        state[id].locked   = !!assignee;
-        if (assignee) count++;
-      });
-      if (count === 0) return;
-      ensureStateDefaults();
-      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
-      render();
-      showToast('✓ Restored ' + count + ' assignments from cached audit log');
-    }).catch(() => {});
+      // 2. Try cached audit log
+      AUDIT_COL.limit(1000).get({ source: 'cache' }).then(snap => {
+        if (!snap.empty && dataRichness(state) === 0) {
+          const docs = [];
+          snap.forEach(d => docs.push(d.data()));
+          applyAuditSnapshot(docs);
+          if (dataRichness(state) > 0) return; // recovered from cache
+        }
+        // 3. Last resort: Firestore REST API (plain HTTP, bypasses WebSocket block)
+        restoreViaREST();
+      }).catch(() => restoreViaREST());
+    }).catch(() => restoreViaREST());
   });
 }
 
@@ -3053,6 +3039,100 @@ function copyStateJSON() {
   }).catch(() => {
     showToast('Copy failed — try again');
   });
+}
+
+/* ── Shared helper: apply an array of raw audit docs to state ── */
+function applyAuditSnapshot(docs) {
+  if (!docs || docs.length === 0) return 0;
+  docs.sort((a,b) => (a.timestamp||'').localeCompare(b.timestamp||''));
+  const last = {};
+  docs.forEach(d => {
+    const id = String(d.leadId);
+    if (d.action === 'assigned' || d.action === 'reassigned') last[id] = d.newOwner || '';
+    else if (d.action === 'unassigned') last[id] = '';
+  });
+  let count = 0;
+  Object.entries(last).forEach(([id, assignee]) => {
+    if (!state[id]) return;
+    state[id].assigned = assignee;
+    state[id].locked   = !!assignee;
+    if (assignee) count++;
+  });
+  if (count > 0) {
+    ensureStateDefaults();
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+    render();
+    showToast('✓ Restored ' + count + ' assignments from audit log');
+  }
+  return count;
+}
+
+/* ── REST fallback: bypasses Firestore SDK WebSocket using plain HTTP ── */
+const FS_REST = 'https://firestore.googleapis.com/v1/projects/personal-tracker-job-hunting/databases/(default)/documents';
+const FS_KEY  = 'AIzaSyB4I0gjGzfV9ftSlWB1rMXjjTezifbImAM';
+
+function parseRestValue(v) {
+  if (!v) return null;
+  if ('stringValue'  in v) return v.stringValue;
+  if ('booleanValue' in v) return v.booleanValue;
+  if ('integerValue' in v) return parseInt(v.integerValue);
+  if ('doubleValue'  in v) return v.doubleValue;
+  if ('nullValue'    in v) return null;
+  if ('mapValue'     in v) {
+    const r = {}, f = v.mapValue.fields || {};
+    Object.keys(f).forEach(k => { r[k] = parseRestValue(f[k]); });
+    return r;
+  }
+  if ('arrayValue' in v) return (v.arrayValue.values || []).map(parseRestValue);
+  return null;
+}
+function parseRestDoc(doc) {
+  const r = {}, f = doc.fields || {};
+  Object.keys(f).forEach(k => { r[k] = parseRestValue(f[k]); });
+  return r;
+}
+
+async function restoreViaREST() {
+  showToast('Trying REST connection…');
+  try {
+    // 1. Check leadState first
+    const stateRes = await fetch(`${FS_REST}/agla/leadState?key=${FS_KEY}`);
+    if (stateRes.ok) {
+      const stateDoc = await stateRes.json();
+      if (stateDoc.fields) {
+        const fsData = parseRestDoc(stateDoc);
+        const fsRich = dataRichness(fsData);
+        if (fsRich > 0) {
+          state = mergeStates(state, fsData);
+          ensureStateDefaults();
+          try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+          render(); showSaved();
+          showToast('✓ REST: loaded ' + Object.values(state).filter(v=>v&&v.assigned).length + ' assignments via HTTP');
+          return;
+        }
+      }
+    }
+    // 2. leadState empty → try audit collection via REST
+    let allDocs = [], pageToken = null;
+    do {
+      const url = `${FS_REST}/aglaAudit?key=${FS_KEY}&pageSize=300${pageToken ? '&pageToken=' + pageToken : ''}`;
+      const res = await fetch(url);
+      if (!res.ok) break;
+      const json = await res.json();
+      (json.documents || []).forEach(d => allDocs.push(parseRestDoc(d)));
+      pageToken = json.nextPageToken || null;
+    } while (pageToken && allDocs.length < 1500);
+
+    if (allDocs.length > 0) {
+      const count = applyAuditSnapshot(allDocs);
+      if (count === 0) showToast('REST: audit log found but 0 active assignments');
+    } else {
+      showToast('REST: no data found — assignments may need to be re-entered');
+    }
+  } catch(e) {
+    console.warn('REST fallback failed', e);
+    showToast('Cannot reach Firestore via HTTP either — check Firebase Console rules');
+  }
 }
 
 function showImportModal() {
