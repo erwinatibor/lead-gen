@@ -781,7 +781,6 @@
   #viewDashboard.hidden { display:none !important; }
   .view-panel { display:none; flex:1; overflow-y:auto; flex-direction:column; min-height:0; }
   .view-panel.active { display:flex; }
-  .main-content:has(#viewHistory.active) { overflow-y:auto; }
 
   /* ── VIEW SHARED ── */
   .view-header { padding:22px 24px 12px; flex-shrink:0; border-bottom:1px solid var(--border); }
@@ -1194,10 +1193,6 @@
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         Automations
       </a>
-      <a class="nav-item" data-view="history" href="#" onclick="switchView('history');return false;">
-        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
-        Audit Log
-      </a>
       <a class="nav-item" data-view="settings" href="#" onclick="switchView('settings');return false;">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         Settings
@@ -1271,6 +1266,12 @@
             <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
           </svg>
           Reset
+        </button>
+        <button class="btn btn-ghost" id="btnAuditLog" onclick="toggleAuditPanel()">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
+          </svg>
+          Audit Log
         </button>
         <button class="btn btn-primary" id="btnExport">
           <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
@@ -1900,6 +1901,19 @@ ianentila27@gmail.com</div>
         </div><!-- /.table-inner-wrap -->
       </div><!-- /.table-section -->
 
+      <!-- AUDIT LOG PANEL (inside dashboard, hidden by default) -->
+      <div id="auditPanel" style="display:none; width:380px; flex-shrink:0; border-left:1px solid var(--border); display:none; flex-direction:column; overflow:hidden; background:var(--sidebar-bg);">
+        <div style="padding:14px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-shrink:0;">
+          <div>
+            <div style="font-size:13px; font-weight:700; color:var(--text);">Audit Log</div>
+            <div style="font-size:10px; color:var(--muted); margin-top:1px;">Assignment history</div>
+          </div>
+          <button onclick="toggleAuditPanel()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;line-height:1;padding:2px 6px;" title="Close">×</button>
+        </div>
+        <div id="historyContainer" style="overflow-y:auto; flex:1; padding:8px 0;">
+          <div class="audit-loading">Loading…</div>
+        </div>
+      </div>
 
     </div><!-- /.workspace -->
 
@@ -2268,19 +2282,6 @@ ianentila27@gmail.com</div>
       </div>
     </div><!-- /.viewSettings -->
 
-    <!-- ── HISTORY / AUDIT LOG VIEW ── -->
-    <div class="view-panel history-view" data-view="history" id="viewHistory">
-      <div class="history-view-header">
-        <div>
-          <div class="history-view-title">Audit Log</div>
-          <div class="history-view-desc">Every lead assignment and reassignment — permanent, never deleted</div>
-        </div>
-        <button onclick="loadHistory()" class="btn btn-ghost" style="font-size:11px">↻ Refresh</button>
-      </div>
-      <div id="historyContainer">
-        <div class="audit-loading">Click Refresh to load history…</div>
-      </div>
-    </div><!-- /.viewHistory -->
 
   </div><!-- /.main-content -->
 </div><!-- /.app-wrapper -->
@@ -2922,7 +2923,8 @@ function logAudit(leadId, company, action, prevOwner, newOwner, reason) {
     changedByName: u?.name || currentUser || 'Unknown',
     timestamp:     new Date().toISOString(),
     reason:        reason || ''
-  }).catch(e => console.warn('Audit log failed', e));
+  }).then(() => { if (auditPanelOpen) loadHistory(); })
+    .catch(e => console.warn('Audit log failed', e));
 }
 
 /* ─────────────── REASSIGNMENT ─────────────── */
@@ -2976,55 +2978,56 @@ function closeReassignModal() {
   pendingReassign = null;
 }
 
-/* ─────────────── HISTORY VIEW ─────────────── */
+/* ─────────────── HISTORY / AUDIT PANEL ─────────────── */
+let auditPanelOpen = false;
+
+function toggleAuditPanel() {
+  const panel = document.getElementById('auditPanel');
+  const btn   = document.getElementById('btnAuditLog');
+  auditPanelOpen = !auditPanelOpen;
+  panel.style.display = auditPanelOpen ? 'flex' : 'none';
+  if (btn) btn.classList.toggle('active', auditPanelOpen);
+  if (auditPanelOpen) loadHistory();
+}
+
 function loadHistory() {
-  document.getElementById('historyContainer').innerHTML = '<div class="audit-loading">Loading…</div>';
+  document.getElementById('historyContainer').innerHTML = '<div class="audit-loading" style="padding:24px 16px;font-size:11px;color:var(--muted);font-family:\'JetBrains Mono\',monospace;">Loading…</div>';
   AUDIT_COL.orderBy('timestamp', 'desc').limit(300).get()
     .then(snap => {
       if (snap.empty) {
-        document.getElementById('historyContainer').innerHTML = '<div class="audit-empty">No history yet. Lead assignments will appear here.</div>';
+        document.getElementById('historyContainer').innerHTML = '<div style="padding:24px 16px;font-size:12px;color:var(--muted);text-align:center;">No history yet.</div>';
         return;
       }
       const entries = [];
       snap.forEach(doc => entries.push(doc.data()));
-      const rows = entries.map(e => {
-        const d  = new Date(e.timestamp);
-        const ds = d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
-        const ts = d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true });
-        const badge = e.action === 'reassigned'
-          ? `<span class="audit-action-badge reassign">Reassigned</span>`
-          : e.action === 'unassigned'
-          ? `<span class="audit-action-badge unassign">Unassigned</span>`
-          : `<span class="audit-action-badge assign">Assigned</span>`;
-        const fromTo = e.action === 'reassigned'
-          ? `<div class="audit-from-to"><span class="audit-from-val">${esc(e.prevOwnerName||e.prevOwner||'—')}</span><span class="audit-arrow">→</span><span class="audit-to-val">${esc(e.newOwnerName||e.newOwner||'—')}</span></div>`
+      const cards = entries.map(e => {
+        const d   = new Date(e.timestamp);
+        const ds  = d.toLocaleDateString('en-US', { month:'short', day:'numeric' });
+        const ts  = d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true });
+        const badgeColor = e.action === 'reassigned' ? '#f59e0b' : e.action === 'unassigned' ? '#ef4444' : '#00ffae';
+        const badgeBg    = e.action === 'reassigned' ? 'rgba(245,158,11,.12)' : e.action === 'unassigned' ? 'rgba(239,68,68,.10)' : 'rgba(0,255,174,.11)';
+        const label = e.action === 'reassigned' ? 'Reassigned' : e.action === 'unassigned' ? 'Unassigned' : 'Assigned';
+        const change = e.action === 'reassigned'
+          ? `<span style="color:#ef4444;font-weight:700">${esc(e.prevOwnerName||e.prevOwner||'—')}</span> <span style="color:var(--muted)">→</span> <span style="color:#00ffae;font-weight:700">${esc(e.newOwnerName||e.newOwner||'—')}</span>`
           : e.action === 'assigned'
-          ? `<div class="audit-from-to"><span class="audit-arrow">→</span><span class="audit-to-val">${esc(e.newOwnerName||e.newOwner||'—')}</span></div>`
-          : `<div class="audit-from-to"><span class="audit-from-val">${esc(e.prevOwnerName||e.prevOwner||'—')}</span><span class="audit-arrow">→</span><span style="color:var(--muted)">Unassigned</span></div>`;
-        return `<tr>
-          <td><div class="audit-ts"><div class="audit-ts-date">${ds}</div><div class="audit-ts-time">${ts}</div></div></td>
-          <td><div class="audit-company-name" title="${esc(e.company)}">${esc(e.company)}</div></td>
-          <td>${badge}</td>
-          <td>${fromTo}</td>
-          <td><span class="audit-by-name">${esc(e.changedByName||e.changedBy||'?')}</span></td>
-          <td><span class="audit-reason-text">${e.reason ? esc(e.reason) : ''}</span></td>
-        </tr>`;
+          ? `<span style="color:var(--muted)">→</span> <span style="color:#00ffae;font-weight:700">${esc(e.newOwnerName||e.newOwner||'—')}</span>`
+          : `<span style="color:#ef4444;font-weight:700">${esc(e.prevOwnerName||e.prevOwner||'—')}</span> <span style="color:var(--muted)">→ unassigned</span>`;
+        return `<div style="padding:11px 16px;border-bottom:1px solid var(--border);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+            <div style="font-size:11.5px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px;" title="${esc(e.company)}">${esc(e.company)}</div>
+            <span style="font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:${badgeBg};color:${badgeColor};border:1px solid ${badgeColor}33;flex-shrink:0;margin-left:6px">${label}</span>
+          </div>
+          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;margin-bottom:4px;">${change}</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:10px;color:var(--muted)">by <strong style="color:var(--text2)">${esc(e.changedByName||e.changedBy||'?')}</strong>${e.reason ? ` · <em style="color:var(--muted2)">${esc(e.reason)}</em>` : ''}</span>
+            <span style="font-size:9.5px;color:var(--muted2);font-family:'JetBrains Mono',monospace;flex-shrink:0;margin-left:6px">${ds} ${ts}</span>
+          </div>
+        </div>`;
       }).join('');
-      document.getElementById('historyContainer').innerHTML = `
-        <table class="audit-table">
-          <colgroup>
-            <col class="col-time"><col class="col-company"><col class="col-action">
-            <col class="col-change"><col class="col-by"><col class="col-reason">
-          </colgroup>
-          <thead><tr>
-            <th>Time</th><th>Company</th><th>Action</th>
-            <th>Change</th><th>By</th><th>Reason</th>
-          </tr></thead>
-          <tbody>${rows}</tbody>
-        </table>`;
+      document.getElementById('historyContainer').innerHTML = cards;
     })
     .catch(() => {
-      document.getElementById('historyContainer').innerHTML = '<div class="audit-empty">Failed to load — check Firestore connection</div>';
+      document.getElementById('historyContainer').innerHTML = '<div style="padding:24px 16px;font-size:12px;color:var(--muted);text-align:center;">Failed to load — check connection</div>';
     });
 }
 
@@ -4003,7 +4006,6 @@ function switchView(view) {
     n.classList.toggle('active', n.dataset.view === view)
   );
   if (view === 'intelligence') renderIntelligence();
-  if (view === 'history') loadHistory();
   if (view === 'outreach') {
     renderPmCards(document.querySelector('.pm-pill.active')?.dataset.industry || 'dental');
     if (!plRendered) renderPitchLib();
