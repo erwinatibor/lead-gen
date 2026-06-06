@@ -246,6 +246,11 @@
   tr.row-contacted { border-left:2px solid var(--yellow); }
   tr.row-replied   { border-left:2px solid var(--green); }
   tr.row-notint    { border-left:2px solid var(--red); opacity:.6; }
+  tr.row-notint td { position:relative; }
+  tr.row-notint td::after {
+    content:''; position:absolute; left:0; right:0;
+    top:50%; height:1px; background:var(--red); opacity:.55; pointer-events:none;
+  }
 
   .company-link {
     color:var(--text); text-decoration:none; font-weight:500;
