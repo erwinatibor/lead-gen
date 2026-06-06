@@ -1122,14 +1122,7 @@
           <span style="color:var(--border2);font-size:10px">|</span>
           <div class="sync-dot" id="syncDot" title="Firebase sync"></div>
           <span id="syncText" style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace">offline</span>
-          <button onclick="pushToCloud()" title="Push your local data to Firestore"
-            style="background:rgba(0,255,174,.08);border:1px solid rgba(0,255,174,.2);color:var(--accent);border-radius:5px;padding:2px 8px;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap">
-            ↑ Push
-          </button>
-          <button onclick="pullFromCloud()" title="Force-load latest data from Firestore"
-            style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);color:#3b82f6;border-radius:5px;padding:2px 8px;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap">
-            ↓ Pull
-          </button>
+          <span id="syncError" style="display:none;font-size:9px;color:var(--red);font-family:'JetBrains Mono',monospace;cursor:pointer" onclick="openView('viewSettings')" title="Click to open Settings for manual sync options">⚠ fix</span>
         </div>
         <button class="btn btn-ghost" id="btnReset">
           <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -2087,7 +2080,15 @@ ianentila27@gmail.com</div>
             <button class="settings-btn" onclick="document.getElementById('btnExport').click()">Export CSV</button>
           </div>
           <div class="settings-data-row">
-            <span class="settings-data-label">Copy assignments to clipboard (paste on another device)</span>
+            <span class="settings-data-label">Force-push local data to cloud (emergency)</span>
+            <button class="settings-btn" onclick="pushToCloud()">↑ Push</button>
+          </div>
+          <div class="settings-data-row">
+            <span class="settings-data-label">Force-pull latest cloud data (emergency)</span>
+            <button class="settings-btn" onclick="pullFromCloud()">↓ Pull</button>
+          </div>
+          <div class="settings-data-row">
+            <span class="settings-data-label">Copy assignments to clipboard (manual transfer)</span>
             <button class="settings-btn" onclick="copyStateJSON()">Copy State</button>
           </div>
           <div class="settings-data-row">
@@ -2404,10 +2405,13 @@ const STATE_DOC   = db.doc('agla/leadState');
 const CONFIG_DOC  = db.doc('agla/config');
 
 function setSyncStatus(live, label) {
-  const dot  = document.getElementById('syncDot');
+  const dot = document.getElementById('syncDot');
   const text = document.getElementById('syncText');
+  const err  = document.getElementById('syncError');
   if (dot)  dot.classList.toggle('live', live);
   if (text) text.textContent = label;
+  const isBad = !live && (label === 'rules!' || label === 'offline' || label === 'failed');
+  if (err) err.style.display = isBad ? 'inline' : 'none';
 }
 
 function submitAuthCode() {
@@ -2443,6 +2447,28 @@ function ensureStateDefaults() {
   });
 }
 
+const STATUS_RANK = ['done','closed','follow-up','contacted','new',''];
+function pickStatus(a, b) {
+  const ai = STATUS_RANK.indexOf(a||''); const bi = STATUS_RANK.indexOf(b||'');
+  return (ai !== -1 && (ai < bi || bi === -1) ? a : b) || 'new';
+}
+
+function mergeStates(local, remote) {
+  const out = {};
+  LEADS.forEach(l => {
+    const k = String(l.id);
+    const lo = local[k]  || {};
+    const re = remote[k] || {};
+    out[k] = {
+      assigned: lo.assigned || re.assigned || '',
+      status:   pickStatus(lo.status, re.status),
+      notes:    lo.notes    || re.notes    || '',
+      done:     lo.done     || re.done     || false
+    };
+  });
+  return out;
+}
+
 function dataRichness(obj) {
   return LEADS.reduce((n, l) => {
     const d = obj[String(l.id)];
@@ -2467,20 +2493,26 @@ function loadState() {
 
       if (firstSync) {
         firstSync = false;
-        const localScore = dataRichness(state);
-        const fsScore    = dataRichness(fsData);
-
-        if (localScore > fsScore) {
-          // Local has more data (e.g. assignments made before Firebase) — push local to cloud
-          setSyncStatus(false, 'uploading…');
+        // Merge local + Firestore: pick non-empty value per field per lead
+        const merged = mergeStates(state, fsData);
+        const mergedRich = dataRichness(merged);
+        const fsRich     = dataRichness(fsData);
+        state = merged;
+        ensureStateDefaults();
+        try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+        render();
+        showSaved();
+        setSyncStatus(true, 'synced');
+        if (mergedRich > fsRich) {
+          // merged has more data than Firestore → upload so all devices get it
           STATE_DOC.set(state)
-            .then(() => { setSyncStatus(true, 'synced'); showToast('Local data pushed to cloud'); })
+            .then(() => showToast('Auto-synced — all devices updated'))
             .catch(() => setSyncStatus(false, 'offline'));
-          return; // keep using local state; next snapshot will confirm
         }
+        return;
       }
 
-      // Firestore wins for all subsequent snapshots
+      // After first sync: Firestore is the live source of truth
       state = fsData;
       ensureStateDefaults();
       try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
