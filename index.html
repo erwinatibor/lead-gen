@@ -6,6 +6,7 @@
 <title>Lead Tracker | Ian Fleni Sison</title>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <style>
   :root {
@@ -2604,9 +2605,8 @@ const firebaseConfig = {
   appId: "1:514779613838:web:08929a532c1d624ff797df"
 };
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-// Cache Firestore data in IndexedDB so the first snapshot on every refresh
-// fires immediately from local cache instead of waiting for the server.
+const auth = firebase.auth();
+const db   = firebase.firestore();
 db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
 const STATE_DOC   = db.doc('agla/leadState');
 const CONFIG_DOC  = db.doc('agla/config');
@@ -3227,12 +3227,15 @@ function loadHistory() {
 
 function initApp() {
   updateUserUI();
-  loadState();
   render();
   showSaved();
   initAiKeys();
-  // Belt-and-suspenders: re-apply after any async render cycle
   setTimeout(updateUserUI, 0);
+  // Sign in anonymously so Firestore rules can require request.auth != null
+  auth.signInAnonymously().catch(() => {});
+  auth.onAuthStateChanged(user => {
+    if (user) loadState();
+  });
 }
 
 // save on tab close / refresh
