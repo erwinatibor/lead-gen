@@ -2794,6 +2794,7 @@ function loadState() {
       }
 
       // After first sync: merge so Firestore changes win, but local never gets wiped
+      firestoreSynced = true;
       const live = mergeStates(state, fsData);
       state = live;
       ensureStateDefaults();
@@ -2804,7 +2805,11 @@ function loadState() {
 
     } else {
       firstSync = false;
-      pushToCloud();
+      firestoreSynced = true;
+      // Only push to Firestore if local has real data — never create an empty doc
+      if (dataRichness(state) > 0) {
+        pushToCloud();
+      }
     }
   }, err => {
     console.warn('Firestore listener error', err);
