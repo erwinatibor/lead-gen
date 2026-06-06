@@ -1144,7 +1144,7 @@
 <body>
 
 <!-- AUTH GATE -->
-<div class="auth-gate" id="authGate">
+<div class="auth-gate" id="authGate" style="display:none">
   <div class="auth-card" id="authCardWrap" style="max-width:340px">
     <!-- Step 1: Access Code -->
     <div id="authStep1">
@@ -2685,10 +2685,10 @@ function switchIdentity() {
 
 function checkAuth() {
   if (localStorage.getItem('agla_auth') === TEAM_CODE) {
-    document.getElementById('authGate').style.display = 'none';
     initApp();
+  } else {
+    document.getElementById('authGate').style.display = 'flex';
   }
-  // else: gate stays visible, user must enter code
 }
 
 /* ─────────────── STORAGE ─────────────── */
