@@ -2608,7 +2608,6 @@ const USERS = {
   rizzalyn: { name:'Rizzalyn', role:'agent',   color:'#3b82f6', initials:'Ri' },
   rutchel:  { name:'Rutchel',  role:'agent',   color:'#a855f7', initials:'Ru' },
   junnel:   { name:'Junnel',   role:'agent',   color:'#f59e0b', initials:'J'  },
-  erwin:    { name:'Erwin',    role:'admin',   color:'#ef4444', initials:'E'  },
 };
 let currentUser = localStorage.getItem('agla_user') || '';
 
@@ -4333,27 +4332,40 @@ const PM_INDUSTRIES = {
     ian:`Hi [First Name],\n\nI'm Ian Fleni Sison, paid media strategist, 5+ years, currently COO & Head of Media Buyers at AGLA Media.\n\nMost SaaS paid channels optimize for trial sign-ups, but trials that don't convert to paid are just expensive acquisition. The real metric is cost per paying customer, and most campaigns never track it.\n\nWhat I do: paid media strategy built around paid conversions, not trial volume. Google Search, LinkedIn,, with CPA targets tied directly to LTV. The result: more paying customers from paid channels at a profitable CAC.\n\nIf that's a problem [Company] is working on. Free 15-minute call.\n\nOpen to connecting this week?\n\nIan Fleni Sison\nianentila27@gmail.com\nlinkedin.com/in/ian-flenisison-563aa1240` }
 };
 
+// Auto-generate Rizzalyn + Rutchel variants from Junnel templates
+Object.keys(PM_INDUSTRIES).forEach(key => {
+  const j = PM_INDUSTRIES[key].junnel;
+  ['Rizzalyn','Rutchel'].forEach(name => {
+    PM_INDUSTRIES[key][name.toLowerCase()] = j
+      .replace('My name is Junnel,', `My name is ${name},`)
+      .replace('\n\nJunnel\n', `\n\n${name}\n`);
+  });
+});
+
 function pmEscHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-function renderPmCards(key) {
-  const data = PM_INDUSTRIES[key];
-  document.getElementById('pmCards').innerHTML = `
-    <div class="pm-card">
-      <div class="pm-card-meta">
-        <span class="pm-card-label">From Junnel</span>
-        <span class="pm-card-channel">LinkedIn DM</span>
-      </div>
-      <div class="pm-card-body">${pmEscHtml(data.junnel)}</div>
-      <button class="pm-copy-btn" data-pmkey="${key}" data-pmsender="junnel" onclick="pmCopy(this)">Copy message</button>
+function pmCard(key, sender, label, text) {
+  const chars = text.length;
+  return `<div class="pm-card">
+    <div class="pm-card-meta">
+      <span class="pm-card-label">From ${label}</span>
+      <span class="pm-card-channel">LinkedIn DM</span>
     </div>
-    <div class="pm-card">
-      <div class="pm-card-meta">
-        <span class="pm-card-label">From Ian</span>
-        <span class="pm-card-channel">LinkedIn DM</span>
-      </div>
-      <div class="pm-card-body">${pmEscHtml(data.ian)}</div>
-      <button class="pm-copy-btn" data-pmkey="${key}" data-pmsender="ian" onclick="pmCopy(this)">Copy message</button>
-    </div>`;
+    <div class="pm-card-body">${pmEscHtml(text)}</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <span style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;">${chars} chars</span>
+    </div>
+    <button class="pm-copy-btn" data-pmkey="${key}" data-pmsender="${sender}" onclick="pmCopy(this)">Copy message</button>
+  </div>`;
+}
+
+function renderPmCards(key) {
+  const d = PM_INDUSTRIES[key];
+  document.getElementById('pmCards').innerHTML =
+    pmCard(key, 'junnel',    'Junnel',    d.junnel)    +
+    pmCard(key, 'ian',       'Ian',       d.ian)       +
+    pmCard(key, 'rizzalyn',  'Rizzalyn',  d.rizzalyn)  +
+    pmCard(key, 'rutchel',   'Rutchel',   d.rutchel);
 }
 
 function pmCopy(btn) {
