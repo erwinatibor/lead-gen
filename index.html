@@ -1122,9 +1122,13 @@
           <span style="color:var(--border2);font-size:10px">|</span>
           <div class="sync-dot" id="syncDot" title="Firebase sync"></div>
           <span id="syncText" style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace">offline</span>
-          <button onclick="pushToCloud()" title="Push your local data to cloud — use this once if mobile shows empty data"
+          <button onclick="pushToCloud()" title="Push your local data to Firestore"
             style="background:rgba(0,255,174,.08);border:1px solid rgba(0,255,174,.2);color:var(--accent);border-radius:5px;padding:2px 8px;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap">
             ↑ Push
+          </button>
+          <button onclick="pullFromCloud()" title="Force-load latest data from Firestore"
+            style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);color:#3b82f6;border-radius:5px;padding:2px 8px;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap">
+            ↓ Pull
           </button>
         </div>
         <button class="btn btn-ghost" id="btnReset">
@@ -2083,6 +2087,14 @@ ianentila27@gmail.com</div>
             <button class="settings-btn" onclick="document.getElementById('btnExport').click()">Export CSV</button>
           </div>
           <div class="settings-data-row">
+            <span class="settings-data-label">Copy assignments to clipboard (paste on another device)</span>
+            <button class="settings-btn" onclick="copyStateJSON()">Copy State</button>
+          </div>
+          <div class="settings-data-row">
+            <span class="settings-data-label">Import assignments from another device (paste JSON)</span>
+            <button class="settings-btn" onclick="showImportModal()">Import State</button>
+          </div>
+          <div class="settings-data-row">
             <span class="settings-data-label">Reset all statuses &amp; notes</span>
             <button class="settings-btn danger" onclick="document.getElementById('btnReset').click()">Reset Data</button>
           </div>
@@ -2155,6 +2167,27 @@ ianentila27@gmail.com</div>
     <div class="gen-modal-footer">
       <div style="margin-left:auto">
         <button class="gen-modal-btn-sec" onclick="closeGenModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- IMPORT STATE MODAL -->
+<div id="importStateModal" class="gen-modal-backdrop" onclick="if(event.target===this)closeImportModal()">
+  <div class="gen-modal" role="dialog" aria-modal="true" style="max-width:520px">
+    <div class="gen-modal-header">
+      <div class="gen-modal-meta">
+        <span style="font-size:13px;font-weight:700;color:var(--text)">Import State JSON</span>
+        <span style="font-size:10px;color:var(--muted)">Paste the JSON copied from another device</span>
+      </div>
+      <button onclick="closeImportModal()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:4px">×</button>
+    </div>
+    <div style="padding:16px 20px;display:flex;flex-direction:column;gap:12px">
+      <textarea id="importStateTA" placeholder='Paste state JSON here… (from Copy State on another device)' rows="8"
+        style="width:100%;background:#070d16;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:11px;padding:10px 12px;resize:vertical;outline:none;line-height:1.5"></textarea>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button onclick="closeImportModal()" style="background:none;border:1px solid var(--border2);color:var(--muted);border-radius:7px;padding:7px 16px;cursor:pointer;font-size:12px">Cancel</button>
+        <button onclick="doImportState()" style="background:var(--green);border:none;color:#000;border-radius:7px;padding:7px 16px;cursor:pointer;font-size:12px;font-weight:700">Load & Push to Cloud</button>
       </div>
     </div>
   </div>
@@ -2461,7 +2494,12 @@ function loadState() {
     }
   }, err => {
     console.warn('Firestore listener error', err);
-    setSyncStatus(false, 'offline');
+    if (err.code === 'permission-denied') {
+      setSyncStatus(false, 'rules!');
+      showToast('Firestore rules expired — go to Firebase Console → Firestore → Rules → set: allow read, write: if true');
+    } else {
+      setSyncStatus(false, 'offline');
+    }
   });
 }
 
@@ -2469,7 +2507,85 @@ function pushToCloud() {
   setSyncStatus(false, 'uploading…');
   STATE_DOC.set(state)
     .then(() => { setSyncStatus(true, 'synced'); showToast('Data uploaded to cloud'); })
-    .catch(e => { setSyncStatus(false, 'failed'); showToast('Upload failed — check connection'); });
+    .catch(e => {
+      if (e.code === 'permission-denied') {
+        setSyncStatus(false, 'rules!');
+        showToast('Firestore rules expired — update in Firebase Console');
+      } else {
+        setSyncStatus(false, 'failed');
+        showToast('Upload failed — check connection');
+      }
+    });
+}
+
+function pullFromCloud() {
+  setSyncStatus(false, 'loading…');
+  STATE_DOC.get().then(doc => {
+    if (doc.exists) {
+      state = doc.data();
+      ensureStateDefaults();
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+      render();
+      showSaved();
+      setSyncStatus(true, 'synced');
+      showToast('Loaded latest data from cloud (' + Object.values(state).filter(v=>v&&v.assigned).length + ' assigned)');
+    } else {
+      setSyncStatus(false, 'empty');
+      showToast('No data in Firestore — use ↑ Push from a device that has data');
+    }
+  }).catch(e => {
+    if (e.code === 'permission-denied') {
+      setSyncStatus(false, 'rules!');
+      showToast('Firestore rules expired — go to Firebase Console → Firestore → Rules');
+    } else {
+      setSyncStatus(false, 'offline');
+      showToast('Cannot reach Firestore — check network');
+    }
+  });
+}
+
+function copyStateJSON() {
+  const json = JSON.stringify(state, null, 2);
+  navigator.clipboard.writeText(json).then(() => {
+    const assigned = Object.values(state).filter(v=>v&&v.assigned).length;
+    showToast('State copied (' + assigned + ' assigned leads) — paste on another device via Settings → Import State');
+  }).catch(() => {
+    showToast('Copy failed — try again');
+  });
+}
+
+function showImportModal() {
+  document.getElementById('importStateTA').value = '';
+  document.getElementById('importStateModal').classList.add('open');
+}
+
+function closeImportModal() {
+  document.getElementById('importStateModal').classList.remove('open');
+}
+
+function doImportState() {
+  const raw = document.getElementById('importStateTA').value.trim();
+  if (!raw) { showToast('Nothing pasted'); return; }
+  let parsed;
+  try { parsed = JSON.parse(raw); } catch(e) { showToast('Invalid JSON — copy again from desktop'); return; }
+  state = parsed;
+  ensureStateDefaults();
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+  render();
+  showSaved();
+  closeImportModal();
+  showToast('State imported — pushing to cloud…');
+  STATE_DOC.set(state)
+    .then(() => { setSyncStatus(true, 'synced'); showToast('Pushed to cloud — all devices will sync'); })
+    .catch(e => {
+      if (e.code === 'permission-denied') {
+        setSyncStatus(false, 'rules!');
+        showToast('Imported locally but Firestore rules expired — update rules in Firebase Console');
+      } else {
+        setSyncStatus(false, 'offline');
+        showToast('Imported locally — cloud push failed');
+      }
+    });
 }
 
 function persist() {
