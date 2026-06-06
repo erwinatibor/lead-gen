@@ -927,13 +927,21 @@
   .co-fill-btn:hover { background:var(--green); color:#000; }
   tr:hover .co-fill-btn { display:inline-flex; }
 
-  /* ── TABLET: hide Address, Position, Phone, LinkedIn ── */
+  /* ── STICKY ASSIGNED COLUMN ── */
+  .th-assigned, .td-assigned {
+    position:sticky; left:0; z-index:3;
+    background:var(--sidebar-bg);
+    border-right:1px solid var(--border);
+  }
+  tbody tr:hover .td-assigned { background:rgba(5,10,22,.97); }
+  tbody tr.done-row .td-assigned { background:var(--sidebar-bg); }
+
+  /* ── TABLET: hide Address, Position, Phone (keep LinkedIn!) ── */
   @media(max-width:1024px) {
     th:nth-child(6), td:nth-child(6),
     th:nth-child(8), td:nth-child(8),
-    th:nth-child(9), td:nth-child(9),
-    th:nth-child(10), td:nth-child(10) { display:none; }
-    table { min-width:620px; }
+    th:nth-child(9), td:nth-child(9) { display:none; }
+    table { min-width:580px; }
   }
 
   /* ── MOBILE ── */
@@ -956,23 +964,23 @@
     .pm-cards { grid-template-columns:1fr; }
     .intel-member-grid { grid-template-columns:repeat(2,1fr); }
     .co-fill-btn { display:inline-flex; }
-    /* also hide Country and Email on mobile */
+    /* hide Country, Contact Name, Email — keep LinkedIn */
     th:nth-child(5), td:nth-child(5),
+    th:nth-child(7), td:nth-child(7),
     th:nth-child(11), td:nth-child(11) { display:none; }
-    table { min-width:480px; }
+    table { min-width:420px; }
     td { padding:7px 8px; }
     th { padding:7px 8px; }
     .topbar-stats { display:none; }
     .table-toolbar { gap:6px; padding:7px 10px; }
   }
 
-  /* ── PHONE: keep only Assigned / # / Company / Status / Done ── */
+  /* ── PHONE: Assigned / # / Company / LinkedIn / Status / Done ── */
   @media(max-width:480px) {
     th:nth-child(4), td:nth-child(4),
-    th:nth-child(7), td:nth-child(7),
     th:nth-child(13), td:nth-child(13) { display:none; }
-    table { min-width:320px; }
-    td.td-company { max-width:140px; }
+    table { min-width:340px; }
+    td.td-company { max-width:130px; }
     .co-fill-btn { display:none; }
     .topbar { padding:0 10px; }
   }
