@@ -2610,6 +2610,13 @@ const USERS = {
   rutchel:  { name:'Rutchel',  role:'agent',   color:'#a855f7', initials:'Ru' },
   junnel:   { name:'Junnel',   role:'agent',   color:'#f59e0b', initials:'J'  },
 };
+// Clean up stale user key (e.g. 'erwin' removed from USERS)
+(function() {
+  const saved = localStorage.getItem('agla_user');
+  if (saved && !({ian:1,rizzalyn:1,rutchel:1,junnel:1}[saved])) {
+    localStorage.removeItem('agla_user');
+  }
+})();
 let currentUser = localStorage.getItem('agla_user') || '';
 
 function setSyncStatus(live, label) {
@@ -2784,8 +2791,9 @@ function loadState() {
         return;
       }
 
-      // After first sync: Firestore is the live source of truth
-      state = fsData;
+      // After first sync: merge so Firestore changes win, but local never gets wiped
+      const live = mergeStates(state, fsData);
+      state = live;
       ensureStateDefaults();
       try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
       render();
@@ -3032,6 +3040,8 @@ function initApp() {
   render();
   showSaved();
   initAiKeys();
+  // Belt-and-suspenders: re-apply after any async render cycle
+  setTimeout(updateUserUI, 0);
 }
 
 // save on tab close / refresh
