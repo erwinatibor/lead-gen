@@ -2611,14 +2611,35 @@ const USERS = {
   rutchel:  { name:'Rutchel',  role:'agent',   color:'#a855f7', initials:'Ru' },
   junnel:   { name:'Junnel',   role:'agent',   color:'#f59e0b', initials:'J'  },
 };
-// Clean up stale user key (e.g. 'erwin' removed from USERS)
+// Helpers to save/load user across localStorage AND cookie (belt-and-suspenders)
+const VALID_USERS = {ian:1,rizzalyn:1,rutchel:1,junnel:1};
+function saveUserIdentity(userId) {
+  localStorage.setItem('agla_user', userId);
+  document.cookie = `agla_user=${userId};max-age=${365*24*3600};path=/;SameSite=Strict`;
+}
+function loadUserIdentity() {
+  const ls = localStorage.getItem('agla_user');
+  if (ls && VALID_USERS[ls]) return ls;
+  const m = document.cookie.match(/(?:^|;\s*)agla_user=([^;]+)/);
+  if (m && VALID_USERS[m[1]]) return m[1];
+  return '';
+}
+// Clean up stale/invalid saved user
 (function() {
   const saved = localStorage.getItem('agla_user');
-  if (saved && !({ian:1,rizzalyn:1,rutchel:1,junnel:1}[saved])) {
-    localStorage.removeItem('agla_user');
-  }
+  if (saved && !VALID_USERS[saved]) localStorage.removeItem('agla_user');
 })();
-let currentUser = localStorage.getItem('agla_user') || '';
+let currentUser = loadUserIdentity();
+// Immediately stamp chip so there's never a "You" flash
+if (currentUser && USERS[currentUser]) {
+  const _u = USERS[currentUser];
+  const _av = document.getElementById('cuAvatar');
+  const _nm = document.getElementById('cuName');
+  const _sb = document.getElementById('sbStatus');
+  if (_av) { _av.textContent = _u.initials; _av.style.background = _u.color; }
+  if (_nm) _nm.textContent = _u.name;
+  if (_sb) _sb.innerHTML = `<span class="sb-dot"></span>${_u.name} · ${_u.role}`;
+}
 
 function setSyncStatus(live, label) {
   const dot = document.getElementById('syncDot');
@@ -2663,7 +2684,7 @@ function submitAuthCode() {
 
 function selectUser(userId) {
   currentUser = userId;
-  localStorage.setItem('agla_user', userId);
+  saveUserIdentity(userId);
   document.getElementById('authGate').style.display = 'none';
   initApp();
 }
@@ -2683,6 +2704,7 @@ function updateUserUI() {
 
 function switchIdentity() {
   localStorage.removeItem('agla_user');
+  document.cookie = 'agla_user=;max-age=0;path=/';
   currentUser = '';
   document.getElementById('authCardWrap').style.maxWidth = '500px';
   document.getElementById('authStep1').style.display = 'none';
@@ -3386,19 +3408,6 @@ function toggleNotice() {
 }
 
 /* ─────────────── INIT ─────────────── */
-// Pre-fill chip from localStorage before checkAuth to avoid flash of "You"
-(function() {
-  const saved = localStorage.getItem('agla_user');
-  if (saved && USERS[saved]) {
-    const u = USERS[saved];
-    const av = document.getElementById('cuAvatar');
-    const nm = document.getElementById('cuName');
-    const sb = document.getElementById('sbStatus');
-    if (av) { av.textContent = u.initials; av.style.background = u.color; }
-    if (nm) nm.textContent = u.name;
-    if (sb) sb.innerHTML = `<span class="sb-dot"></span>${u.name} · ${u.role}`;
-  }
-})();
 checkAuth();
 
 /* ─────────────── OUTREACH GENERATOR ─────────────── */
