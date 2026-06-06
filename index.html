@@ -2814,11 +2814,12 @@ function loadState() {
         showSaved();
         setSyncStatus(true, 'synced');
         if (mergedRich > fsRich) {
-          // merged has more data than Firestore → upload so all devices get it
           STATE_DOC.set(state)
             .then(() => showToast('Auto-synced — all devices updated'))
             .catch(() => setSyncStatus(false, 'offline'));
         }
+        // If state is still empty after merge, auto-recover from audit log
+        if (mergedRich === 0) autoRecoverFromAudit();
         return;
       }
 
@@ -2890,6 +2891,37 @@ function pullFromCloud() {
       showToast('Cannot reach Firestore — check network');
     }
   });
+}
+
+function autoRecoverFromAudit() {
+  setSyncStatus(false, 'restoring…');
+  AUDIT_COL.limit(1000).get().then(snap => {
+    if (snap.empty) { setSyncStatus(true, 'synced'); return; }
+    const docs = [];
+    snap.forEach(d => docs.push(d.data()));
+    docs.sort((a,b) => (a.timestamp||'').localeCompare(b.timestamp||''));
+    const last = {};
+    docs.forEach(d => {
+      const id = String(d.leadId);
+      if (d.action === 'assigned' || d.action === 'reassigned') last[id] = d.newOwner || '';
+      else if (d.action === 'unassigned') last[id] = '';
+    });
+    let count = 0;
+    Object.entries(last).forEach(([id, assignee]) => {
+      if (!state[id]) return;
+      state[id].assigned = assignee;
+      state[id].locked   = !!assignee;
+      if (assignee) count++;
+    });
+    if (count === 0) { setSyncStatus(true, 'synced'); return; }
+    ensureStateDefaults();
+    STATE_DOC.set(state).then(() => {
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+      render();
+      setSyncStatus(true, 'synced');
+      showToast('✓ Restored ' + count + ' assignments from audit log');
+    }).catch(() => setSyncStatus(true, 'synced'));
+  }).catch(() => setSyncStatus(true, 'synced'));
 }
 
 function recoverFromAuditLog() {
