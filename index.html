@@ -1015,20 +1015,147 @@
   .auth-err { font-size:11px; color:var(--red); min-height:16px; }
   .sync-dot { width:6px; height:6px; border-radius:50%; background:var(--muted); flex-shrink:0; transition:background .3s; }
   .sync-dot.live { background:var(--accent); box-shadow:0 0 6px var(--accent); }
+
+  /* ── USER SELECTION STEP ── */
+  .auth-step2 { display:none; flex-direction:column; gap:16px; }
+  .auth-user-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .auth-user-card {
+    background:var(--surface2); border:1px solid var(--border2);
+    border-radius:12px; padding:14px 10px; cursor:pointer;
+    transition:border-color .18s, background .18s, transform .12s;
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    user-select:none;
+  }
+  .auth-user-card:hover { border-color:var(--accent); background:rgba(0,255,174,.06); transform:translateY(-1px); }
+  .auth-user-avatar {
+    width:38px; height:38px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:800; color:#000; flex-shrink:0;
+  }
+  .auth-user-name { font-size:12px; font-weight:700; color:var(--text); }
+  .auth-user-role { font-size:9px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+
+  /* ── CURRENT USER CHIP ── */
+  .cu-chip {
+    display:flex; align-items:center; gap:7px; padding:4px 10px 4px 4px;
+    background:var(--surface); border:1px solid var(--border2); border-radius:20px;
+    cursor:pointer; transition:border-color .15s;
+  }
+  .cu-chip:hover { border-color:rgba(0,255,174,.4); }
+  .cu-avatar {
+    width:22px; height:22px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:9px; font-weight:800; color:#000; flex-shrink:0;
+  }
+  .cu-name { font-size:11px; font-weight:600; color:var(--text2); }
+
+  /* ── LOCK BADGE (assigned cell) ── */
+  .lock-badge {
+    display:flex; align-items:center; gap:5px;
+    padding:3px 7px 3px 5px; border-radius:5px;
+    background:rgba(0,255,174,.07); border:1px solid rgba(0,255,174,.2);
+    cursor:pointer; transition:background .15s, border-color .15s;
+    font-size:10px; font-weight:700; color:var(--green); white-space:nowrap;
+    width:100%; max-width:100%;
+  }
+  .lock-badge:hover { background:rgba(0,255,174,.14); border-color:rgba(0,255,174,.4); }
+  .lock-icon { flex-shrink:0; opacity:.8; }
+
+  /* ── REASSIGN MODAL ── */
+  .rmodal-backdrop {
+    position:fixed; inset:0; z-index:600;
+    background:rgba(0,0,0,.65); backdrop-filter:blur(8px);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .2s;
+  }
+  .rmodal-backdrop.open { opacity:1; pointer-events:auto; }
+  .rmodal {
+    background:var(--surface); border:1px solid rgba(239,68,68,.3);
+    border-radius:16px; padding:0; width:100%; max-width:420px;
+    transform:scale(.96) translateY(8px); opacity:0;
+    transition:transform .2s, opacity .2s; overflow:hidden;
+    box-shadow:0 32px 80px rgba(0,0,0,.5);
+  }
+  .rmodal-backdrop.open .rmodal { transform:scale(1) translateY(0); opacity:1; }
+  .rmodal-header {
+    background:rgba(239,68,68,.08); border-bottom:1px solid rgba(239,68,68,.2);
+    padding:18px 20px; display:flex; align-items:center; gap:12px;
+  }
+  .rmodal-warn-icon { color:#ef4444; flex-shrink:0; }
+  .rmodal-title { font-size:14px; font-weight:800; color:var(--text); letter-spacing:-.01em; }
+  .rmodal-body { padding:20px; display:flex; flex-direction:column; gap:14px; }
+  .rmodal-company { font-size:11px; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+  .rmodal-company strong { color:var(--text); font-size:13px; }
+  .rmodal-owners { display:flex; align-items:center; gap:10px; padding:12px 14px; background:var(--surface2); border-radius:10px; border:1px solid var(--border); }
+  .rmodal-owner-from { font-size:12px; font-weight:700; color:var(--red); }
+  .rmodal-arrow { color:var(--muted); font-size:16px; }
+  .rmodal-owner-sel {
+    flex:1; background:var(--bg); border:1px solid rgba(0,255,174,.3);
+    color:var(--green); border-radius:7px; padding:6px 10px; font-size:12px;
+    font-weight:700; font-family:inherit; outline:none; cursor:pointer;
+  }
+  .rmodal-label { font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+  .rmodal-reason {
+    width:100%; background:var(--bg); border:1px solid var(--border2);
+    color:var(--text2); border-radius:8px; padding:9px 12px; font-size:12px;
+    font-family:inherit; resize:none; outline:none; line-height:1.5;
+  }
+  .rmodal-reason:focus { border-color:rgba(0,255,174,.35); }
+  .rmodal-note { font-size:10.5px; color:var(--muted); line-height:1.5; }
+  .rmodal-foot { padding:14px 20px; border-top:1px solid var(--border); display:flex; gap:8px; justify-content:flex-end; }
+
+  /* ── HISTORY VIEW ── */
+  .history-view { padding:28px 32px; display:flex; flex-direction:column; gap:20px; overflow-y:auto; }
+  .history-view-header { display:flex; align-items:flex-start; justify-content:space-between; }
+  .history-view-title { font-size:20px; font-weight:800; color:var(--text); letter-spacing:-.02em; }
+  .history-view-desc { font-size:12px; color:var(--muted); margin-top:2px; }
+  .audit-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .audit-table th { font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-family:'JetBrains Mono',monospace; font-weight:600; padding:8px 12px; text-align:left; border-bottom:1px solid var(--border); white-space:nowrap; }
+  .audit-table td { padding:10px 12px; border-bottom:1px solid var(--border); vertical-align:middle; }
+  .audit-table tr:hover td { background:var(--surface2); }
+  .audit-action-badge {
+    display:inline-flex; align-items:center; padding:2px 8px; border-radius:4px;
+    font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; font-family:'JetBrains Mono',monospace;
+  }
+  .audit-action-badge.assign   { background:rgba(0,255,174,.12); color:var(--green); border:1px solid rgba(0,255,174,.25); }
+  .audit-action-badge.reassign { background:rgba(245,158,11,.12); color:#f59e0b;       border:1px solid rgba(245,158,11,.25); }
+  .audit-action-badge.unassign { background:rgba(239,68,68,.10); color:var(--red);     border:1px solid rgba(239,68,68,.2); }
+  .audit-from-to { display:flex; align-items:center; gap:6px; font-family:'JetBrains Mono',monospace; }
+  .audit-from-val { color:var(--red); font-weight:700; font-size:11px; }
+  .audit-to-val   { color:var(--green); font-weight:700; font-size:11px; }
+  .audit-arrow { color:var(--muted); font-size:12px; }
+  .audit-by-name { font-weight:700; color:var(--text); }
+  .audit-reason-text { font-style:italic; color:var(--muted); font-size:11px; }
+  .audit-ts { display:flex; flex-direction:column; gap:1px; }
+  .audit-ts-date { color:var(--text2); font-size:11px; }
+  .audit-ts-time { color:var(--muted); font-size:10px; font-family:'JetBrains Mono',monospace; }
+  .audit-company-name { font-weight:600; color:var(--text); max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .audit-empty { text-align:center; padding:48px; color:var(--muted); font-size:13px; }
+  .audit-loading { text-align:center; padding:48px; color:var(--muted); font-size:12px; font-family:'JetBrains Mono',monospace; }
 </style>
 </head>
 <body>
 
 <!-- AUTH GATE -->
 <div class="auth-gate" id="authGate">
-  <div class="auth-card">
-    <div class="auth-logo">AGLA Media</div>
-    <div class="auth-title">Team Access</div>
-    <div class="auth-desc">Enter the team access code your administrator shared with you.</div>
-    <input class="auth-input" type="password" id="authCodeInput" placeholder="Access code" maxlength="32"
-      onkeydown="if(event.key==='Enter')submitAuthCode()">
-    <button class="auth-btn" onclick="submitAuthCode()">Enter</button>
-    <div class="auth-err" id="authErr"></div>
+  <div class="auth-card" id="authCardWrap" style="max-width:340px">
+    <!-- Step 1: Access Code -->
+    <div id="authStep1">
+      <div class="auth-logo">AGLA Media</div>
+      <div class="auth-title">Team Access</div>
+      <div class="auth-desc">Enter the team access code your administrator shared with you.</div>
+      <input class="auth-input" type="password" id="authCodeInput" placeholder="Access code" maxlength="32"
+        onkeydown="if(event.key==='Enter')submitAuthCode()">
+      <button class="auth-btn" onclick="submitAuthCode()">Enter</button>
+      <div class="auth-err" id="authErr"></div>
+    </div>
+    <!-- Step 2: Who are you? -->
+    <div class="auth-step2" id="authStep2">
+      <div class="auth-logo">AGLA Media</div>
+      <div class="auth-title">Who are you?</div>
+      <div class="auth-desc">Select your name so your actions are tracked.</div>
+      <div class="auth-user-grid" id="authUserGrid"></div>
+    </div>
   </div>
 </div>
 
@@ -1040,7 +1167,7 @@
       <div class="sb-avatar"><img src="logo.png" alt="AGLA Media"></div>
       <div>
         <div class="sb-name">AGLA Media</div>
-        <div class="sb-status"><span class="sb-dot"></span>Ian · COO</div>
+        <div class="sb-status" id="sbStatus"><span class="sb-dot"></span>Ian · COO</div>
       </div>
     </div>
     <nav class="sidebar-nav">
@@ -1059,6 +1186,10 @@
       <a class="nav-item" data-view="automations" href="#" onclick="switchView('automations');return false;">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         Automations
+      </a>
+      <a class="nav-item" data-view="history" href="#" onclick="switchView('history');return false;">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+        Audit Log
       </a>
       <a class="nav-item" data-view="settings" href="#" onclick="switchView('settings');return false;">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
@@ -1122,7 +1253,11 @@
           <span style="color:var(--border2);font-size:10px">|</span>
           <div class="sync-dot" id="syncDot" title="Firebase sync"></div>
           <span id="syncText" style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace">offline</span>
-          <span id="syncError" style="display:none;font-size:9px;color:var(--red);font-family:'JetBrains Mono',monospace;cursor:pointer" onclick="openView('viewSettings')" title="Click to open Settings for manual sync options">⚠ fix</span>
+          <span id="syncError" style="display:none;font-size:9px;color:var(--red);font-family:'JetBrains Mono',monospace;cursor:pointer" onclick="switchView('settings')" title="Click to open Settings for manual sync options">⚠ fix</span>
+        </div>
+        <div class="cu-chip" id="cuChip" onclick="switchView('settings')" title="Logged in as — click to change">
+          <div class="cu-avatar" id="cuAvatar">?</div>
+          <span class="cu-name" id="cuName">You</span>
         </div>
         <button class="btn btn-ghost" id="btnReset">
           <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -2080,6 +2215,14 @@ ianentila27@gmail.com</div>
             <button class="settings-btn" onclick="document.getElementById('btnExport').click()">Export CSV</button>
           </div>
           <div class="settings-data-row">
+            <span class="settings-data-label">Logged in as</span>
+            <span class="settings-data-val" id="settingsCurrentUser">—</span>
+          </div>
+          <div class="settings-data-row">
+            <span class="settings-data-label">Switch identity</span>
+            <button class="settings-btn" onclick="switchIdentity()">Change User</button>
+          </div>
+          <div class="settings-data-row">
             <span class="settings-data-label">Force-push local data to cloud (emergency)</span>
             <button class="settings-btn" onclick="pushToCloud()">↑ Push</button>
           </div>
@@ -2117,6 +2260,20 @@ ianentila27@gmail.com</div>
         </div>
       </div>
     </div><!-- /.viewSettings -->
+
+    <!-- ── HISTORY / AUDIT LOG VIEW ── -->
+    <div class="view-panel history-view" data-view="history" id="viewHistory">
+      <div class="history-view-header">
+        <div>
+          <div class="history-view-title">Audit Log</div>
+          <div class="history-view-desc">Every lead assignment and reassignment — permanent, never deleted</div>
+        </div>
+        <button onclick="loadHistory()" class="btn btn-ghost" style="font-size:11px">↻ Refresh</button>
+      </div>
+      <div id="historyContainer">
+        <div class="audit-loading">Click Refresh to load history…</div>
+      </div>
+    </div><!-- /.viewHistory -->
 
   </div><!-- /.main-content -->
 </div><!-- /.app-wrapper -->
@@ -2169,6 +2326,45 @@ ianentila27@gmail.com</div>
       <div style="margin-left:auto">
         <button class="gen-modal-btn-sec" onclick="closeGenModal()">Close</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- REASSIGN MODAL -->
+<div id="reassignModal" class="rmodal-backdrop" onclick="if(event.target===this)closeReassignModal()">
+  <div class="rmodal">
+    <div class="rmodal-header">
+      <svg class="rmodal-warn-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      <div>
+        <div class="rmodal-title">Lead Already Assigned</div>
+      </div>
+    </div>
+    <div class="rmodal-body">
+      <div class="rmodal-company">Company: <strong id="rModalCompany">—</strong></div>
+      <div class="rmodal-owners">
+        <div>
+          <div class="rmodal-label" style="margin-bottom:3px">Current Owner</div>
+          <div class="rmodal-owner-from" id="rModalFrom">—</div>
+        </div>
+        <div class="rmodal-arrow">→</div>
+        <div style="flex:1">
+          <div class="rmodal-label" style="margin-bottom:3px">New Owner</div>
+          <select class="rmodal-owner-sel" id="rModalNewOwner">
+            <option value="">— Select —</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <div class="rmodal-label" style="margin-bottom:6px">Reason (optional — will be logged)</div>
+        <textarea class="rmodal-reason" id="rModalReason" rows="2" placeholder="e.g. Transferred per manager request…"></textarea>
+      </div>
+      <div class="rmodal-note">⚠ This reassignment will be permanently recorded in the Audit Log with your name, timestamp, and reason.</div>
+    </div>
+    <div class="rmodal-foot">
+      <button onclick="closeReassignModal()" style="background:none;border:1px solid var(--border2);color:var(--muted);border-radius:7px;padding:7px 16px;cursor:pointer;font-size:12px">Cancel</button>
+      <button onclick="confirmReassign()" style="background:var(--red);border:none;color:#fff;border-radius:7px;padding:7px 18px;cursor:pointer;font-size:12px;font-weight:700">Confirm Reassign</button>
     </div>
   </div>
 </div>
@@ -2403,6 +2599,16 @@ firebase.initializeApp(firebaseConfig);
 const db          = firebase.firestore();
 const STATE_DOC   = db.doc('agla/leadState');
 const CONFIG_DOC  = db.doc('agla/config');
+const AUDIT_COL   = db.collection('aglaAudit');
+
+const USERS = {
+  ian:      { name:'Ian',      role:'manager', color:'#00ffae', initials:'I'  },
+  rizzalyn: { name:'Rizzalyn', role:'agent',   color:'#3b82f6', initials:'Ri' },
+  rutchel:  { name:'Rutchel',  role:'agent',   color:'#a855f7', initials:'Ru' },
+  junnel:   { name:'Junnel',   role:'agent',   color:'#f59e0b', initials:'J'  },
+  erwin:    { name:'Erwin',    role:'admin',   color:'#ef4444', initials:'E'  },
+};
+let currentUser = localStorage.getItem('agla_user') || '';
 
 function setSyncStatus(live, label) {
   const dot = document.getElementById('syncDot');
@@ -2414,12 +2620,30 @@ function setSyncStatus(live, label) {
   if (err) err.style.display = isBad ? 'inline' : 'none';
 }
 
+function buildUserGrid() {
+  document.getElementById('authUserGrid').innerHTML = Object.entries(USERS).map(([id, u]) =>
+    `<div class="auth-user-card" onclick="selectUser('${id}')">
+       <div class="auth-user-avatar" style="background:${u.color}">${u.initials}</div>
+       <div class="auth-user-name">${u.name}</div>
+       <div class="auth-user-role">${u.role}</div>
+     </div>`
+  ).join('');
+}
+
 function submitAuthCode() {
   const code = document.getElementById('authCodeInput').value.trim();
   if (code === TEAM_CODE) {
     localStorage.setItem('agla_auth', TEAM_CODE);
-    document.getElementById('authGate').style.display = 'none';
-    initApp();
+    if (currentUser) {
+      document.getElementById('authGate').style.display = 'none';
+      initApp();
+    } else {
+      document.getElementById('authCardWrap').style.maxWidth = '500px';
+      document.getElementById('authStep1').style.display = 'none';
+      buildUserGrid();
+      const s2 = document.getElementById('authStep2');
+      s2.style.display = 'flex';
+    }
   } else {
     document.getElementById('authErr').textContent = 'Incorrect code. Try again.';
     document.getElementById('authCodeInput').value = '';
@@ -2427,23 +2651,64 @@ function submitAuthCode() {
   }
 }
 
+function selectUser(userId) {
+  currentUser = userId;
+  localStorage.setItem('agla_user', userId);
+  document.getElementById('authGate').style.display = 'none';
+  initApp();
+}
+
+function updateUserUI() {
+  const u = USERS[currentUser];
+  if (!u) return;
+  const av = document.getElementById('cuAvatar');
+  const nm = document.getElementById('cuName');
+  const sb = document.getElementById('sbStatus');
+  const su = document.getElementById('settingsCurrentUser');
+  if (av) { av.textContent = u.initials; av.style.background = u.color; }
+  if (nm) nm.textContent = u.name;
+  if (sb) sb.innerHTML = `<span class="sb-dot"></span>${u.name} · ${u.role}`;
+  if (su) su.textContent = `${u.name} (${u.role})`;
+}
+
+function switchIdentity() {
+  localStorage.removeItem('agla_user');
+  currentUser = '';
+  document.getElementById('authCardWrap').style.maxWidth = '500px';
+  document.getElementById('authStep1').style.display = 'none';
+  buildUserGrid();
+  document.getElementById('authStep2').style.display = 'flex';
+  document.getElementById('authGate').style.display = 'flex';
+}
+
 function checkAuth() {
   if (localStorage.getItem('agla_auth') === TEAM_CODE) {
-    document.getElementById('authGate').style.display = 'none';
-    initApp();
+    if (currentUser) {
+      document.getElementById('authGate').style.display = 'none';
+      initApp();
+    } else {
+      // Code valid but no user selected — show step 2
+      document.getElementById('authCardWrap').style.maxWidth = '500px';
+      document.getElementById('authStep1').style.display = 'none';
+      buildUserGrid();
+      document.getElementById('authStep2').style.display = 'flex';
+    }
   }
-  // else: gate stays visible, user must enter code
+  // else: gate stays visible
 }
 
 /* ─────────────── STORAGE ─────────────── */
 function ensureStateDefaults() {
   LEADS.forEach(l => {
     const k = String(l.id);
-    if (!state[k]) state[k] = {status:'new', notes:'', done:false, assigned:''};
-    if (!state[k].status)              state[k].status   = 'new';
-    if (state[k].notes === undefined)  state[k].notes    = '';
-    if (state[k].done === undefined)   state[k].done     = false;
-    if (state[k].assigned === undefined) state[k].assigned = '';
+    if (!state[k]) state[k] = {status:'new', notes:'', done:false, assigned:'', locked:false, assignedBy:'', assignedAt:''};
+    if (!state[k].status)                 state[k].status     = 'new';
+    if (state[k].notes === undefined)     state[k].notes      = '';
+    if (state[k].done === undefined)      state[k].done       = false;
+    if (state[k].assigned === undefined)  state[k].assigned   = '';
+    if (state[k].locked === undefined)    state[k].locked     = !!state[k].assigned;
+    if (state[k].assignedBy === undefined) state[k].assignedBy = '';
+    if (state[k].assignedAt === undefined) state[k].assignedAt = '';
   });
 }
 
@@ -2459,11 +2724,15 @@ function mergeStates(local, remote) {
     const k = String(l.id);
     const lo = local[k]  || {};
     const re = remote[k] || {};
+    const assigned = lo.assigned || re.assigned || '';
     out[k] = {
-      assigned: lo.assigned || re.assigned || '',
-      status:   pickStatus(lo.status, re.status),
-      notes:    lo.notes    || re.notes    || '',
-      done:     lo.done     || re.done     || false
+      assigned,
+      status:     pickStatus(lo.status, re.status),
+      notes:      lo.notes      || re.notes      || '',
+      done:       lo.done       || re.done        || false,
+      locked:     !!(lo.locked  || re.locked      || assigned),
+      assignedBy: lo.assignedBy || re.assignedBy  || '',
+      assignedAt: lo.assignedAt || re.assignedAt  || ''
     };
   });
   return out;
@@ -2631,7 +2900,125 @@ function persist() {
     .catch(e => { console.warn('Firestore write failed', e); setSyncStatus(false, 'offline'); });
 }
 
+/* ─────────────── AUDIT LOG ─────────────── */
+function logAudit(leadId, company, action, prevOwner, newOwner, reason) {
+  const u = USERS[currentUser];
+  AUDIT_COL.add({
+    leadId:        String(leadId),
+    company:       company || String(leadId),
+    action,        // 'assigned' | 'reassigned' | 'unassigned'
+    prevOwner:     prevOwner || '',
+    prevOwnerName: USERS[prevOwner]?.name || prevOwner || '',
+    newOwner:      newOwner  || '',
+    newOwnerName:  USERS[newOwner]?.name  || newOwner  || '',
+    changedBy:     currentUser,
+    changedByName: u?.name || currentUser || 'Unknown',
+    timestamp:     new Date().toISOString(),
+    reason:        reason || ''
+  }).catch(e => console.warn('Audit log failed', e));
+}
+
+/* ─────────────── REASSIGNMENT ─────────────── */
+let pendingReassign = null;
+
+function showReassignModal(leadId) {
+  const k    = String(leadId);
+  const lead = LEADS.find(l => String(l.id) === k);
+  const s    = state[k] || {};
+  pendingReassign = { leadId: k, company: lead?.company || k, currentOwner: s.assigned };
+
+  document.getElementById('rModalCompany').textContent = lead?.company || k;
+  document.getElementById('rModalFrom').textContent = USERS[s.assigned]?.name || s.assigned || '—';
+  document.getElementById('rModalReason').value = '';
+
+  const sel = document.getElementById('rModalNewOwner');
+  sel.innerHTML = '<option value="">— Select new owner —</option>' +
+    Object.entries(USERS).map(([val, u]) =>
+      `<option value="${val}"${val === s.assigned ? ' disabled' : ''}>${u.name}${val === s.assigned ? ' (current)' : ''}</option>`
+    ).join('') +
+    '<option value="">— Unassign —</option>';
+
+  document.getElementById('reassignModal').classList.add('open');
+}
+
+function confirmReassign() {
+  if (!pendingReassign) return;
+  const { leadId, company, currentOwner } = pendingReassign;
+  const newOwner = document.getElementById('rModalNewOwner').value;
+  const reason   = document.getElementById('rModalReason').value.trim();
+
+  if (newOwner === currentOwner) { closeReassignModal(); return; }
+
+  const k = String(leadId);
+  const action = !newOwner ? 'unassigned' : currentOwner ? 'reassigned' : 'assigned';
+  state[k].assigned   = newOwner;
+  state[k].locked     = !!newOwner;
+  state[k].assignedBy = newOwner ? currentUser : '';
+  state[k].assignedAt = new Date().toISOString();
+
+  persist();
+  logAudit(leadId, company, action, currentOwner, newOwner, reason);
+  closeReassignModal();
+  render();
+  const actionLabel = action === 'unassigned' ? 'Unassigned' : `Reassigned to ${USERS[newOwner]?.name || newOwner}`;
+  showToast(`${actionLabel} — logged in Audit Log`);
+}
+
+function closeReassignModal() {
+  document.getElementById('reassignModal').classList.remove('open');
+  pendingReassign = null;
+}
+
+/* ─────────────── HISTORY VIEW ─────────────── */
+function loadHistory() {
+  document.getElementById('historyContainer').innerHTML = '<div class="audit-loading">Loading…</div>';
+  AUDIT_COL.orderBy('timestamp', 'desc').limit(300).get()
+    .then(snap => {
+      if (snap.empty) {
+        document.getElementById('historyContainer').innerHTML = '<div class="audit-empty">No history yet. Lead assignments will appear here.</div>';
+        return;
+      }
+      const entries = [];
+      snap.forEach(doc => entries.push(doc.data()));
+      const rows = entries.map(e => {
+        const d  = new Date(e.timestamp);
+        const ds = d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+        const ts = d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true });
+        const badge = e.action === 'reassigned'
+          ? `<span class="audit-action-badge reassign">Reassigned</span>`
+          : e.action === 'unassigned'
+          ? `<span class="audit-action-badge unassign">Unassigned</span>`
+          : `<span class="audit-action-badge assign">Assigned</span>`;
+        const fromTo = e.action === 'reassigned'
+          ? `<div class="audit-from-to"><span class="audit-from-val">${esc(e.prevOwnerName||e.prevOwner||'—')}</span><span class="audit-arrow">→</span><span class="audit-to-val">${esc(e.newOwnerName||e.newOwner||'—')}</span></div>`
+          : e.action === 'assigned'
+          ? `<div class="audit-from-to"><span class="audit-arrow">→</span><span class="audit-to-val">${esc(e.newOwnerName||e.newOwner||'—')}</span></div>`
+          : `<div class="audit-from-to"><span class="audit-from-val">${esc(e.prevOwnerName||e.prevOwner||'—')}</span><span class="audit-arrow">→</span><span style="color:var(--muted)">Unassigned</span></div>`;
+        return `<tr>
+          <td><div class="audit-ts"><div class="audit-ts-date">${ds}</div><div class="audit-ts-time">${ts}</div></div></td>
+          <td><div class="audit-company-name" title="${esc(e.company)}">${esc(e.company)}</div></td>
+          <td>${badge}</td>
+          <td>${fromTo}</td>
+          <td><span class="audit-by-name">${esc(e.changedByName||e.changedBy||'?')}</span></td>
+          <td><span class="audit-reason-text">${e.reason ? esc(e.reason) : ''}</span></td>
+        </tr>`;
+      }).join('');
+      document.getElementById('historyContainer').innerHTML = `
+        <table class="audit-table">
+          <thead><tr>
+            <th>Time</th><th>Company</th><th>Action</th>
+            <th>Change</th><th>By</th><th>Reason</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+    })
+    .catch(() => {
+      document.getElementById('historyContainer').innerHTML = '<div class="audit-empty">Failed to load — check Firestore connection</div>';
+    });
+}
+
 function initApp() {
+  updateUserUI();
   loadState();
   render();
   showSaved();
@@ -2749,13 +3136,16 @@ function render() {
 
     tr.innerHTML = `
       <td class="td-assigned">
-        <select class="assigned-sel${s.assigned?' has-val':''}" data-action="assigned" data-id="${k}" title="${s.assigned||'Unassigned'}">
-          <option value="" ${!s.assigned?'selected':''}>—</option>
-          <option value="ian"      ${s.assigned==='ian'      ?'selected':''}>Ian</option>
-          <option value="rizzalyn" ${s.assigned==='rizzalyn' ?'selected':''}>Rizzalyn</option>
-          <option value="rutchel"  ${s.assigned==='rutchel'  ?'selected':''}>Rutchel</option>
-          <option value="junnel"   ${s.assigned==='junnel'   ?'selected':''}>Junnel</option>
-        </select>
+        ${s.assigned && s.locked
+          ? `<button class="lock-badge" onclick="showReassignModal('${k}')" title="Assigned to ${esc(USERS[s.assigned]?.name||s.assigned)} — click to reassign">
+               <svg class="lock-icon" width="9" height="9" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+               ${esc(USERS[s.assigned]?.name||s.assigned)}
+             </button>`
+          : `<select class="assigned-sel" data-action="assigned" data-id="${k}" title="Unassigned — click to assign">
+               <option value="">— Assign</option>
+               ${Object.entries(USERS).map(([val,u])=>`<option value="${val}">${u.name}</option>`).join('')}
+             </select>`
+        }
       </td>
       <td class="td-num">${l.id}</td>
       <td class="td-company"><div class="company-cell"><div class="co-avatar ${avatarClass}">${initials}</div>${companyCellInner}<button class="co-fill-btn" data-action="fill-gen" data-id="${k}" title="Load in Outreach Generator">→ Gen</button></div></td>
@@ -2841,9 +3231,16 @@ document.getElementById('tbody').addEventListener('change', e => {
   }
 
   if (action === 'assigned') {
-    state[id].assigned = el.value;
-    el.classList.toggle('has-val', !!el.value);
+    const newOwner = el.value;
+    const lead = LEADS.find(l => String(l.id) === id);
+    state[id].assigned   = newOwner;
+    state[id].locked     = !!newOwner;
+    state[id].assignedBy = newOwner ? currentUser : '';
+    state[id].assignedAt = new Date().toISOString();
+    el.classList.toggle('has-val', !!newOwner);
     persist();
+    logAudit(id, lead?.company || id, 'assigned', '', newOwner, '');
+    render();
   }
 
   if (action === 'done') {
@@ -3595,6 +3992,7 @@ function switchView(view) {
     n.classList.toggle('active', n.dataset.view === view)
   );
   if (view === 'intelligence') renderIntelligence();
+  if (view === 'history') loadHistory();
   if (view === 'outreach') {
     renderPmCards(document.querySelector('.pm-pill.active')?.dataset.industry || 'dental');
     if (!plRendered) renderPitchLib();
