@@ -2855,11 +2855,15 @@ function loadState() {
       setSyncStatus(true, 'synced');
 
     } else {
+      // Document doesn't exist in Firestore
       firstSync = false;
       firestoreSynced = true;
-      // Only push to Firestore if local has real data — never create an empty doc
+      setSyncStatus(true, 'synced');
       if (dataRichness(state) > 0) {
         pushToCloud();
+      } else {
+        // State is empty AND doc doesn't exist — recover from audit log
+        autoRecoverFromAudit();
       }
     }
   }, err => {
