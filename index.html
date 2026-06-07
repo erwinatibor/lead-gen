@@ -3392,18 +3392,19 @@ function getFiltered() {
   const sta = document.getElementById('filterStatus').value;
 
   return LEADS.filter(l => {
+    const s = state[String(l.id)] || {};
     if (ind && l.industry !== ind) return false;
     if (ctr && l.country !== ctr)  return false;
-    if (sta && state[String(l.id)].status !== sta) return false;
+    if (sta && s.status !== sta) return false;
     if (q) {
       const hay = [l.company, l.contact, l.title, l.email, l.phone, l.address, l.country, l.industry,
-                   state[String(l.id)].notes].join(' ').toLowerCase();
+                   s.notes || ''].join(' ').toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
   }).sort((a, b) => {
-    let av = sortCol === 'status' ? state[String(a.id)].status : (a[sortCol] ?? '');
-    let bv = sortCol === 'status' ? state[String(b.id)].status : (b[sortCol] ?? '');
+    let av = sortCol === 'status' ? (state[String(a.id)]||{}).status||'' : (a[sortCol] ?? '');
+    let bv = sortCol === 'status' ? (state[String(b.id)]||{}).status||'' : (b[sortCol] ?? '');
     if (typeof av === 'number') return (av - bv) * sortDir;
     return String(av).localeCompare(String(bv)) * sortDir;
   });
@@ -3423,7 +3424,7 @@ function render() {
 
   leads.forEach(l => {
     const k  = String(l.id);
-    const s  = state[k];
+    const s  = state[k] || { status:'new', notes:'', done:false, assigned:'', locked:false };
     const tr = document.createElement('tr');
     tr.dataset.id = k;
     tr.className  = `row-${s.status}${s.done ? ' done-row' : ''}`;
