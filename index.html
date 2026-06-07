@@ -1258,6 +1258,7 @@
           <div class="sync-dot" id="syncDot" title="Firebase sync"></div>
           <span id="syncText" style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace">offline</span>
           <span id="syncError" style="display:none;font-size:9px;color:var(--red);font-family:'JetBrains Mono',monospace;cursor:pointer" onclick="switchView('settings')" title="Click to open Settings for manual sync options">⚠ fix</span>
+          <button id="recoverBtn" onclick="recoverFromAuditLog()" title="Restore assignments from audit log" style="display:none;font-size:9px;padding:2px 7px;height:22px;background:rgba(0,255,174,.15);border:1px solid rgba(0,255,174,.3);color:var(--green);border-radius:5px;cursor:pointer;font-family:'JetBrains Mono',monospace;white-space:nowrap">⟳ Recover</button>
         </div>
         <div class="cu-chip" id="cuChip" onclick="switchView('settings')" title="Logged in as — click to change">
           <div class="cu-avatar" id="cuAvatar">?</div>
@@ -2652,10 +2653,12 @@ function setSyncStatus(live, label) {
   const dot = document.getElementById('syncDot');
   const text = document.getElementById('syncText');
   const err  = document.getElementById('syncError');
+  const rec  = document.getElementById('recoverBtn');
   if (dot)  dot.classList.toggle('live', live);
   if (text) text.textContent = label;
   const isBad = !live && (label === 'rules!' || label === 'offline' || label === 'failed');
   if (err) err.style.display = isBad ? 'inline' : 'none';
+  if (rec) rec.style.display = isBad ? 'inline-flex' : 'none';
   if (live) hideOfflineBanner();
 }
 
