@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <!-- Cache buster: redirect to versioned URL so CDN always serves latest code -->
-<script>(function(){var V='9';var p=new URLSearchParams(location.search);if(p.get('v')!==V){location.replace(location.pathname+'?v='+V+(location.hash||''));}}());</script>
+<script>(function(){var V='10';var p=new URLSearchParams(location.search);if(p.get('v')!==V){location.replace(location.pathname+'?v='+V+(location.hash||''));}}());</script>
 <title>Lead Tracker | Ian Fleni Sison</title>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -1300,7 +1300,7 @@
             </svg>
             <input type="search" id="searchInput" placeholder="Search company, contact…">
           </div>
-          <select id="filterIndustry">
+          <select id="filterIndustry" autocomplete="off">
             <option value="">All Industries</option>
             <option>Dental</option>
             <option>MedSpa</option>
@@ -1314,14 +1314,14 @@
             <option>Orthodontics</option>
             <option>Aesthetics</option>
           </select>
-          <select id="filterCountry">
+          <select id="filterCountry" autocomplete="off">
             <option value="">All Countries</option>
             <option>US</option>
             <option>Australia</option>
             <option>Canada</option>
             <option>Philippines</option>
           </select>
-          <select id="filterStatus">
+          <select id="filterStatus" autocomplete="off">
             <option value="">All Statuses</option>
             <option value="new">New</option>
             <option value="contacted">Contacted</option>
@@ -2769,9 +2769,10 @@ function checkAuth() {
 
 /* ─────────────── STORAGE ─────────────── */
 function ensureStateDefaults() {
+  if (!state || typeof state !== 'object' || Array.isArray(state)) state = {};
   LEADS.forEach(l => {
     const k = String(l.id);
-    if (!state[k]) state[k] = {status:'new', notes:'', done:false, assigned:'', locked:false, assignedBy:'', assignedAt:''};
+    if (!state[k] || typeof state[k] !== 'object') state[k] = {status:'new', notes:'', done:false, assigned:'', locked:false, assignedBy:'', assignedAt:''};
     if (!state[k].status)                 state[k].status     = 'new';
     if (state[k].notes === undefined)     state[k].notes      = '';
     if (state[k].done === undefined)      state[k].done       = false;
@@ -2820,8 +2821,11 @@ function loadState() {
   // seed from localStorage for instant render while Firestore loads
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) state = JSON.parse(raw);
-  } catch(e) { state = {}; }
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) state = parsed;
+    }
+  } catch(e) {}
   ensureStateDefaults();
 
   let firstSync = true;
@@ -3201,8 +3205,10 @@ function doImportState() {
 }
 
 function persist() {
-  // local save first (instant)
-  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+  // Only overwrite localStorage when state has all leads — prevents saving empty/partial state
+  if (state && typeof state === 'object' && Object.keys(state).length >= LEADS.length) {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+  }
   showSaved();
   // Only push to Firestore after we've received the first snapshot —
   // prevents an early refresh from overwriting Firestore with empty defaults
@@ -3350,12 +3356,22 @@ function initApp() {
   // Load localStorage state first so render() has valid state[id] objects
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) state = JSON.parse(raw);
-  } catch(e) { state = {}; }
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) state = parsed;
+    }
+  } catch(e) {}
   ensureStateDefaults();
   // Persist immediately so a hard refresh always finds lead data in localStorage
   try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
   try { render(); } catch(e) { console.error('[render]', e); setTimeout(render, 100); }
+  // Failsafe: if tbody is empty after 800ms (e.g. render threw silently), force another render
+  setTimeout(() => {
+    try {
+      const tbody = document.getElementById('tbody');
+      if (tbody && tbody.rows.length === 0 && LEADS.length > 0) render();
+    } catch(e) {}
+  }, 800);
   showSaved();
   setTimeout(updateUserUI, 0);
   // Auth first, then start ALL Firestore listeners (rules require request.auth != null)
