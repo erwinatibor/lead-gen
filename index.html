@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <!-- Cache buster: redirect to versioned URL so CDN always serves latest code -->
-<script>(function(){var V='8';var p=new URLSearchParams(location.search);if(p.get('v')!==V){location.replace(location.pathname+'?v='+V+(location.hash||''));}}());</script>
+<script>(function(){var V='9';var p=new URLSearchParams(location.search);if(p.get('v')!==V){location.replace(location.pathname+'?v='+V+(location.hash||''));}}());</script>
 <title>Lead Tracker | Ian Fleni Sison</title>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -3338,13 +3338,24 @@ function loadHistory() {
 
 function initApp() {
   updateUserUI();
+  // Reset all filters — browser restores form values on soft refresh which can hide all rows
+  const _si = document.getElementById('searchInput');
+  const _fi = document.getElementById('filterIndustry');
+  const _fc = document.getElementById('filterCountry');
+  const _fs = document.getElementById('filterStatus');
+  if (_si) _si.value = '';
+  if (_fi) _fi.value = '';
+  if (_fc) _fc.value = '';
+  if (_fs) _fs.value = '';
   // Load localStorage state first so render() has valid state[id] objects
   try {
     const raw = localStorage.getItem(KEY);
     if (raw) state = JSON.parse(raw);
   } catch(e) { state = {}; }
   ensureStateDefaults();
-  render();
+  // Persist immediately so a hard refresh always finds lead data in localStorage
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+  try { render(); } catch(e) { console.error('[render]', e); setTimeout(render, 100); }
   showSaved();
   setTimeout(updateUserUI, 0);
   // Auth first, then start ALL Firestore listeners (rules require request.auth != null)
