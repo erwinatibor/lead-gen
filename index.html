@@ -3105,8 +3105,23 @@ function parseRestDoc(doc) {
 async function restoreViaREST() {
   showToast('Trying REST connection…');
   try {
+    // Get Firebase auth token if available (needed when rules require request.auth != null)
+    let authHeader = {};
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        const token = await user.getIdToken();
+        authHeader = { 'Authorization': `Bearer ${token}` };
+      }
+    } catch(e) {}
+
+    const fetchFS = (path) => fetch(
+      `${FS_REST}/${path}?key=${FS_KEY}`,
+      { headers: authHeader }
+    );
+
     // 1. Check leadState first
-    const stateRes = await fetch(`${FS_REST}/agla/leadState?key=${FS_KEY}`);
+    const stateRes = await fetchFS('agla/leadState');
     if (stateRes.ok) {
       const stateDoc = await stateRes.json();
       if (stateDoc.fields) {
@@ -3122,11 +3137,11 @@ async function restoreViaREST() {
         }
       }
     }
-    // 2. leadState empty → try audit collection via REST
+    // 2. leadState empty → try audit collection via REST (paginated)
     let allDocs = [], pageToken = null;
     do {
       const url = `${FS_REST}/aglaAudit?key=${FS_KEY}&pageSize=300${pageToken ? '&pageToken=' + pageToken : ''}`;
-      const res = await fetch(url);
+      const res = await fetch(url, { headers: authHeader });
       if (!res.ok) break;
       const json = await res.json();
       (json.documents || []).forEach(d => allDocs.push(parseRestDoc(d)));
@@ -3141,7 +3156,7 @@ async function restoreViaREST() {
     }
   } catch(e) {
     console.warn('REST fallback failed', e);
-    showToast('Cannot reach Firestore via HTTP either — check Firebase Console rules');
+    showToast('Cannot reach Firestore — disable Brave Shields or try Chrome');
   }
 }
 
