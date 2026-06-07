@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <!-- Cache buster: redirect to versioned URL so CDN always serves latest code -->
-<script>(function(){var V='10';var p=new URLSearchParams(location.search);if(p.get('v')!==V){location.replace(location.pathname+'?v='+V+(location.hash||''));}}());</script>
+<script>(function(){var V='11';var p=new URLSearchParams(location.search);if(p.get('v')!==V){location.replace(location.pathname+'?v='+V+(location.hash||''));}}());</script>
 <title>Lead Tracker | Ian Fleni Sison</title>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -836,12 +836,6 @@
   .pm-copy-btn.copied { background:var(--blue); border-color:var(--blue); color:#fff; }
   @media(max-width:680px) { .pm-cards { grid-template-columns:1fr; } }
 
-  /* ── ASSIGNED DROPDOWN ── */
-  .th-assigned { width:76px; min-width:76px; padding:9px 6px; }
-  .td-assigned { width:76px; min-width:76px; padding:5px 6px; cursor:default; }
-  .assigned-sel { font-size:9.5px; padding:2px 2px 2px 4px; background:var(--surface); border:1px solid var(--border2); color:var(--muted); border-radius:5px; cursor:pointer; font-family:inherit; width:100%; min-width:0; appearance:none; background-image:none; }
-  .assigned-sel.has-val { color:var(--green); border-color:rgba(0,255,174,.35); font-weight:700; }
-
   /* ── MEMBER SCOREBOARD ── */
   .intel-member-section { margin-bottom:4px; }
   .intel-member-label { font-size:9.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--green); font-family:'JetBrains Mono',monospace; margin-bottom:10px; display:block; }
@@ -933,15 +927,6 @@
   .co-fill-btn:hover { background:var(--green); color:#000; }
   tr:hover .co-fill-btn { display:inline-flex; }
 
-  /* ── STICKY ASSIGNED COLUMN ── */
-  .th-assigned, .td-assigned {
-    position:sticky; left:0; z-index:3;
-    background:var(--sidebar-bg);
-    border-right:1px solid var(--border);
-  }
-  tbody tr:hover .td-assigned { background:rgba(5,10,22,.97); }
-  tbody tr.done-row .td-assigned { background:var(--sidebar-bg); }
-
   /* ── TABLET: hide Address, Position, Phone (keep LinkedIn!) ── */
   @media(max-width:1024px) {
     th:nth-child(6), td:nth-child(6),
@@ -991,186 +976,11 @@
     .topbar { padding:0 10px; }
   }
 
-  /* ── AUTH GATE ── */
-  .auth-gate {
-    position:fixed; inset:0; background:rgba(7,9,18,.97);
-    display:flex; align-items:center; justify-content:center;
-    z-index:9999; backdrop-filter:blur(8px);
-  }
-  .auth-card {
-    background:var(--card); border:1px solid var(--border);
-    border-radius:16px; padding:36px 32px; width:100%; max-width:340px;
-    display:flex; flex-direction:column; gap:14px; text-align:center;
-    box-shadow:0 0 60px rgba(0,255,174,.08);
-  }
-  .auth-logo { font-size:11px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); font-family:'JetBrains Mono',monospace; }
-  .auth-title { font-size:20px; font-weight:700; color:var(--text); }
-  .auth-desc { font-size:12px; color:var(--muted); line-height:1.5; }
-  .auth-input {
-    background:var(--surface); border:1px solid var(--border2); color:var(--text);
-    border-radius:9px; padding:10px 14px; font-size:14px; font-family:inherit;
-    outline:none; text-align:center; letter-spacing:.12em; transition:border-color .2s;
-  }
-  .auth-input:focus { border-color:var(--accent); box-shadow:0 0 0 2px rgba(0,255,174,.12); }
-  .auth-btn {
-    background:linear-gradient(135deg,#00ffae,#00d084); color:#000;
-    border:none; border-radius:9px; padding:12px; font-size:14px; font-weight:800;
-    cursor:pointer; transition:all .2s; font-family:inherit; letter-spacing:.02em;
-    box-shadow:0 4px 18px rgba(0,255,174,.25);
-  }
-  .auth-btn:hover { box-shadow:0 0 28px rgba(0,255,174,.45); transform:translateY(-1px); }
-  .auth-err { font-size:11px; color:var(--red); min-height:16px; }
   .sync-dot { width:6px; height:6px; border-radius:50%; background:var(--muted); flex-shrink:0; transition:background .3s; }
   .sync-dot.live { background:var(--accent); box-shadow:0 0 6px var(--accent); }
-
-  /* ── USER SELECTION STEP ── */
-  .auth-step2 { display:none; flex-direction:column; gap:16px; }
-  .auth-user-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-  .auth-user-card {
-    background:var(--surface2); border:1px solid var(--border2);
-    border-radius:12px; padding:14px 10px; cursor:pointer;
-    transition:border-color .18s, background .18s, transform .12s;
-    display:flex; flex-direction:column; align-items:center; gap:8px;
-    user-select:none;
-  }
-  .auth-user-card:hover { border-color:var(--accent); background:rgba(0,255,174,.06); transform:translateY(-1px); }
-  .auth-user-avatar {
-    width:38px; height:38px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    font-size:13px; font-weight:800; color:#000; flex-shrink:0;
-  }
-  .auth-user-name { font-size:12px; font-weight:700; color:var(--text); }
-  .auth-user-role { font-size:9px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-family:'JetBrains Mono',monospace; }
-
-  /* ── CURRENT USER CHIP ── */
-  .cu-chip {
-    display:flex; align-items:center; gap:7px; padding:4px 10px 4px 4px;
-    background:var(--surface); border:1px solid var(--border2); border-radius:20px;
-    cursor:pointer; transition:border-color .15s;
-  }
-  .cu-chip:hover { border-color:rgba(0,255,174,.4); }
-  .cu-avatar {
-    width:22px; height:22px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    font-size:9px; font-weight:800; color:#000; flex-shrink:0;
-  }
-  .cu-name { font-size:11px; font-weight:600; color:var(--text2); }
-
-  /* ── LOCK BADGE (assigned cell) ── */
-  .lock-badge {
-    display:flex; align-items:center; gap:5px;
-    padding:3px 7px 3px 5px; border-radius:5px;
-    background:rgba(0,255,174,.07); border:1px solid rgba(0,255,174,.2);
-    cursor:pointer; transition:background .15s, border-color .15s;
-    font-size:10px; font-weight:700; color:var(--green); white-space:nowrap;
-    width:100%; max-width:100%;
-  }
-  .lock-badge:hover { background:rgba(0,255,174,.14); border-color:rgba(0,255,174,.4); }
-  .lock-icon { flex-shrink:0; opacity:.8; }
-
-  /* ── REASSIGN MODAL ── */
-  .rmodal-backdrop {
-    position:fixed; inset:0; z-index:600;
-    background:rgba(0,0,0,.65); backdrop-filter:blur(8px);
-    display:flex; align-items:center; justify-content:center;
-    opacity:0; pointer-events:none; transition:opacity .2s;
-  }
-  .rmodal-backdrop.open { opacity:1; pointer-events:auto; }
-  .rmodal {
-    background:var(--surface); border:1px solid rgba(239,68,68,.3);
-    border-radius:16px; padding:0; width:100%; max-width:420px;
-    transform:scale(.96) translateY(8px); opacity:0;
-    transition:transform .2s, opacity .2s; overflow:hidden;
-    box-shadow:0 32px 80px rgba(0,0,0,.5);
-  }
-  .rmodal-backdrop.open .rmodal { transform:scale(1) translateY(0); opacity:1; }
-  .rmodal-header {
-    background:rgba(239,68,68,.08); border-bottom:1px solid rgba(239,68,68,.2);
-    padding:18px 20px; display:flex; align-items:center; gap:12px;
-  }
-  .rmodal-warn-icon { color:#ef4444; flex-shrink:0; }
-  .rmodal-title { font-size:14px; font-weight:800; color:var(--text); letter-spacing:-.01em; }
-  .rmodal-body { padding:20px; display:flex; flex-direction:column; gap:14px; }
-  .rmodal-company { font-size:11px; color:var(--muted); font-family:'JetBrains Mono',monospace; }
-  .rmodal-company strong { color:var(--text); font-size:13px; }
-  .rmodal-owners { display:flex; align-items:center; gap:10px; padding:12px 14px; background:var(--surface2); border-radius:10px; border:1px solid var(--border); }
-  .rmodal-owner-from { font-size:12px; font-weight:700; color:var(--red); }
-  .rmodal-arrow { color:var(--muted); font-size:16px; }
-  .rmodal-owner-sel {
-    flex:1; background:var(--bg); border:1px solid rgba(0,255,174,.3);
-    color:var(--green); border-radius:7px; padding:6px 10px; font-size:12px;
-    font-weight:700; font-family:inherit; outline:none; cursor:pointer;
-  }
-  .rmodal-label { font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-family:'JetBrains Mono',monospace; }
-  .rmodal-reason {
-    width:100%; background:var(--bg); border:1px solid var(--border2);
-    color:var(--text2); border-radius:8px; padding:9px 12px; font-size:12px;
-    font-family:inherit; resize:none; outline:none; line-height:1.5;
-  }
-  .rmodal-reason:focus { border-color:rgba(0,255,174,.35); }
-  .rmodal-note { font-size:10.5px; color:var(--muted); line-height:1.5; }
-  .rmodal-foot { padding:14px 20px; border-top:1px solid var(--border); display:flex; gap:8px; justify-content:flex-end; }
-
-  /* ── HISTORY VIEW ── */
-  .history-view { padding:20px 24px; flex:none !important; height:auto !important; display:flex; flex-direction:column; gap:16px; overflow-y:visible; }
-  .history-view-header { display:flex; align-items:flex-start; justify-content:space-between; }
-  .history-view-title { font-size:17px; font-weight:800; color:var(--text); letter-spacing:-.02em; }
-  .history-view-desc { font-size:11px; color:var(--muted); margin-top:2px; }
-  .audit-table { width:100%; max-width:820px; border-collapse:collapse; font-size:11.5px; table-layout:fixed; }
-  .audit-table th { font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-family:'JetBrains Mono',monospace; font-weight:600; padding:7px 8px; text-align:left; border-bottom:1px solid var(--border); white-space:nowrap; }
-  .audit-table td { padding:8px 8px; border-bottom:1px solid var(--border); vertical-align:middle; }
-  .audit-table col.col-time    { width:100px; }
-  .audit-table col.col-company { width:180px; }
-  .audit-table col.col-action  { width:96px; }
-  .audit-table col.col-change  { width:160px; }
-  .audit-table col.col-by      { width:80px; }
-  .audit-table col.col-reason  { width:auto; }
-  .audit-table tr:hover td { background:var(--surface2); }
-  .audit-action-badge {
-    display:inline-flex; align-items:center; padding:2px 8px; border-radius:4px;
-    font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; font-family:'JetBrains Mono',monospace;
-  }
-  .audit-action-badge.assign   { background:rgba(0,255,174,.12); color:var(--green); border:1px solid rgba(0,255,174,.25); }
-  .audit-action-badge.reassign { background:rgba(245,158,11,.12); color:#f59e0b;       border:1px solid rgba(245,158,11,.25); }
-  .audit-action-badge.unassign { background:rgba(239,68,68,.10); color:var(--red);     border:1px solid rgba(239,68,68,.2); }
-  .audit-from-to { display:flex; align-items:center; gap:6px; font-family:'JetBrains Mono',monospace; }
-  .audit-from-val { color:var(--red); font-weight:700; font-size:11px; }
-  .audit-to-val   { color:var(--green); font-weight:700; font-size:11px; }
-  .audit-arrow { color:var(--muted); font-size:12px; }
-  .audit-by-name { font-weight:700; color:var(--text); }
-  .audit-reason-text { font-style:italic; color:var(--muted); font-size:11px; }
-  .audit-ts { display:flex; flex-direction:column; gap:1px; }
-  .audit-ts-date { color:var(--text2); font-size:10.5px; }
-  .audit-ts-time { color:var(--muted); font-size:9.5px; font-family:'JetBrains Mono',monospace; }
-  .audit-company-name { font-weight:600; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block; }
-  .audit-empty { text-align:center; padding:48px; color:var(--muted); font-size:13px; }
-  .audit-loading { text-align:center; padding:48px; color:var(--muted); font-size:12px; font-family:'JetBrains Mono',monospace; }
 </style>
 </head>
 <body>
-
-<!-- AUTH GATE -->
-<div class="auth-gate" id="authGate" style="display:none">
-  <div class="auth-card" id="authCardWrap" style="max-width:340px">
-    <!-- Step 1: Access Code -->
-    <div id="authStep1">
-      <div class="auth-logo">AGLA Media</div>
-      <div class="auth-title">Team Access</div>
-      <div class="auth-desc">Enter the team access code your administrator shared with you.</div>
-      <input class="auth-input" type="password" id="authCodeInput" placeholder="Access code" maxlength="32"
-        onkeydown="if(event.key==='Enter')submitAuthCode()">
-      <button class="auth-btn" onclick="submitAuthCode()">Enter</button>
-      <div class="auth-err" id="authErr"></div>
-    </div>
-    <!-- Step 2: Who are you? -->
-    <div class="auth-step2" id="authStep2">
-      <div class="auth-logo">AGLA Media</div>
-      <div class="auth-title">Who are you?</div>
-      <div class="auth-desc">Select your name so your actions are tracked.</div>
-      <div class="auth-user-grid" id="authUserGrid"></div>
-    </div>
-  </div>
-</div>
 
 <div class="app-wrapper">
 
@@ -1263,18 +1073,7 @@
           <div class="sync-dot" id="syncDot" title="Firebase sync"></div>
           <span id="syncText" style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace">local</span>
           <span id="syncError" style="display:none;font-size:9px;color:var(--red);font-family:'JetBrains Mono',monospace;cursor:pointer" onclick="switchView('settings')" title="Click to open Settings for manual sync options">⚠ fix</span>
-          <button id="recoverBtn" onclick="recoverFromAuditLog()" title="Restore assignments from audit log" style="display:none;font-size:9px;padding:2px 7px;height:22px;background:rgba(0,255,174,.15);border:1px solid rgba(0,255,174,.3);color:var(--green);border-radius:5px;cursor:pointer;font-family:'JetBrains Mono',monospace;white-space:nowrap">⟳ Recover</button>
         </div>
-        <div class="cu-chip" id="cuChip" onclick="switchView('settings')" title="Logged in as — click to change">
-          <div class="cu-avatar" id="cuAvatar">?</div>
-          <span class="cu-name" id="cuName">You</span>
-        </div>
-        <button class="btn btn-ghost" id="btnAuditLog" onclick="toggleAuditPanel()">
-          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
-          </svg>
-          Audit Log
-        </button>
         <button class="btn btn-primary" id="btnExport">
           <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -1335,7 +1134,6 @@
           <table id="leadsTable">
             <thead>
               <tr>
-                <th class="th-assigned">Assigned</th>
                 <th data-col="id">#<span class="si">↕</span></th>
                 <th data-col="company">Company<span class="si">↕</span></th>
                 <th data-col="industry">Industry<span class="si">↕</span></th>
@@ -1903,20 +1701,6 @@ ianentila27@gmail.com</div>
         </div><!-- /.table-inner-wrap -->
       </div><!-- /.table-section -->
 
-      <!-- AUDIT LOG PANEL (inside dashboard, hidden by default) -->
-      <div id="auditPanel" style="display:none; width:380px; flex-shrink:0; border-left:1px solid var(--border); display:none; flex-direction:column; overflow:hidden; background:var(--sidebar-bg);">
-        <div style="padding:14px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-shrink:0;">
-          <div>
-            <div style="font-size:13px; font-weight:700; color:var(--text);">Audit Log</div>
-            <div style="font-size:10px; color:var(--muted); margin-top:1px;">Assignment history</div>
-          </div>
-          <button onclick="toggleAuditPanel()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;line-height:1;padding:2px 6px;" title="Close">×</button>
-        </div>
-        <div id="historyContainer" style="overflow-y:auto; flex:1; padding:8px 0;">
-          <div class="audit-loading">Loading…</div>
-        </div>
-      </div>
-
     </div><!-- /.workspace -->
 
     <!-- ── INTELLIGENCE VIEW ── -->
@@ -1957,10 +1741,6 @@ ianentila27@gmail.com</div>
             <div class="intel-stat-val" id="iFull">—</div>
             <div class="intel-stat-pct" id="iFullPct">email + li + name</div>
           </div>
-        </div>
-        <div class="intel-member-section">
-          <span class="intel-member-label">Outreach Team: Lead Tracker</span>
-          <div class="intel-member-grid" id="intelMemberGrid"></div>
         </div>
         <div class="intel-tables">
           <div class="intel-table-card">
@@ -2238,14 +2018,6 @@ ianentila27@gmail.com</div>
             <button class="settings-btn" onclick="document.getElementById('btnExport').click()">Export CSV</button>
           </div>
           <div class="settings-data-row">
-            <span class="settings-data-label">Logged in as</span>
-            <span class="settings-data-val" id="settingsCurrentUser">—</span>
-          </div>
-          <div class="settings-data-row">
-            <span class="settings-data-label">Switch identity</span>
-            <button class="settings-btn" onclick="switchIdentity()">Change User</button>
-          </div>
-          <div class="settings-data-row">
             <span class="settings-data-label">Force-push local data to cloud (emergency)</span>
             <button class="settings-btn" onclick="pushToCloud()">↑ Push</button>
           </div>
@@ -2254,15 +2026,11 @@ ianentila27@gmail.com</div>
             <button class="settings-btn" onclick="pullFromCloud()">↓ Pull</button>
           </div>
           <div class="settings-data-row">
-            <span class="settings-data-label">Recover assignments from audit log</span>
-            <button class="settings-btn" style="background:var(--green);color:#000;font-weight:700" onclick="recoverFromAuditLog()">⟳ Recover</button>
-          </div>
-          <div class="settings-data-row">
-            <span class="settings-data-label">Copy assignments to clipboard (manual transfer)</span>
+            <span class="settings-data-label">Copy state to clipboard (manual transfer)</span>
             <button class="settings-btn" onclick="copyStateJSON()">Copy State</button>
           </div>
           <div class="settings-data-row">
-            <span class="settings-data-label">Import assignments from another device (paste JSON)</span>
+            <span class="settings-data-label">Import state from another device (paste JSON)</span>
             <button class="settings-btn" onclick="showImportModal()">Import State</button>
           </div>
           <div class="settings-data-row">
@@ -2340,45 +2108,6 @@ ianentila27@gmail.com</div>
       <div style="margin-left:auto">
         <button class="gen-modal-btn-sec" onclick="closeGenModal()">Close</button>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- REASSIGN MODAL -->
-<div id="reassignModal" class="rmodal-backdrop" onclick="if(event.target===this)closeReassignModal()">
-  <div class="rmodal">
-    <div class="rmodal-header">
-      <svg class="rmodal-warn-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-      </svg>
-      <div>
-        <div class="rmodal-title">Lead Already Assigned</div>
-      </div>
-    </div>
-    <div class="rmodal-body">
-      <div class="rmodal-company">Company: <strong id="rModalCompany">—</strong></div>
-      <div class="rmodal-owners">
-        <div>
-          <div class="rmodal-label" style="margin-bottom:3px">Current Owner</div>
-          <div class="rmodal-owner-from" id="rModalFrom">—</div>
-        </div>
-        <div class="rmodal-arrow">→</div>
-        <div style="flex:1">
-          <div class="rmodal-label" style="margin-bottom:3px">New Owner</div>
-          <select class="rmodal-owner-sel" id="rModalNewOwner">
-            <option value="">— Select —</option>
-          </select>
-        </div>
-      </div>
-      <div>
-        <div class="rmodal-label" style="margin-bottom:6px">Reason (optional — will be logged)</div>
-        <textarea class="rmodal-reason" id="rModalReason" rows="2" placeholder="e.g. Transferred per manager request…"></textarea>
-      </div>
-      <div class="rmodal-note">⚠ This reassignment will be permanently recorded in the Audit Log with your name, timestamp, and reason.</div>
-    </div>
-    <div class="rmodal-foot">
-      <button onclick="closeReassignModal()" style="background:none;border:1px solid var(--border2);color:var(--muted);border-radius:7px;padding:7px 16px;cursor:pointer;font-size:12px">Cancel</button>
-      <button onclick="confirmReassign()" style="background:var(--red);border:none;color:#fff;border-radius:7px;padding:7px 18px;cursor:pointer;font-size:12px;font-weight:700">Confirm Reassign</button>
     </div>
   </div>
 </div>
@@ -2600,8 +2329,6 @@ let sortCol = 'id', sortDir = 1;
 let notesTimers = {};  // debounce timers per lead id
 
 /* ─────────────── FIREBASE ─────────────── */
-const TEAM_CODE = 'AGLA2025'; // share this with your 4 friends
-
 const firebaseConfig = {
   apiKey: "AIzaSyB4I0gjGzfV9ftSlWB1rMXjjTezifbImAM",
   authDomain: "personal-tracker-job-hunting.firebaseapp.com",
@@ -2616,55 +2343,16 @@ const db   = firebase.firestore();
 db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
 const STATE_DOC   = db.doc('agla/leadState');
 const CONFIG_DOC  = db.doc('agla/config');
-const AUDIT_COL   = db.collection('aglaAudit');
-
-const USERS = {
-  ian:      { name:'Ian',      role:'manager', color:'#00ffae', initials:'I'  },
-  rizzalyn: { name:'Rizzalyn', role:'agent',   color:'#3b82f6', initials:'Ri' },
-  rutchel:  { name:'Rutchel',  role:'agent',   color:'#a855f7', initials:'Ru' },
-  junnel:   { name:'Junnel',   role:'agent',   color:'#f59e0b', initials:'J'  },
-};
-// Helpers to save/load user across localStorage AND cookie (belt-and-suspenders)
-const VALID_USERS = {ian:1,rizzalyn:1,rutchel:1,junnel:1};
-function saveUserIdentity(userId) {
-  localStorage.setItem('agla_user', userId);
-  document.cookie = `agla_user=${userId};max-age=${365*24*3600};path=/;SameSite=Strict`;
-}
-function loadUserIdentity() {
-  const ls = localStorage.getItem('agla_user');
-  if (ls && VALID_USERS[ls]) return ls;
-  const m = document.cookie.match(/(?:^|;\s*)agla_user=([^;]+)/);
-  if (m && VALID_USERS[m[1]]) return m[1];
-  return '';
-}
-// Clean up stale/invalid saved user
-(function() {
-  const saved = localStorage.getItem('agla_user');
-  if (saved && !VALID_USERS[saved]) localStorage.removeItem('agla_user');
-})();
-let currentUser = loadUserIdentity();
-// Immediately stamp chip so there's never a "You" flash
-if (currentUser && USERS[currentUser]) {
-  const _u = USERS[currentUser];
-  const _av = document.getElementById('cuAvatar');
-  const _nm = document.getElementById('cuName');
-  const _sb = document.getElementById('sbStatus');
-  if (_av) { _av.textContent = _u.initials; _av.style.background = _u.color; }
-  if (_nm) _nm.textContent = _u.name;
-  if (_sb) _sb.innerHTML = `<span class="sb-dot"></span>${_u.name} · ${_u.role}`;
-}
 
 function setSyncStatus(live, label) {
   const dot = document.getElementById('syncDot');
   const text = document.getElementById('syncText');
   const err  = document.getElementById('syncError');
-  const rec  = document.getElementById('recoverBtn');
   if (dot)  dot.classList.toggle('live', live);
   // Show 'local' instead of 'offline' — data saves to localStorage regardless
   if (text) text.textContent = (label === 'offline') ? 'local' : label;
   const isBad = !live && (label === 'rules!' || label === 'failed');
   if (err) err.style.display = isBad ? 'inline' : 'none';
-  if (rec) rec.style.display = isBad ? 'inline-flex' : 'none';
   if (live) hideOfflineBanner();
 }
 
@@ -2688,98 +2376,15 @@ function hideOfflineBanner() {
   if (el) el.remove();
 }
 
-function buildUserGrid() {
-  document.getElementById('authUserGrid').innerHTML = Object.entries(USERS).map(([id, u]) =>
-    `<div class="auth-user-card" onclick="selectUser('${id}')">
-       <div class="auth-user-avatar" style="background:${u.color}">${u.initials}</div>
-       <div class="auth-user-name">${u.name}</div>
-       <div class="auth-user-role">${u.role}</div>
-     </div>`
-  ).join('');
-}
-
-function submitAuthCode() {
-  const code = document.getElementById('authCodeInput').value.trim();
-  if (code === TEAM_CODE) {
-    localStorage.setItem('agla_auth', TEAM_CODE);
-    if (currentUser) {
-      document.getElementById('authGate').style.display = 'none';
-      initApp();
-    } else {
-      // First time — ask who they are, then enter app
-      document.getElementById('authCardWrap').style.maxWidth = '500px';
-      document.getElementById('authStep1').style.display = 'none';
-      buildUserGrid();
-      document.getElementById('authStep2').style.display = 'flex';
-    }
-  } else {
-    document.getElementById('authErr').textContent = 'Incorrect code. Try again.';
-    document.getElementById('authCodeInput').value = '';
-    document.getElementById('authCodeInput').focus();
-  }
-}
-
-function selectUser(userId) {
-  currentUser = userId;
-  saveUserIdentity(userId);
-  document.getElementById('authGate').style.display = 'none';
-  initApp();
-}
-
-function updateUserUI() {
-  const u = USERS[currentUser];
-  if (!u) return;
-  const av = document.getElementById('cuAvatar');
-  const nm = document.getElementById('cuName');
-  const sb = document.getElementById('sbStatus');
-  const su = document.getElementById('settingsCurrentUser');
-  if (av) { av.textContent = u.initials; av.style.background = u.color; }
-  if (nm) nm.textContent = u.name;
-  if (sb) sb.innerHTML = `<span class="sb-dot"></span>${u.name} · ${u.role}`;
-  if (su) su.textContent = `${u.name} (${u.role})`;
-}
-
-function switchIdentity() {
-  localStorage.removeItem('agla_user');
-  document.cookie = 'agla_user=;max-age=0;path=/';
-  currentUser = '';
-  document.getElementById('authCardWrap').style.maxWidth = '500px';
-  document.getElementById('authStep1').style.display = 'none';
-  buildUserGrid();
-  document.getElementById('authStep2').style.display = 'flex';
-  document.getElementById('authGate').style.display = 'flex';
-}
-
-function checkAuth() {
-  if (localStorage.getItem('agla_auth') === TEAM_CODE) {
-    if (currentUser && USERS[currentUser]) {
-      initApp();
-    } else {
-      // Auth valid but no identity saved — show user picker
-      document.getElementById('authCardWrap').style.maxWidth = '500px';
-      document.getElementById('authStep1').style.display = 'none';
-      buildUserGrid();
-      document.getElementById('authStep2').style.display = 'flex';
-      document.getElementById('authGate').style.display = 'flex';
-    }
-  } else {
-    document.getElementById('authGate').style.display = 'flex';
-  }
-}
-
 /* ─────────────── STORAGE ─────────────── */
 function ensureStateDefaults() {
   if (!state || typeof state !== 'object' || Array.isArray(state)) state = {};
   LEADS.forEach(l => {
     const k = String(l.id);
-    if (!state[k] || typeof state[k] !== 'object') state[k] = {status:'new', notes:'', done:false, assigned:'', locked:false, assignedBy:'', assignedAt:''};
-    if (!state[k].status)                 state[k].status     = 'new';
-    if (state[k].notes === undefined)     state[k].notes      = '';
-    if (state[k].done === undefined)      state[k].done       = false;
-    if (state[k].assigned === undefined)  state[k].assigned   = '';
-    if (state[k].locked === undefined)    state[k].locked     = !!state[k].assigned;
-    if (state[k].assignedBy === undefined) state[k].assignedBy = '';
-    if (state[k].assignedAt === undefined) state[k].assignedAt = '';
+    if (!state[k] || typeof state[k] !== 'object') state[k] = {status:'new', notes:'', done:false};
+    if (!state[k].status)             state[k].status = 'new';
+    if (state[k].notes === undefined) state[k].notes  = '';
+    if (state[k].done === undefined)  state[k].done   = false;
   });
 }
 
@@ -2795,15 +2400,10 @@ function mergeStates(local, remote) {
     const k = String(l.id);
     const lo = local[k]  || {};
     const re = remote[k] || {};
-    const assigned = lo.assigned || re.assigned || '';
     out[k] = {
-      assigned,
-      status:     pickStatus(lo.status, re.status),
-      notes:      lo.notes      || re.notes      || '',
-      done:       lo.done       || re.done        || false,
-      locked:     !!(lo.locked  || re.locked      || assigned),
-      assignedBy: lo.assignedBy || re.assignedBy  || '',
-      assignedAt: lo.assignedAt || re.assignedAt  || ''
+      status: pickStatus(lo.status, re.status),
+      notes:  lo.notes || re.notes || '',
+      done:   lo.done  || re.done  || false
     };
   });
   return out;
@@ -2813,7 +2413,7 @@ function dataRichness(obj) {
   return LEADS.reduce((n, l) => {
     const d = obj[String(l.id)];
     if (!d) return n;
-    return n + (d.assigned ? 3 : 0) + (d.status && d.status !== 'new' ? 2 : 0) + (d.notes ? 1 : 0) + (d.done ? 1 : 0);
+    return n + (d.status && d.status !== 'new' ? 2 : 0) + (d.notes ? 1 : 0) + (d.done ? 1 : 0);
   }, 0);
 }
 
@@ -2852,8 +2452,6 @@ function loadState() {
             .then(() => showToast('Auto-synced — all devices updated'))
             .catch(() => setSyncStatus(false, 'offline'));
         }
-        // If state is still empty after merge, auto-recover from audit log
-        if (mergedRich === 0) autoRecoverFromAudit();
         return;
       }
 
@@ -2875,8 +2473,7 @@ function loadState() {
       if (dataRichness(state) > 0) {
         pushToCloud();
       } else {
-        // State is empty AND doc doesn't exist — recover from audit log
-        autoRecoverFromAudit();
+        setSyncStatus(true, 'synced');
       }
     }
   }, err => {
@@ -2893,21 +2490,12 @@ function loadState() {
           ensureStateDefaults();
           try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
           render();
-          showToast('Loaded ' + Object.values(state).filter(v=>v&&v.assigned).length + ' assignments from offline cache');
+          showToast('Loaded from offline cache');
           return;
         }
       }
-      // 2. Try cached audit log
-      AUDIT_COL.limit(1000).get({ source: 'cache' }).then(snap => {
-        if (!snap.empty && dataRichness(state) === 0) {
-          const docs = [];
-          snap.forEach(d => docs.push(d.data()));
-          applyAuditSnapshot(docs);
-          if (dataRichness(state) > 0) return; // recovered from cache
-        }
-        // 3. Last resort: Firestore REST API (plain HTTP, bypasses WebSocket block)
-        restoreViaREST();
-      }).catch(() => restoreViaREST());
+      // 2. Last resort: Firestore REST API (plain HTTP, bypasses WebSocket block)
+      restoreViaREST();
     }).catch(() => restoreViaREST());
   });
 }
@@ -2937,7 +2525,7 @@ function pullFromCloud() {
       render();
       showSaved();
       setSyncStatus(true, 'synced');
-      showToast('Loaded latest data from cloud (' + Object.values(state).filter(v=>v&&v.assigned).length + ' assigned)');
+      showToast('Loaded latest data from cloud');
     } else {
       setSyncStatus(false, 'empty');
       showToast('No data in Firestore — use ↑ Push from a device that has data');
@@ -2953,138 +2541,13 @@ function pullFromCloud() {
   });
 }
 
-function autoRecoverFromAudit() {
-  setSyncStatus(false, 'restoring…');
-  function applyAuditDocs(docs) {
-    docs.sort((a,b) => (a.timestamp||'').localeCompare(b.timestamp||''));
-    const last = {};
-    docs.forEach(d => {
-      const id = String(d.leadId);
-      if (d.action === 'assigned' || d.action === 'reassigned') last[id] = d.newOwner || '';
-      else if (d.action === 'unassigned') last[id] = '';
-    });
-    let count = 0;
-    Object.entries(last).forEach(([id, assignee]) => {
-      if (!state[id]) return;
-      state[id].assigned = assignee;
-      state[id].locked   = !!assignee;
-      if (assignee) count++;
-    });
-    if (count === 0) { setSyncStatus(true, 'synced'); return; }
-    ensureStateDefaults();
-    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
-    render();
-    showToast('✓ Restored ' + count + ' assignments from audit log');
-    STATE_DOC.set(state)
-      .then(() => setSyncStatus(true, 'synced'))
-      .catch(() => setSyncStatus(true, 'local-only'));
-  }
-  // Try network first, fallback to cache
-  AUDIT_COL.limit(1000).get().then(snap => {
-    const docs = [];
-    snap.forEach(d => docs.push(d.data()));
-    if (docs.length === 0) {
-      setSyncStatus(true, 'synced');
-      showToast('Audit log empty — assignments need to be re-entered');
-      return;
-    }
-    applyAuditDocs(docs);
-  }).catch(() => {
-    // Network failed — try IndexedDB cache
-    AUDIT_COL.limit(1000).get({ source: 'cache' }).then(snap => {
-      const docs = [];
-      snap.forEach(d => docs.push(d.data()));
-      if (docs.length === 0) { setSyncStatus(true, 'synced'); return; }
-      applyAuditDocs(docs);
-    }).catch(() => setSyncStatus(true, 'synced')); // connection works, just no cache
-  });
-}
-
-function recoverFromAuditLog() {
-  showToast('Checking Firestore…');
-  // Step 1: check if leadState already has assignment data
-  STATE_DOC.get().then(doc => {
-    if (doc.exists) {
-      const fsData = doc.data();
-      const fsAssigned = Object.values(fsData).filter(v => v && v.assigned).length;
-      if (fsAssigned > 0) {
-        // Data is actually there — just pull it
-        state = fsData;
-        ensureStateDefaults();
-        firestoreSynced = true;
-        try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
-        render(); showSaved(); setSyncStatus(true, 'synced');
-        showToast(`✓ Found ${fsAssigned} assignments in Firestore — restored!`);
-        return;
-      }
-    }
-    // Step 2: Firestore is empty — try audit log (limit to 500 newest entries)
-    showToast('Scanning audit log…');
-    AUDIT_COL.limit(500).get().then(snap => {
-      if (snap.empty) { showToast('No audit records found — assignments must be re-entered manually'); return; }
-      const docs = [];
-      snap.forEach(d => docs.push(d.data()));
-      docs.sort((a, b) => (a.timestamp || '').localeCompare(b.timestamp || ''));
-      const last = {};
-      docs.forEach(d => {
-        const id = String(d.leadId);
-        if (d.action === 'assigned' || d.action === 'reassigned') last[id] = d.newOwner || '';
-        else if (d.action === 'unassigned') last[id] = '';
-      });
-      let count = 0;
-      Object.entries(last).forEach(([id, assignee]) => {
-        if (!state[id]) return;
-        state[id].assigned = assignee;
-        state[id].locked   = !!assignee;
-        if (assignee) count++;
-      });
-      ensureStateDefaults();
-      firestoreSynced = true;
-      STATE_DOC.set(state)
-        .then(() => {
-          try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
-          render(); showSaved(); setSyncStatus(true, 'synced');
-          showToast(count > 0 ? `✓ Recovered ${count} assignments from audit log!` : 'Audit log found but 0 assignments — re-enter manually');
-        })
-        .catch(() => showToast('Read OK but write failed — check Firestore rules'));
-    }).catch(e => { showToast('Audit log read failed — check Firestore rules'); console.warn(e); });
-  }).catch(e => { showToast('Cannot reach Firestore — check network'); console.warn(e); });
-}
-
 function copyStateJSON() {
   const json = JSON.stringify(state, null, 2);
   navigator.clipboard.writeText(json).then(() => {
-    const assigned = Object.values(state).filter(v=>v&&v.assigned).length;
-    showToast('State copied (' + assigned + ' assigned leads) — paste on another device via Settings → Import State');
+    showToast('State copied — paste on another device via Settings → Import State');
   }).catch(() => {
     showToast('Copy failed — try again');
   });
-}
-
-/* ── Shared helper: apply an array of raw audit docs to state ── */
-function applyAuditSnapshot(docs) {
-  if (!docs || docs.length === 0) return 0;
-  docs.sort((a,b) => (a.timestamp||'').localeCompare(b.timestamp||''));
-  const last = {};
-  docs.forEach(d => {
-    const id = String(d.leadId);
-    if (d.action === 'assigned' || d.action === 'reassigned') last[id] = d.newOwner || '';
-    else if (d.action === 'unassigned') last[id] = '';
-  });
-  let count = 0;
-  Object.entries(last).forEach(([id, assignee]) => {
-    if (!state[id]) return;
-    state[id].assigned = assignee;
-    state[id].locked   = !!assignee;
-    if (assignee) count++;
-  });
-  if (count > 0) {
-    ensureStateDefaults();
-    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
-    render();
-    showToast('✓ Restored ' + count + ' assignments from audit log');
-  }
-  return count;
 }
 
 /* ── REST fallback: bypasses Firestore SDK WebSocket using plain HTTP ── */
@@ -3142,28 +2605,15 @@ async function restoreViaREST() {
           ensureStateDefaults();
           try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
           render(); showSaved();
-          showToast('✓ REST: loaded ' + Object.values(state).filter(v=>v&&v.assigned).length + ' assignments via HTTP');
+          showToast('✓ REST: loaded state via HTTP');
+          setSyncStatus(true, 'synced');
           return;
         }
       }
     }
-    // 2. leadState empty → try audit collection via REST (paginated)
-    let allDocs = [], pageToken = null;
-    do {
-      const url = `${FS_REST}/aglaAudit?key=${FS_KEY}&pageSize=300${pageToken ? '&pageToken=' + pageToken : ''}`;
-      const res = await fetch(url, { headers: authHeader });
-      if (!res.ok) break;
-      const json = await res.json();
-      (json.documents || []).forEach(d => allDocs.push(parseRestDoc(d)));
-      pageToken = json.nextPageToken || null;
-    } while (pageToken && allDocs.length < 1500);
-
-    if (allDocs.length > 0) {
-      const count = applyAuditSnapshot(allDocs);
-      if (count === 0) showToast('REST: audit log found but 0 active assignments');
-    } else {
-      showToast('REST: no data found — assignments may need to be re-entered');
-    }
+    // leadState empty — show synced status and return
+    setSyncStatus(true, 'synced');
+    showToast('REST: no data found');
   } catch(e) {
     console.warn('REST fallback failed', e);
     showToast('Cannot reach Firestore — disable Brave Shields or try Chrome');
@@ -3219,131 +2669,7 @@ function persist() {
     .catch(e => { console.warn('Firestore write failed', e); setSyncStatus(false, 'offline'); });
 }
 
-/* ─────────────── AUDIT LOG ─────────────── */
-function logAudit(leadId, company, action, prevOwner, newOwner, reason) {
-  const u = USERS[currentUser];
-  AUDIT_COL.add({
-    leadId:        String(leadId),
-    company:       company || String(leadId),
-    action,        // 'assigned' | 'reassigned' | 'unassigned'
-    prevOwner:     prevOwner || '',
-    prevOwnerName: USERS[prevOwner]?.name || prevOwner || '',
-    newOwner:      newOwner  || '',
-    newOwnerName:  USERS[newOwner]?.name  || newOwner  || '',
-    changedBy:     currentUser,
-    changedByName: u?.name || currentUser || 'Unknown',
-    timestamp:     new Date().toISOString(),
-    reason:        reason || ''
-  }).then(() => { if (auditPanelOpen) loadHistory(); })
-    .catch(e => console.warn('Audit log failed', e));
-}
-
-/* ─────────────── REASSIGNMENT ─────────────── */
-let pendingReassign = null;
-
-function showReassignModal(leadId) {
-  const k    = String(leadId);
-  const lead = LEADS.find(l => String(l.id) === k);
-  const s    = state[k] || {};
-  pendingReassign = { leadId: k, company: lead?.company || k, currentOwner: s.assigned };
-
-  document.getElementById('rModalCompany').textContent = lead?.company || k;
-  document.getElementById('rModalFrom').textContent = USERS[s.assigned]?.name || s.assigned || '—';
-  document.getElementById('rModalReason').value = '';
-
-  const sel = document.getElementById('rModalNewOwner');
-  sel.innerHTML = '<option value="">— Select new owner —</option>' +
-    Object.entries(USERS).map(([val, u]) =>
-      `<option value="${val}"${val === s.assigned ? ' disabled' : ''}>${u.name}${val === s.assigned ? ' (current)' : ''}</option>`
-    ).join('') +
-    '<option value="">— Unassign —</option>';
-
-  document.getElementById('reassignModal').classList.add('open');
-}
-
-function confirmReassign() {
-  if (!pendingReassign) return;
-  const { leadId, company, currentOwner } = pendingReassign;
-  const newOwner = document.getElementById('rModalNewOwner').value;
-  const reason   = document.getElementById('rModalReason').value.trim();
-
-  if (newOwner === currentOwner) { closeReassignModal(); return; }
-
-  const k = String(leadId);
-  const action = !newOwner ? 'unassigned' : currentOwner ? 'reassigned' : 'assigned';
-  state[k].assigned   = newOwner;
-  state[k].locked     = !!newOwner;
-  state[k].assignedBy = newOwner ? currentUser : '';
-  state[k].assignedAt = new Date().toISOString();
-
-  persist();
-  logAudit(leadId, company, action, currentOwner, newOwner, reason);
-  closeReassignModal();
-  render();
-  const actionLabel = action === 'unassigned' ? 'Unassigned' : `Reassigned to ${USERS[newOwner]?.name || newOwner}`;
-  showToast(`${actionLabel} — logged in Audit Log`);
-}
-
-function closeReassignModal() {
-  document.getElementById('reassignModal').classList.remove('open');
-  pendingReassign = null;
-}
-
-/* ─────────────── HISTORY / AUDIT PANEL ─────────────── */
-let auditPanelOpen = false;
-
-function toggleAuditPanel() {
-  const panel = document.getElementById('auditPanel');
-  const btn   = document.getElementById('btnAuditLog');
-  auditPanelOpen = !auditPanelOpen;
-  panel.style.display = auditPanelOpen ? 'flex' : 'none';
-  if (btn) btn.classList.toggle('active', auditPanelOpen);
-  if (auditPanelOpen) loadHistory();
-}
-
-function loadHistory() {
-  document.getElementById('historyContainer').innerHTML = '<div class="audit-loading" style="padding:24px 16px;font-size:11px;color:var(--muted);font-family:\'JetBrains Mono\',monospace;">Loading…</div>';
-  AUDIT_COL.orderBy('timestamp', 'desc').limit(300).get()
-    .then(snap => {
-      if (snap.empty) {
-        document.getElementById('historyContainer').innerHTML = '<div style="padding:24px 16px;font-size:12px;color:var(--muted);text-align:center;">No history yet.</div>';
-        return;
-      }
-      const entries = [];
-      snap.forEach(doc => entries.push(doc.data()));
-      const cards = entries.map(e => {
-        const d   = new Date(e.timestamp);
-        const ds  = d.toLocaleDateString('en-US', { month:'short', day:'numeric' });
-        const ts  = d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true });
-        const badgeColor = e.action === 'reassigned' ? '#f59e0b' : e.action === 'unassigned' ? '#ef4444' : '#00ffae';
-        const badgeBg    = e.action === 'reassigned' ? 'rgba(245,158,11,.12)' : e.action === 'unassigned' ? 'rgba(239,68,68,.10)' : 'rgba(0,255,174,.11)';
-        const label = e.action === 'reassigned' ? 'Reassigned' : e.action === 'unassigned' ? 'Unassigned' : 'Assigned';
-        const change = e.action === 'reassigned'
-          ? `<span style="color:#ef4444;font-weight:700">${esc(e.prevOwnerName||e.prevOwner||'—')}</span> <span style="color:var(--muted)">→</span> <span style="color:#00ffae;font-weight:700">${esc(e.newOwnerName||e.newOwner||'—')}</span>`
-          : e.action === 'assigned'
-          ? `<span style="color:var(--muted)">→</span> <span style="color:#00ffae;font-weight:700">${esc(e.newOwnerName||e.newOwner||'—')}</span>`
-          : `<span style="color:#ef4444;font-weight:700">${esc(e.prevOwnerName||e.prevOwner||'—')}</span> <span style="color:var(--muted)">→ unassigned</span>`;
-        return `<div style="padding:11px 16px;border-bottom:1px solid var(--border);">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
-            <div style="font-size:11.5px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px;" title="${esc(e.company)}">${esc(e.company)}</div>
-            <span style="font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:${badgeBg};color:${badgeColor};border:1px solid ${badgeColor}33;flex-shrink:0;margin-left:6px">${label}</span>
-          </div>
-          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;margin-bottom:4px;">${change}</div>
-          <div style="display:flex;align-items:center;justify-content:space-between;">
-            <span style="font-size:10px;color:var(--muted)">by <strong style="color:var(--text2)">${esc(e.changedByName||e.changedBy||'?')}</strong>${e.reason ? ` · <em style="color:var(--muted2)">${esc(e.reason)}</em>` : ''}</span>
-            <span style="font-size:9.5px;color:var(--muted2);font-family:'JetBrains Mono',monospace;flex-shrink:0;margin-left:6px">${ds} ${ts}</span>
-          </div>
-        </div>`;
-      }).join('');
-      document.getElementById('historyContainer').innerHTML = cards;
-    })
-    .catch(() => {
-      document.getElementById('historyContainer').innerHTML = '<div style="padding:24px 16px;font-size:12px;color:var(--muted);text-align:center;">Failed to load — check connection</div>';
-    });
-}
-
 function initApp() {
-  updateUserUI();
   // Reset all filters — browser restores form values on soft refresh which can hide all rows
   const _si = document.getElementById('searchInput');
   const _fi = document.getElementById('filterIndustry');
@@ -3373,7 +2699,6 @@ function initApp() {
     } catch(e) {}
   }, 800);
   showSaved();
-  setTimeout(updateUserUI, 0);
   // Auth first, then start ALL Firestore listeners (rules require request.auth != null)
   auth.signInAnonymously()
     .then(() => { initAiKeys(); loadState(); })
@@ -3454,7 +2779,7 @@ function render() {
 
   leads.forEach(l => {
     const k  = String(l.id);
-    const s  = state[k] || { status:'new', notes:'', done:false, assigned:'', locked:false };
+    const s  = state[k] || { status:'new', notes:'', done:false };
     const tr = document.createElement('tr');
     tr.dataset.id = k;
     tr.className  = `row-${s.status}${s.done ? ' done-row' : ''}`;
@@ -3491,18 +2816,6 @@ function render() {
       : `<span class="no-data">—</span>`;
 
     tr.innerHTML = `
-      <td class="td-assigned">
-        ${s.assigned
-          ? `<button class="lock-badge" onclick="showReassignModal('${k}')" title="Assigned to ${esc(USERS[s.assigned]?.name||s.assigned)} — click to reassign">
-               <svg class="lock-icon" width="9" height="9" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-               ${esc(USERS[s.assigned]?.name||s.assigned)}
-             </button>`
-          : `<select class="assigned-sel" data-action="assigned" data-id="${k}" title="Unassigned — click to assign">
-               <option value="">— Assign</option>
-               ${Object.entries(USERS).map(([val,u])=>`<option value="${val}">${u.name}</option>`).join('')}
-             </select>`
-        }
-      </td>
       <td class="td-num">${l.id}</td>
       <td class="td-company"><div class="company-cell"><div class="co-avatar ${avatarClass}">${initials}</div>${companyCellInner}<button class="co-fill-btn" data-action="fill-gen" data-id="${k}" title="Load in Outreach Generator">→ Gen</button></div></td>
       <td><span class="tag ${IND_CLS[l.industry]||'tag-agency'}">${l.industry}</span></td>
@@ -3584,19 +2897,6 @@ document.getElementById('tbody').addEventListener('change', e => {
     tr.className = `row-${el.value}${state[id].done ? ' done-row' : ''}`;
     updateStats(document.querySelectorAll('#tbody tr').length);
     persist();
-  }
-
-  if (action === 'assigned') {
-    const newOwner = el.value;
-    const lead = LEADS.find(l => String(l.id) === id);
-    state[id].assigned   = newOwner;
-    state[id].locked     = !!newOwner;
-    state[id].assignedBy = newOwner ? currentUser : '';
-    state[id].assignedAt = new Date().toISOString();
-    el.classList.toggle('has-val', !!newOwner);
-    persist();
-    logAudit(id, lead?.company || id, 'assigned', '', newOwner, '');
-    render();
   }
 
   if (action === 'done') {
@@ -3714,7 +3014,7 @@ function toggleNotice() {
 }
 
 /* ─────────────── INIT ─────────────── */
-checkAuth();
+initApp();
 
 /* ─────────────── OUTREACH GENERATOR ─────────────── */
 const GEN_PRESETS = {
@@ -4396,37 +3696,6 @@ function renderIntelligence() {
   renderRows('intelCountryRows', countBy('country'));
   document.getElementById('settingsTotal').textContent = total;
 
-  // Member scoreboard
-  const MEMBER_DEFS = [
-    { key:'ian',      label:'Ian',      role:'Direct' },
-    { key:'rizzalyn', label:'Rizzalyn', role:'Proxy'  },
-    { key:'rutchel',  label:'Rutchel',  role:'Proxy'  },
-    { key:'junnel',   label:'Junnel',   role:'Proxy'  },
-  ];
-  const mStats = {};
-  MEMBER_DEFS.forEach(m => mStats[m.key] = { assigned:0, contacted:0, replied:0, done:0 });
-  LEADS.forEach(l => {
-    const s = state[String(l.id)];
-    if (!s || !s.assigned || !mStats[s.assigned]) return;
-    const ms = mStats[s.assigned];
-    ms.assigned++;
-    if (s.status === 'contacted') ms.contacted++;
-    if (s.status === 'replied')   ms.replied++;
-    if (s.done)                   ms.done++;
-  });
-  const maxAssigned = Math.max(1, ...MEMBER_DEFS.map(m => mStats[m.key].assigned));
-  document.getElementById('intelMemberGrid').innerHTML = MEMBER_DEFS.map(m => {
-    const ms = mStats[m.key];
-    const barPct = Math.round(ms.assigned / maxAssigned * 100);
-    return `<div class="intel-member-card">
-      <div class="intel-member-name">${m.label} <span style="font-size:9px;font-weight:400;color:var(--muted);margin-left:4px">${m.role}</span></div>
-      <div class="intel-member-row"><span class="intel-member-row-label">Assigned</span><span class="intel-member-row-val">${ms.assigned}</span></div>
-      <div class="intel-member-row"><span class="intel-member-row-label">Contacted</span><span class="intel-member-row-val green">${ms.contacted}</span></div>
-      <div class="intel-member-row"><span class="intel-member-row-label">Replied</span><span class="intel-member-row-val green">${ms.replied}</span></div>
-      <div class="intel-member-row"><span class="intel-member-row-label">Done</span><span class="intel-member-row-val green">${ms.done}</span></div>
-      <div class="intel-member-bar"><div class="intel-member-bar-fill" style="width:${barPct}%"></div></div>
-    </div>`;
-  }).join('');
 }
 
 
