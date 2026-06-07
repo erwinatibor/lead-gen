@@ -214,24 +214,15 @@
   th .si { display:inline-block; margin-left:3px; opacity:.35; font-size:9px; }
   th.sorted .si { opacity:1; }
 
-  tbody tr { border-bottom:1px solid var(--border); transition:background .15s, box-shadow .15s; }
-  tbody tr:hover { background:rgba(0,255,174,.03); box-shadow:inset 0 0 0 1px rgba(0,255,174,.1); }
+  tbody tr { border-bottom:1px solid var(--border); transition:background .12s, box-shadow .12s; }
+  tbody tr:hover { background:rgba(0,255,174,.02); box-shadow:inset 0 0 0 1px rgba(0,255,174,.05); }
   tbody tr.done-row { opacity:.36; }
   tbody tr.done-row td:not(.td-done) { text-decoration:line-through; }
 
-  td { padding:9px 12px; vertical-align:middle; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; cursor:pointer; transition:white-space 0s, max-width .15s; }
+  td { padding:9px 12px; vertical-align:middle; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; cursor:pointer; }
   td.td-num { color:var(--muted2); font-size:10px; font-family:'JetBrains Mono',monospace; width:44px; min-width:44px; max-width:44px; overflow:visible; text-overflow:clip; }
   td.td-done { text-align:center; cursor:default; }
   td.td-company { max-width:220px; }
-
-  /* Expand row on hover: show full text, multi-line, with a subtle glow */
-  tbody tr:hover td {
-    max-width:none; overflow:visible; text-overflow:unset; white-space:normal;
-    background:rgba(0,255,174,.025); vertical-align:top;
-  }
-  tbody tr:hover td.td-num { white-space:nowrap; }
-  tbody tr:hover td.td-done { vertical-align:middle; }
-  tbody tr:hover { outline:1px solid rgba(0,255,174,.14); outline-offset:-1px; }
 
   .company-cell { display:flex; align-items:center; gap:9px; min-width:0; }
   .co-avatar {
