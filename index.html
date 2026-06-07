@@ -3335,13 +3335,19 @@ function loadHistory() {
 
 function initApp() {
   updateUserUI();
+  // Load localStorage state first so render() has valid state[id] objects
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) state = JSON.parse(raw);
+  } catch(e) { state = {}; }
+  ensureStateDefaults();
   render();
   showSaved();
   setTimeout(updateUserUI, 0);
   // Auth first, then start ALL Firestore listeners (rules require request.auth != null)
   auth.signInAnonymously()
     .then(() => { initAiKeys(); loadState(); })
-    .catch(() => { initAiKeys(); loadState(); }); // fallback if anonymous auth not enabled
+    .catch(() => { initAiKeys(); loadState(); });
 }
 
 // save on tab close / refresh
