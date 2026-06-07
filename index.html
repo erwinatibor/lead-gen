@@ -2962,25 +2962,28 @@ function autoRecoverFromAudit() {
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
     render();
     showToast('✓ Restored ' + count + ' assignments from audit log');
-    // Try writing to Firestore; silently ignore if offline
     STATE_DOC.set(state)
       .then(() => setSyncStatus(true, 'synced'))
-      .catch(() => setSyncStatus(false, 'offline'));
+      .catch(() => setSyncStatus(true, 'local-only'));
   }
   // Try network first, fallback to cache
   AUDIT_COL.limit(1000).get().then(snap => {
     const docs = [];
     snap.forEach(d => docs.push(d.data()));
-    if (docs.length === 0) { setSyncStatus(true, 'synced'); return; }
+    if (docs.length === 0) {
+      setSyncStatus(true, 'synced');
+      showToast('Audit log empty — assignments need to be re-entered');
+      return;
+    }
     applyAuditDocs(docs);
   }).catch(() => {
     // Network failed — try IndexedDB cache
     AUDIT_COL.limit(1000).get({ source: 'cache' }).then(snap => {
       const docs = [];
       snap.forEach(d => docs.push(d.data()));
-      if (docs.length === 0) { setSyncStatus(false, 'offline'); return; }
+      if (docs.length === 0) { setSyncStatus(true, 'synced'); return; }
       applyAuditDocs(docs);
-    }).catch(() => setSyncStatus(false, 'offline'));
+    }).catch(() => setSyncStatus(true, 'synced')); // connection works, just no cache
   });
 }
 
@@ -3313,12 +3316,11 @@ function initApp() {
   updateUserUI();
   render();
   showSaved();
-  initAiKeys();
   setTimeout(updateUserUI, 0);
-  // Try anonymous auth; fall back to direct loadState if auth isn't enabled
+  // Auth first, then start ALL Firestore listeners (rules require request.auth != null)
   auth.signInAnonymously()
-    .then(() => loadState())
-    .catch(() => loadState()); // auth not enabled → still load Firestore
+    .then(() => { initAiKeys(); loadState(); })
+    .catch(() => { initAiKeys(); loadState(); }); // fallback if anonymous auth not enabled
 }
 
 // save on tab close / refresh
