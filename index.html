@@ -313,6 +313,16 @@
   }
   .done-chk:hover:not(:checked) { border-color:var(--green); }
 
+  .outreach-sel {
+    appearance:none; border:1px solid var(--border2); border-radius:5px; padding:3px 22px 3px 8px;
+    font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:500; cursor:pointer;
+    outline:none; transition:all .15s; background-color:transparent; color:var(--muted);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='currentColor' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 6px center;
+  }
+  .outreach-sel.has-val { color:var(--accent); border-color:rgba(0,255,174,.35); background-color:rgba(0,255,174,.06); }
+  .outreach-sel option { background:#161921; color:var(--text); }
+
   .phone-val { color:var(--muted); font-size:11px; font-family:'JetBrains Mono',monospace; }
   .empty-state { text-align:center; padding:60px 20px; color:var(--muted); }
   .empty-state p { font-size:13px; margin-top:10px; color:var(--muted2); }
@@ -1140,6 +1150,7 @@
                 <th>LinkedIn</th>
                 <th>Email</th>
                 <th data-col="status">Status<span class="si">↕</span></th>
+                <th>Outreach By</th>
                 <th>Notes</th>
                 <th>Done</th>
               </tr>
@@ -2376,10 +2387,11 @@ function ensureStateDefaults() {
   if (!state || typeof state !== 'object' || Array.isArray(state)) state = {};
   LEADS.forEach(l => {
     const k = String(l.id);
-    if (!state[k] || typeof state[k] !== 'object') state[k] = {status:'new', notes:'', done:false};
-    if (!state[k].status)             state[k].status = 'new';
-    if (state[k].notes === undefined) state[k].notes  = '';
-    if (state[k].done === undefined)  state[k].done   = false;
+    if (!state[k] || typeof state[k] !== 'object') state[k] = {status:'new', notes:'', done:false, outreach:''};
+    if (!state[k].status)                state[k].status   = 'new';
+    if (state[k].notes === undefined)    state[k].notes    = '';
+    if (state[k].done === undefined)     state[k].done     = false;
+    if (state[k].outreach === undefined) state[k].outreach = '';
   });
 }
 
@@ -2396,9 +2408,10 @@ function mergeStates(local, remote) {
     const lo = local[k]  || {};
     const re = remote[k] || {};
     out[k] = {
-      status: pickStatus(lo.status, re.status),
-      notes:  lo.notes || re.notes || '',
-      done:   lo.done  || re.done  || false
+      status:   pickStatus(lo.status, re.status),
+      notes:    lo.notes    || re.notes    || '',
+      done:     lo.done     || re.done     || false,
+      outreach: lo.outreach || re.outreach || ''
     };
   });
   return out;
@@ -2830,6 +2843,14 @@ function render() {
         </select>
       </td>
       <td>
+        <select class="outreach-sel${s.outreach ? ' has-val' : ''}" data-action="outreach" data-id="${k}">
+          <option value="">—</option>
+          <option value="Jun"${s.outreach==='Jun' ? ' selected' : ''}>Jun</option>
+          <option value="Mar"${s.outreach==='Mar' ? ' selected' : ''}>Mar</option>
+          <option value="Riz"${s.outreach==='Riz' ? ' selected' : ''}>Riz</option>
+        </select>
+      </td>
+      <td>
         <input class="notes-inp" type="text"
           value="${esc(s.notes)}"
           placeholder="Add note…"
@@ -2891,6 +2912,12 @@ document.getElementById('tbody').addEventListener('change', e => {
     const tr = el.closest('tr');
     tr.className = `row-${el.value}${state[id].done ? ' done-row' : ''}`;
     updateStats(document.querySelectorAll('#tbody tr').length);
+    persist();
+  }
+
+  if (action === 'outreach') {
+    state[id].outreach = el.value;
+    el.className = 'outreach-sel' + (el.value ? ' has-val' : '');
     persist();
   }
 
@@ -2956,12 +2983,12 @@ document.getElementById('btnReset').addEventListener('click', () => {
 /* ─────────────── EXPORT CSV ─────────────── */
 document.getElementById('btnExport').addEventListener('click', () => {
   const leads   = getFiltered();
-  const headers = ['ID','Company','Industry','Country','Contact Name','Position','Website','Phone','LinkedIn','Email','Address','Status','Notes','Done'];
+  const headers = ['ID','Company','Industry','Country','Contact Name','Position','Website','Phone','LinkedIn','Email','Address','Status','Outreach By','Notes','Done'];
   const rows    = leads.map(l => {
     const s = state[String(l.id)];
     return [l.id, l.company, l.industry, l.country, l.contact, l.title,
             l.website, l.phone, l.linkedin, l.email, l.address,
-            s.status, s.notes, s.done ? 'Yes' : 'No']
+            s.status, s.outreach || '', s.notes, s.done ? 'Yes' : 'No']
       .map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(',');
   });
 
