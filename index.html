@@ -1139,8 +1139,8 @@
           <table id="leadsTable">
             <thead>
               <tr>
-                <th>Outreach By</th>
                 <th data-col="id">#<span class="si">↕</span></th>
+                <th>Outreach By</th>
                 <th data-col="company">Company<span class="si">↕</span></th>
                 <th data-col="industry">Industry<span class="si">↕</span></th>
                 <th data-col="country">Country<span class="si">↕</span></th>
@@ -2824,6 +2824,7 @@ function render() {
       : `<span class="no-data">—</span>`;
 
     tr.innerHTML = `
+      <td class="td-num">${l.id}</td>
       <td>
         <select class="outreach-sel${s.outreach ? ' has-val' : ''}" data-action="outreach" data-id="${k}">
           <option value="">—</option>
@@ -2832,7 +2833,6 @@ function render() {
           <option value="Riz"${s.outreach==='Riz' ? ' selected' : ''}>Riz</option>
         </select>
       </td>
-      <td class="td-num">${l.id}</td>
       <td class="td-company"><div class="company-cell"><div class="co-avatar ${avatarClass}">${initials}</div>${companyCellInner}<button class="co-fill-btn" data-action="fill-gen" data-id="${k}" title="Load in Outreach Generator">→ Gen</button></div></td>
       <td><span class="tag ${IND_CLS[l.industry]||'tag-agency'}">${l.industry}</span></td>
       <td><span class="flag">${FLAGS[l.country]||''}</span> <span style="font-size:11px;color:var(--muted2)">${l.country}</span></td>
