@@ -313,14 +313,14 @@
   }
   .done-chk:hover:not(:checked) { border-color:var(--green); }
 
-  td.td-outreach { width:50px; min-width:50px; max-width:50px; padding:5px 4px; overflow:visible; }
+  td.td-outreach { width:50px; min-width:50px; max-width:50px; padding:5px 4px; }
   .outreach-sel {
-    appearance:none; border:1px solid rgba(255,255,255,.18); border-radius:5px; padding:3px 18px 3px 7px;
+    appearance:none; border:1px solid rgba(255,255,255,.18); border-radius:5px; padding:3px 14px 3px 6px;
     font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:500; cursor:pointer;
     outline:none; transition:all .15s; background-color:transparent; color:var(--muted);
-    width:100%;
+    width:100%; box-sizing:border-box;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='currentColor' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat:no-repeat; background-position:right 5px center;
+    background-repeat:no-repeat; background-position:right 4px center;
   }
   .outreach-sel:hover { border-color:rgba(255,255,255,.32); }
   .outreach-sel.has-val { color:var(--accent); border-color:rgba(0,255,174,.5); background-color:rgba(0,255,174,.06); }
