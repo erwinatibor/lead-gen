@@ -313,18 +313,27 @@
   }
   .done-chk:hover:not(:checked) { border-color:var(--green); }
 
-  td.td-outreach { width:54px; min-width:54px; max-width:54px; padding:4px 5px; overflow:hidden; }
-  .outreach-sel {
-    appearance:none; border:1px solid rgba(255,255,255,.2); border-radius:5px; padding:3px 14px 3px 6px;
-    font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:500; cursor:pointer;
-    outline:none; transition:all .15s; background-color:transparent; color:var(--muted);
-    display:block; width:44px; flex-shrink:0;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='currentColor' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat:no-repeat; background-position:right 4px center;
+  td.td-outreach { width:54px; min-width:54px; max-width:54px; padding:4px 5px; overflow:visible; }
+  .by-trigger {
+    appearance:none; border:1px solid rgba(255,255,255,.2); border-radius:5px;
+    padding:3px 6px; font-family:'JetBrains Mono',monospace; font-size:10px;
+    font-weight:500; cursor:pointer; background:transparent; color:var(--muted);
+    width:44px; text-align:left; white-space:nowrap; overflow:hidden;
+    text-overflow:ellipsis; transition:border-color .15s;
   }
-  .outreach-sel:hover { border-color:rgba(255,255,255,.38); }
-  .outreach-sel.has-val { color:var(--accent); border-color:rgba(0,255,174,.55); background-color:rgba(0,255,174,.06); }
-  .outreach-sel option { background:#161921; color:var(--text); }
+  .by-trigger:hover { border-color:rgba(255,255,255,.38); }
+  .by-trigger.has-val { color:var(--accent); border-color:rgba(0,255,174,.55); background:rgba(0,255,174,.06); }
+  #byMenu {
+    display:none; position:fixed; z-index:9999;
+    background:#0d1420; border:1px solid rgba(255,255,255,.14); border-radius:7px;
+    padding:3px; box-shadow:0 8px 28px rgba(0,0,0,.7); min-width:fit-content; width:auto;
+  }
+  .by-opt {
+    padding:5px 14px; font-family:'JetBrains Mono',monospace; font-size:10px;
+    color:var(--muted); border-radius:4px; cursor:pointer; white-space:nowrap;
+  }
+  .by-opt:hover { background:rgba(255,255,255,.06); color:var(--text); }
+  .by-opt.sel { background:rgba(0,255,174,.1); color:var(--accent); }
 
   .phone-val { color:var(--muted); font-size:11px; font-family:'JetBrains Mono',monospace; }
   .empty-state { text-align:center; padding:60px 20px; color:var(--muted); }
@@ -2776,8 +2785,77 @@ function getFiltered() {
   });
 }
 
+/* ─────────────── BY DROPDOWN (floating portal) ─────────────── */
+let closeByMenu = () => {};
+(function() {
+  const OPTS = ['', 'Jun', 'Mar', 'Riz'];
+  const menu = document.createElement('div');
+  menu.id = 'byMenu';
+  menu.innerHTML = OPTS.map(v =>
+    `<div class="by-opt" data-val="${v}">${v || '—'}</div>`
+  ).join('');
+  document.body.appendChild(menu);
+
+  let activeId = null;
+
+  function close() {
+    menu.style.display = 'none';
+    activeId = null;
+  }
+  closeByMenu = close;
+
+  function open(trigger, id) {
+    activeId = id;
+    const rect = trigger.getBoundingClientRect();
+    menu.style.display = 'block';
+    // position below trigger; flip above if too close to bottom
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const menuH = menu.offsetHeight || 120;
+    if (spaceBelow < menuH + 8 && rect.top > menuH + 8) {
+      menu.style.top  = (rect.top - menuH - 4) + 'px';
+    } else {
+      menu.style.top  = (rect.bottom + 4) + 'px';
+    }
+    menu.style.left = rect.left + 'px';
+    const cur = state[id]?.outreach || '';
+    menu.querySelectorAll('.by-opt').forEach(o =>
+      o.classList.toggle('sel', o.dataset.val === cur)
+    );
+  }
+
+  document.addEventListener('click', e => {
+    const trigger = e.target.closest('[data-action="outreach"]');
+    if (trigger) {
+      e.stopPropagation();
+      const id = trigger.dataset.id;
+      if (activeId === id) { close(); return; }
+      open(trigger, id);
+      return;
+    }
+    if (e.target.closest('#byMenu')) {
+      const opt = e.target.closest('.by-opt');
+      if (!opt || !activeId) return;
+      const val = opt.dataset.val;
+      state[activeId].outreach = val;
+      const btn = document.querySelector(`[data-action="outreach"][data-id="${activeId}"]`);
+      if (btn) {
+        btn.textContent = val || '—';
+        btn.classList.toggle('has-val', !!val);
+      }
+      persist();
+      close();
+      return;
+    }
+    close();
+  }, true);
+
+  window.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+})();
+
 /* ─────────────── RENDER ─────────────── */
 function render() {
+  closeByMenu();
   const leads = getFiltered();
   const tbody = document.getElementById('tbody');
   const empty = document.getElementById('emptyState');
@@ -2829,12 +2907,7 @@ function render() {
     tr.innerHTML = `
       <td class="td-num">${l.id}</td>
       <td class="td-outreach">
-        <select class="outreach-sel${s.outreach ? ' has-val' : ''}" data-action="outreach" data-id="${k}">
-          <option value="">—</option>
-          <option value="Jun"${s.outreach==='Jun' ? ' selected' : ''}>Jun</option>
-          <option value="Mar"${s.outreach==='Mar' ? ' selected' : ''}>Mar</option>
-          <option value="Riz"${s.outreach==='Riz' ? ' selected' : ''}>Riz</option>
-        </select>
+        <button class="by-trigger${s.outreach ? ' has-val' : ''}" data-action="outreach" data-id="${k}">${s.outreach || '—'}</button>
       </td>
       <td class="td-company"><div class="company-cell"><div class="co-avatar ${avatarClass}">${initials}</div>${companyCellInner}<button class="co-fill-btn" data-action="fill-gen" data-id="${k}" title="Load in Outreach Generator">→ Gen</button></div></td>
       <td><span class="tag ${IND_CLS[l.industry]||'tag-agency'}">${l.industry}</span></td>
@@ -2915,12 +2988,6 @@ document.getElementById('tbody').addEventListener('change', e => {
     const tr = el.closest('tr');
     tr.className = `row-${el.value}${state[id].done ? ' done-row' : ''}`;
     updateStats(document.querySelectorAll('#tbody tr').length);
-    persist();
-  }
-
-  if (action === 'outreach') {
-    state[id].outreach = el.value;
-    el.className = 'outreach-sel' + (el.value ? ' has-val' : '');
     persist();
   }
 
