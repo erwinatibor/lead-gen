@@ -810,6 +810,109 @@
   .view-header-title { font-size:16px; font-weight:700; color:var(--text); letter-spacing:-.02em; }
   .view-header-sub { font-size:10px; color:var(--muted); margin-top:3px; font-family:'JetBrains Mono',monospace; }
 
+  /* ── DASHBOARD KPI ── */
+  .dash-body { flex:1; overflow-y:auto; padding:20px 24px 32px; display:flex; flex-direction:column; gap:18px; }
+  .dash-view-header { flex-shrink:0; }
+  .dash-view-title { font-size:17px; font-weight:700; color:var(--text); letter-spacing:-.025em; }
+  .dash-view-sub { font-size:10px; color:var(--muted); font-family:'JetBrains Mono',monospace; margin-top:4px; }
+  .dash-kpi-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:10px; }
+  .dash-kpi-card { background:var(--surface); border:1px solid var(--border); border-radius:11px; padding:14px 16px; display:flex; flex-direction:column; gap:3px; transition:border-color .15s; }
+  .dash-kpi-card:hover { border-color:rgba(255,255,255,.18); }
+  .dash-kpi-card.kpi-accent { border-color:rgba(0,255,174,.3); background:rgba(0,255,174,.04); }
+  .dash-kpi-card.kpi-green { border-color:rgba(0,255,174,.18); }
+  .dash-kpi-card.kpi-blue { border-color:rgba(99,179,237,.2); }
+  .dash-kpi-card.kpi-purple { border-color:rgba(159,122,234,.2); }
+  .kpi-label { font-size:9px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+  .kpi-val { font-size:26px; font-weight:700; color:var(--text); letter-spacing:-.04em; line-height:1; margin-top:5px; }
+  .dash-kpi-card.kpi-accent .kpi-val { color:var(--green); text-shadow:0 0 18px rgba(0,255,174,.25); }
+  .dash-kpi-card.kpi-blue .kpi-val { color:#63b3ed; }
+  .dash-kpi-card.kpi-purple .kpi-val { color:#9f7aea; }
+  .kpi-sub { font-size:9px; color:var(--muted); font-family:'JetBrains Mono',monospace; margin-top:2px; }
+  .dash-mid-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+  .dash-bottom-row { display:grid; grid-template-columns:3fr 2fr; gap:12px; }
+  .dash-card { background:var(--surface); border:1px solid var(--border); border-radius:11px; padding:16px 18px; }
+  .dash-card-title { font-size:9px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); font-family:'JetBrains Mono',monospace; margin-bottom:12px; }
+  .funnel-wrap { display:flex; flex-direction:column; gap:7px; }
+  .funnel-bar { display:flex; align-items:center; gap:8px; }
+  .funnel-bar-label { font-size:10px; color:var(--muted); font-family:'JetBrains Mono',monospace; width:68px; text-align:right; flex-shrink:0; }
+  .funnel-bar-track { flex:1; height:18px; background:var(--bg); border-radius:4px; overflow:hidden; }
+  .funnel-bar-fill { height:100%; border-radius:4px; display:flex; align-items:center; padding-left:7px; min-width:20px; }
+  .funnel-bar-fill .fb-val { font-size:10px; font-weight:600; color:rgba(255,255,255,.85); font-family:'JetBrains Mono',monospace; white-space:nowrap; }
+  .fb-new { background:rgba(255,255,255,.1); }
+  .fb-contacted { background:rgba(0,255,174,.45); }
+  .fb-replied { background:rgba(99,179,237,.6); }
+  .fb-done { background:rgba(159,122,234,.65); }
+  .fb-notint { background:rgba(255,80,80,.45); }
+  .industry-chart { display:flex; flex-direction:column; gap:5px; max-height:160px; overflow-y:auto; }
+  .ic-row { display:flex; align-items:center; gap:7px; }
+  .ic-name { font-size:10px; color:var(--muted); width:90px; flex-shrink:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .ic-bar-track { flex:1; height:5px; background:var(--bg); border-radius:3px; overflow:hidden; }
+  .ic-bar-fill { height:100%; background:var(--green); border-radius:3px; opacity:.65; }
+  .ic-count { font-size:10px; color:var(--muted); font-family:'JetBrains Mono',monospace; width:24px; text-align:right; flex-shrink:0; }
+  .assignee-chart { display:flex; flex-direction:column; gap:10px; }
+  .ac-item { display:flex; flex-direction:column; gap:4px; }
+  .ac-top { display:flex; justify-content:space-between; align-items:baseline; }
+  .ac-name { font-size:11px; color:var(--text); font-weight:600; }
+  .ac-count { font-size:10px; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+  .ac-bar-track { height:5px; background:var(--bg); border-radius:3px; overflow:hidden; }
+  .ac-bar-fill { height:100%; border-radius:3px; background:var(--green); opacity:.7; }
+  .ac-none { font-size:10px; color:var(--muted); font-family:'JetBrains Mono',monospace; font-style:italic; }
+  .d-progress-bars { display:flex; flex-direction:column; gap:9px; }
+  .dpb-row { display:flex; align-items:center; gap:10px; }
+  .dpb-label { font-size:10px; color:var(--muted); font-family:'JetBrains Mono',monospace; width:88px; flex-shrink:0; text-transform:capitalize; }
+  .dpb-track { flex:1; height:7px; background:var(--bg); border-radius:4px; overflow:hidden; }
+  .dpb-fill { height:100%; border-radius:4px; }
+  .dpb-fill.s-new { background:rgba(255,255,255,.15); }
+  .dpb-fill.s-contacted { background:rgba(0,255,174,.55); }
+  .dpb-fill.s-replied { background:rgba(99,179,237,.7); }
+  .dpb-fill.s-done { background:rgba(159,122,234,.75); }
+  .dpb-fill.s-notint { background:rgba(255,80,80,.6); }
+  .dpb-val { font-size:10px; color:var(--muted); font-family:'JetBrains Mono',monospace; width:38px; text-align:right; flex-shrink:0; }
+  .d-system-status { display:flex; flex-direction:column; gap:9px; }
+  .dss-row { display:flex; align-items:center; justify-content:space-between; }
+  .dss-label { font-size:10px; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+  .dss-badge { font-size:9px; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:3px; }
+  .dss-badge.ok { background:rgba(0,255,174,.12); color:var(--green); }
+  .dss-badge.warn { background:rgba(255,200,60,.12); color:#fcd34d; }
+
+  /* ── CONTACTS VIEW ── */
+  .contacts-view-header { display:flex; align-items:center; justify-content:space-between; padding:16px 24px 14px; flex-shrink:0; border-bottom:1px solid var(--border); }
+  .btn-new-outreach { display:flex; align-items:center; gap:6px; }
+
+  /* ── NEW OUTREACH MODAL ── */
+  .nm-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,.72); backdrop-filter:blur(6px); z-index:1000; align-items:center; justify-content:center; }
+  .nm-backdrop.open { display:flex; }
+  .nm-modal { background:var(--surface); border:1px solid var(--border); border-radius:14px; width:clamp(480px,60vw,800px); max-height:88vh; display:flex; flex-direction:column; box-shadow:0 24px 60px rgba(0,0,0,.85); animation:nmSlideIn .22s cubic-bezier(.34,1.36,.64,1); }
+  @keyframes nmSlideIn { from { transform:scale(.93) translateY(10px); opacity:0; } to { transform:scale(1) translateY(0); opacity:1; } }
+  .nm-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px 13px; border-bottom:1px solid var(--border); flex-shrink:0; }
+  .nm-title { display:flex; align-items:center; gap:8px; font-size:14px; font-weight:700; color:var(--text); }
+  .nm-close { background:transparent; border:none; color:var(--muted); cursor:pointer; padding:4px 5px; border-radius:5px; display:flex; line-height:1; }
+  .nm-close:hover { color:var(--text); background:rgba(255,255,255,.07); }
+  .nm-body { padding:18px 20px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:13px; }
+  .nm-row { display:grid; gap:12px; }
+  .nm-row-2 { grid-template-columns:1fr 1fr; }
+  .nm-row-3 { grid-template-columns:1fr 1fr 1fr; }
+  .nm-field { display:flex; flex-direction:column; gap:5px; }
+  .nm-label { font-size:9px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+  .nm-input, .nm-select, .nm-textarea { background:#070d16; border:1px solid var(--border); border-radius:7px; color:var(--text); font-family:'JetBrains Mono',monospace; font-size:11px; padding:8px 11px; outline:none; transition:border-color .15s; width:100%; box-sizing:border-box; }
+  .nm-input:focus, .nm-select:focus, .nm-textarea:focus { border-color:var(--green); box-shadow:0 0 0 2px rgba(0,255,174,.1); }
+  .nm-textarea { resize:vertical; min-height:88px; line-height:1.5; }
+  .nm-date { color-scheme:dark; }
+  .nm-type-pills { display:flex; gap:6px; flex-wrap:wrap; padding-top:1px; }
+  .nm-type-pill { background:#070d16; border:1px solid var(--border); border-radius:6px; color:var(--muted); font-size:10px; font-family:'JetBrains Mono',monospace; padding:5px 11px; cursor:pointer; transition:all .15s; }
+  .nm-type-pill.active { background:rgba(0,255,174,.1); border-color:rgba(0,255,174,.5); color:var(--green); }
+  .nm-type-pill:hover:not(.active) { border-color:rgba(255,255,255,.22); color:var(--text); }
+  .nm-footer { padding:13px 20px 16px; border-top:1px solid var(--border); display:flex; align-items:center; gap:7px; justify-content:flex-end; flex-shrink:0; }
+  .nm-btn { border-radius:7px; font-size:11px; font-family:'JetBrains Mono',monospace; padding:7px 15px; cursor:pointer; display:flex; align-items:center; gap:6px; transition:all .15s; border:1px solid transparent; font-weight:500; }
+  .nm-btn-ghost { background:transparent; border-color:transparent; color:var(--muted); }
+  .nm-btn-ghost:hover { color:var(--text); background:rgba(255,255,255,.04); }
+  .nm-btn-secondary { background:rgba(255,255,255,.04); border-color:var(--border); color:var(--muted); }
+  .nm-btn-secondary:hover { border-color:rgba(255,255,255,.28); color:var(--text); }
+  .nm-btn-outline { background:transparent; border-color:rgba(0,255,174,.4); color:var(--green); }
+  .nm-btn-outline:hover { background:rgba(0,255,174,.06); }
+  .nm-btn-primary { background:var(--green); border-color:var(--green); color:#000; font-weight:700; }
+  .nm-btn-primary:hover { filter:brightness(1.1); }
+
   /* ── INTELLIGENCE VIEW ── */
   .intel-body { padding:18px 24px 24px; display:flex; flex-direction:column; gap:16px; }
   .intel-stat-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; }
@@ -962,6 +1065,12 @@
     .nav-item.active { border-left:none; border-bottom-color:var(--green); }
     .main-content { overflow:auto; height:auto; }
     .workspace { flex-direction:column; overflow:visible; height:auto; }
+    .dash-kpi-grid { grid-template-columns:repeat(3,1fr) !important; }
+    .dash-mid-row { grid-template-columns:1fr !important; }
+    .dash-bottom-row { grid-template-columns:1fr !important; }
+    .nm-row-2, .nm-row-3 { grid-template-columns:1fr !important; }
+    .nm-modal { width:95vw !important; }
+    .contacts-view-header { flex-direction:column; gap:10px; align-items:flex-start; }
     .table-section { overflow:visible; height:auto; }
     .table-inner-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
     .right-panel { width:100%; border-left:none; border-top:1px solid var(--border); height:auto; }
@@ -1019,9 +1128,9 @@
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         Intelligence
       </a>
-      <a class="nav-item" data-view="outreach" href="#" onclick="switchView('outreach');return false;">
-        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Outreach
+      <a class="nav-item" data-view="contacts" href="#" onclick="switchView('contacts');return false;">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Contacts
       </a>
       <a class="nav-item" data-view="automations" href="#" onclick="switchView('automations');return false;">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -1102,13 +1211,92 @@
       </div>
     </div>
 
-    <!-- WORKSPACE -->
+    <!-- WORKSPACE / DASHBOARD -->
     <div class="workspace" id="viewDashboard">
+      <div class="dash-body">
+        <div class="dash-view-header">
+          <div class="dash-view-title">Dashboard</div>
+          <div class="dash-view-sub">Pipeline overview · Live data</div>
+        </div>
 
-      <!-- TABLE SECTION -->
+        <!-- KPI GRID -->
+        <div class="dash-kpi-grid">
+          <div class="dash-kpi-card kpi-accent">
+            <div class="kpi-label">Total Leads</div>
+            <div class="kpi-val" id="dKpiTotal">176</div>
+            <div class="kpi-sub">in database</div>
+          </div>
+          <div class="dash-kpi-card kpi-green">
+            <div class="kpi-label">Contacted</div>
+            <div class="kpi-val" id="dKpiContacted">0</div>
+            <div class="kpi-sub" id="dKpiContactedPct">0% of total</div>
+          </div>
+          <div class="dash-kpi-card kpi-blue">
+            <div class="kpi-label">Replied</div>
+            <div class="kpi-val" id="dKpiReplied">0</div>
+            <div class="kpi-sub" id="dKpiRepliedPct">0% reply rate</div>
+          </div>
+          <div class="dash-kpi-card kpi-purple">
+            <div class="kpi-label">Closed / Done</div>
+            <div class="kpi-val" id="dKpiDone">0</div>
+            <div class="kpi-sub" id="dKpiDonePct">0% conversion</div>
+          </div>
+          <div class="dash-kpi-card">
+            <div class="kpi-label">Not Interested</div>
+            <div class="kpi-val" id="dKpiNotInt">0</div>
+            <div class="kpi-sub" id="dKpiNotIntPct">0% of reached</div>
+          </div>
+          <div class="dash-kpi-card">
+            <div class="kpi-label">Pending</div>
+            <div class="kpi-val" id="dKpiPending">176</div>
+            <div class="kpi-sub">not yet contacted</div>
+          </div>
+        </div>
+
+        <!-- MID ROW: Funnel + Industry + Assignee -->
+        <div class="dash-mid-row">
+          <div class="dash-card">
+            <div class="dash-card-title">Pipeline Funnel</div>
+            <div id="dFunnel" class="funnel-wrap"></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-title">Industry Breakdown</div>
+            <div id="dIndustryChart" class="industry-chart"></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-title">Assignee Activity</div>
+            <div id="dAssigneeChart" class="assignee-chart"></div>
+          </div>
+        </div>
+
+        <!-- BOTTOM ROW: Progress + System -->
+        <div class="dash-bottom-row">
+          <div class="dash-card">
+            <div class="dash-card-title">Outreach Progress by Status</div>
+            <div id="dProgressBars" class="d-progress-bars"></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-title">System Status</div>
+            <div id="dSystemStatus" class="d-system-status"></div>
+          </div>
+        </div>
+
+      </div><!-- /.dash-body -->
+    </div><!-- /.workspace / #viewDashboard -->
+
+    <!-- ── CONTACTS & OUTREACH VIEW ── -->
+    <div class="view-panel" data-view="contacts" id="viewContacts">
+      <div class="contacts-view-header">
+        <div>
+          <div class="view-header-title">Contacts &amp; Outreach</div>
+          <div class="view-header-sub">All leads · Manage status, notes, and outreach activity</div>
+        </div>
+        <button class="btn btn-primary btn-new-outreach" onclick="openNewOutreachModal()">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Outreach
+        </button>
+      </div>
       <div class="table-section">
-
-        <!-- TOOLBAR -->
         <div class="table-toolbar">
           <div class="search-wrap">
             <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -1719,7 +1907,7 @@ ianentila27@gmail.com</div>
         </div><!-- /.table-inner-wrap -->
       </div><!-- /.table-section -->
 
-    </div><!-- /.workspace -->
+    </div><!-- /.viewContacts -->
 
     <!-- ── INTELLIGENCE VIEW ── -->
     <div class="view-panel" data-view="intelligence" id="viewIntelligence">
@@ -2147,6 +2335,93 @@ ianentila27@gmail.com</div>
         <button onclick="closeImportModal()" style="background:none;border:1px solid var(--border2);color:var(--muted);border-radius:7px;padding:7px 16px;cursor:pointer;font-size:12px">Cancel</button>
         <button onclick="doImportState()" style="background:var(--green);border:none;color:#000;border-radius:7px;padding:7px 16px;cursor:pointer;font-size:12px;font-weight:700">Load & Push to Cloud</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- NEW OUTREACH MODAL -->
+<div id="newOutreachModal" class="nm-backdrop" onclick="handleNewOutreachBackdropClick(event)">
+  <div class="nm-modal" role="dialog" aria-modal="true">
+    <div class="nm-header">
+      <div class="nm-title">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        New Outreach
+      </div>
+      <button class="nm-close" onclick="closeNewOutreachModal()" aria-label="Close">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="nm-body">
+      <div class="nm-row nm-row-2">
+        <div class="nm-field">
+          <label class="nm-label">Contact *</label>
+          <select class="nm-select" id="nmContact">
+            <option value="">Select a contact…</option>
+          </select>
+        </div>
+        <div class="nm-field">
+          <label class="nm-label">Outreach Type</label>
+          <div class="nm-type-pills" id="nmTypePills">
+            <button class="nm-type-pill active" data-type="email">✉ Email</button>
+            <button class="nm-type-pill" data-type="linkedin">🔗 LinkedIn</button>
+            <button class="nm-type-pill" data-type="phone">📞 Phone</button>
+            <button class="nm-type-pill" data-type="sms">💬 SMS</button>
+          </div>
+        </div>
+      </div>
+      <div class="nm-field" id="nmSubjectField">
+        <label class="nm-label">Subject</label>
+        <input class="nm-input" type="text" id="nmSubject" placeholder="e.g. Quick intro — AGLA Media">
+      </div>
+      <div class="nm-field">
+        <label class="nm-label">Message / Notes</label>
+        <textarea class="nm-textarea" id="nmMessage" placeholder="Your outreach message or key talking points…" rows="5"></textarea>
+      </div>
+      <div class="nm-row nm-row-3">
+        <div class="nm-field">
+          <label class="nm-label">Campaign Name</label>
+          <input class="nm-input" type="text" id="nmCampaign" placeholder="e.g. Q3 MedSpa Blitz">
+        </div>
+        <div class="nm-field">
+          <label class="nm-label">Priority</label>
+          <select class="nm-select" id="nmPriority">
+            <option value="normal">Normal</option>
+            <option value="high">High</option>
+            <option value="urgent">Urgent</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <div class="nm-field">
+          <label class="nm-label">Status</label>
+          <select class="nm-select" id="nmOutreachStatus">
+            <option value="draft">Draft</option>
+            <option value="scheduled">Scheduled</option>
+            <option value="sent">Sent</option>
+          </select>
+        </div>
+      </div>
+      <div class="nm-row nm-row-2">
+        <div class="nm-field">
+          <label class="nm-label">Personalization Notes</label>
+          <input class="nm-input" type="text" id="nmPersonalization" placeholder="e.g. Mentioned clinic rebrand on IG">
+        </div>
+        <div class="nm-field">
+          <label class="nm-label">Follow-up Date</label>
+          <input class="nm-input nm-date" type="date" id="nmFollowup">
+        </div>
+      </div>
+    </div>
+    <div class="nm-footer">
+      <button class="nm-btn nm-btn-ghost" onclick="closeNewOutreachModal()">Cancel</button>
+      <button class="nm-btn nm-btn-secondary" onclick="saveNewOutreach('draft')">Save Draft</button>
+      <button class="nm-btn nm-btn-outline" onclick="saveNewOutreach('scheduled')">
+        <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Schedule
+      </button>
+      <button class="nm-btn nm-btn-primary" onclick="saveNewOutreach('sent')">
+        <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Send Outreach
+      </button>
     </div>
   </div>
 </div>
@@ -2711,6 +2986,7 @@ function initApp() {
   // Persist immediately so a hard refresh always finds lead data in localStorage
   try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
   try { render(); } catch(e) { console.error('[render]', e); setTimeout(render, 100); }
+  try { renderDashboard(); } catch(e) {}
   // Failsafe: if tbody is empty after 800ms (e.g. render threw silently), force another render
   setTimeout(() => {
     try {
@@ -2757,6 +3033,10 @@ function updateStats(visibleCount) {
   document.getElementById('statDone').textContent     = done;
   document.getElementById('statPct').textContent      = pct + '%';
   document.getElementById('progressFill').style.width = pct + '%';
+  // Refresh dashboard KPIs if dashboard is currently visible
+  if (!document.getElementById('viewDashboard').classList.contains('hidden')) {
+    try { renderDashboard(); } catch(e) {}
+  }
 }
 
 /* ─────────────── FILTER / SORT ─────────────── */
@@ -3729,6 +4009,103 @@ function setTheme(t) {
   );
 })();
 
+/* ─────────────── NEW OUTREACH MODAL ─────────────── */
+let outreachHistory = [];
+const OH_KEY = 'outreachHistory_v1';
+
+(function loadOutreachHistory() {
+  try {
+    const raw = localStorage.getItem(OH_KEY);
+    if (raw) outreachHistory = JSON.parse(raw) || [];
+  } catch(e) {}
+})();
+
+function persistOutreachHistory() {
+  try { localStorage.setItem(OH_KEY, JSON.stringify(outreachHistory)); } catch(e) {}
+}
+
+function openNewOutreachModal(prefillId) {
+  // Populate contact dropdown from LEADS
+  const sel = document.getElementById('nmContact');
+  sel.innerHTML = '<option value="">Select a contact…</option>' +
+    LEADS.map(l => `<option value="${l.id}"${prefillId==l.id?' selected':''}>${l.company}${l.contact?' — '+l.contact:''}</option>`).join('');
+
+  // Reset fields
+  document.getElementById('nmSubject').value = '';
+  document.getElementById('nmMessage').value = '';
+  document.getElementById('nmCampaign').value = '';
+  document.getElementById('nmPersonalization').value = '';
+  document.getElementById('nmFollowup').value = '';
+  document.getElementById('nmPriority').value = 'normal';
+  document.getElementById('nmOutreachStatus').value = 'draft';
+
+  // Reset type pills to Email
+  document.querySelectorAll('.nm-type-pill').forEach(p => p.classList.toggle('active', p.dataset.type === 'email'));
+  document.getElementById('nmSubjectField').style.display = '';
+
+  document.getElementById('newOutreachModal').classList.add('open');
+}
+
+function closeNewOutreachModal() {
+  document.getElementById('newOutreachModal').classList.remove('open');
+}
+
+function handleNewOutreachBackdropClick(e) {
+  if (e.target === document.getElementById('newOutreachModal')) closeNewOutreachModal();
+}
+
+// Type pill toggle
+document.addEventListener('click', function(e) {
+  const pill = e.target.closest('.nm-type-pill');
+  if (!pill) return;
+  document.querySelectorAll('.nm-type-pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  // Show/hide subject field based on type
+  const showSubject = ['email','linkedin'].includes(pill.dataset.type);
+  const sf = document.getElementById('nmSubjectField');
+  if (sf) sf.style.display = showSubject ? '' : 'none';
+});
+
+function saveNewOutreach(statusOverride) {
+  const contactId = document.getElementById('nmContact').value;
+  if (!contactId) { alert('Please select a contact.'); return; }
+
+  const lead = LEADS.find(l => String(l.id) === String(contactId));
+  const type = document.querySelector('.nm-type-pill.active')?.dataset.type || 'email';
+
+  const record = {
+    id: Date.now(),
+    leadId: Number(contactId),
+    company: lead?.company || '',
+    contact: lead?.contact || '',
+    type,
+    subject:     document.getElementById('nmSubject').value.trim(),
+    message:     document.getElementById('nmMessage').value.trim(),
+    campaign:    document.getElementById('nmCampaign').value.trim(),
+    priority:    document.getElementById('nmPriority').value,
+    status:      statusOverride || document.getElementById('nmOutreachStatus').value,
+    personalization: document.getElementById('nmPersonalization').value.trim(),
+    followup:    document.getElementById('nmFollowup').value,
+    createdAt:   new Date().toISOString(),
+  };
+
+  outreachHistory.push(record);
+  persistOutreachHistory();
+
+  // If status is 'sent', also update lead status to 'contacted' if still 'new'
+  if (record.status === 'sent') {
+    const k = String(contactId);
+    if (state[k] && state[k].status === 'new') {
+      state[k].status = 'contacted';
+      persist();
+      render();
+    }
+  }
+
+  showToast(`Outreach ${record.status === 'sent' ? 'sent' : record.status === 'scheduled' ? 'scheduled' : 'saved as draft'} — ${record.company}`);
+  closeNewOutreachModal();
+}
+
 /* ─────────────── VIEW SWITCHING ─────────────── */
 function switchView(view) {
   const dashboard = document.getElementById('viewDashboard');
@@ -3739,11 +4116,114 @@ function switchView(view) {
   document.querySelectorAll('.nav-item[data-view]').forEach(n =>
     n.classList.toggle('active', n.dataset.view === view)
   );
+  if (view === 'dashboard') renderDashboard();
   if (view === 'intelligence') renderIntelligence();
   if (view === 'outreach') {
     renderPmCards(document.querySelector('.pm-pill.active')?.dataset.industry || 'dental');
     if (!plRendered) renderPitchLib();
   }
+}
+
+/* ─────────────── DASHBOARD KPIs ─────────────── */
+function renderDashboard() {
+  const total     = LEADS.length;
+  const contacted = Object.values(state).filter(s => s.status === 'contacted').length;
+  const replied   = Object.values(state).filter(s => s.status === 'replied').length;
+  const done      = Object.values(state).filter(s => s.done).length;
+  const notint    = Object.values(state).filter(s => s.status === 'notint').length;
+  const pending   = total - contacted - replied - notint - done;
+
+  const pct = (n, d) => d > 0 ? Math.round(n / d * 100) + '%' : '0%';
+
+  const el = id => document.getElementById(id);
+
+  el('dKpiTotal').textContent    = total;
+  el('dKpiContacted').textContent = contacted;
+  el('dKpiReplied').textContent   = replied;
+  el('dKpiDone').textContent      = done;
+  el('dKpiNotInt').textContent    = notint;
+  el('dKpiPending').textContent   = Math.max(0, pending);
+  el('dKpiContactedPct').textContent = pct(contacted, total) + ' of total';
+  el('dKpiRepliedPct').textContent   = pct(replied, contacted + replied || 1) + ' reply rate';
+  el('dKpiDonePct').textContent      = pct(done, total) + ' conversion';
+  el('dKpiNotIntPct').textContent    = pct(notint, contacted + replied + notint || 1) + ' of reached';
+
+  // Pipeline Funnel
+  const funnelData = [
+    { label: 'Total',     val: total,     cls: 'fb-new' },
+    { label: 'Contacted', val: contacted, cls: 'fb-contacted' },
+    { label: 'Replied',   val: replied,   cls: 'fb-replied' },
+    { label: 'Done',      val: done,      cls: 'fb-done' },
+    { label: 'Not Int.',  val: notint,    cls: 'fb-notint' },
+  ];
+  el('dFunnel').innerHTML = funnelData.map(f => {
+    const w = total > 0 ? Math.round(f.val / total * 100) : 0;
+    return `<div class="funnel-bar">
+      <span class="funnel-bar-label">${f.label}</span>
+      <div class="funnel-bar-track">
+        <div class="funnel-bar-fill ${f.cls}" style="width:${Math.max(w,f.val>0?3:0)}%">
+          <span class="fb-val">${f.val}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Industry Breakdown
+  const industries = {};
+  LEADS.forEach(l => { industries[l.industry] = (industries[l.industry] || 0) + 1; });
+  const indSorted = Object.entries(industries).sort((a,b) => b[1]-a[1]);
+  const maxInd = indSorted[0]?.[1] || 1;
+  el('dIndustryChart').innerHTML = indSorted.map(([name, count]) =>
+    `<div class="ic-row">
+      <span class="ic-name" title="${name}">${name}</span>
+      <div class="ic-bar-track"><div class="ic-bar-fill" style="width:${Math.round(count/maxInd*100)}%"></div></div>
+      <span class="ic-count">${count}</span>
+    </div>`
+  ).join('');
+
+  // Assignee Activity
+  const assignees = {};
+  Object.values(state).forEach(s => {
+    if (s.outreach) assignees[s.outreach] = (assignees[s.outreach] || 0) + 1;
+  });
+  const asgSorted = Object.entries(assignees).sort((a,b) => b[1]-a[1]);
+  const maxAsg = asgSorted[0]?.[1] || 1;
+  const totalAssigned = asgSorted.reduce((s,[,v]) => s+v, 0);
+  el('dAssigneeChart').innerHTML = asgSorted.length > 0
+    ? asgSorted.map(([name, count]) =>
+        `<div class="ac-item">
+          <div class="ac-top"><span class="ac-name">${name}</span><span class="ac-count">${count} leads</span></div>
+          <div class="ac-bar-track"><div class="ac-bar-fill" style="width:${Math.round(count/maxAsg*100)}%"></div></div>
+        </div>`
+      ).join('')
+    : '<div class="ac-none">No assignees yet — use the By column in Contacts</div>';
+
+  // Progress Bars by status
+  const statuses = [
+    { key:'new',       label:'Pending',      count: Math.max(0,pending), cls:'s-new' },
+    { key:'contacted', label:'Contacted',    count: contacted,           cls:'s-contacted' },
+    { key:'replied',   label:'Replied',      count: replied,             cls:'s-replied' },
+    { key:'done',      label:'Done',         count: done,                cls:'s-done' },
+    { key:'notint',    label:'Not Int.',     count: notint,              cls:'s-notint' },
+  ];
+  el('dProgressBars').innerHTML = statuses.map(s => {
+    const w = total > 0 ? Math.round(s.count / total * 100) : 0;
+    return `<div class="dpb-row">
+      <span class="dpb-label">${s.label}</span>
+      <div class="dpb-track"><div class="dpb-fill ${s.cls}" style="width:${w}%"></div></div>
+      <span class="dpb-val">${s.count} <span style="opacity:.5">(${w}%)</span></span>
+    </div>`;
+  }).join('');
+
+  // System Status
+  const syncOk = document.getElementById('syncDot')?.classList.contains('synced');
+  const syncText = document.getElementById('syncText')?.textContent || '—';
+  el('dSystemStatus').innerHTML = `
+    <div class="dss-row"><span class="dss-label">Firebase sync</span><span class="dss-badge ${syncOk?'ok':'warn'}">${syncText}</span></div>
+    <div class="dss-row"><span class="dss-label">Leads loaded</span><span class="dss-badge ok">${total}</span></div>
+    <div class="dss-row"><span class="dss-label">Local storage</span><span class="dss-badge ok">active</span></div>
+    <div class="dss-row"><span class="dss-label">Last save</span><span class="dss-badge ok">${document.getElementById('saveText')?.textContent||'—'}</span></div>
+  `;
 }
 
 /* ─────────────── INTELLIGENCE ─────────────── */
