@@ -829,6 +829,7 @@
   .dash-kpi-card.kpi-purple .kpi-val { color:#9f7aea; }
   .kpi-sub { font-size:9px; color:var(--muted); font-family:'JetBrains Mono',monospace; margin-top:2px; }
   .dash-mid-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+  .dash-intel-row { display:grid; grid-template-columns:3fr 2fr; gap:12px; }
   .dash-bottom-row { display:grid; grid-template-columns:3fr 2fr; gap:12px; }
   .dash-card { background:var(--surface); border:1px solid var(--border); border-radius:11px; padding:16px 18px; }
   .dash-card-title { font-size:9px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); font-family:'JetBrains Mono',monospace; margin-bottom:12px; }
@@ -1067,6 +1068,7 @@
     .workspace { flex-direction:column; overflow:visible; height:auto; }
     .dash-kpi-grid { grid-template-columns:repeat(3,1fr) !important; }
     .dash-mid-row { grid-template-columns:1fr !important; }
+    .dash-intel-row { grid-template-columns:1fr !important; }
     .dash-bottom-row { grid-template-columns:1fr !important; }
     .nm-row-2, .nm-row-3 { grid-template-columns:1fr !important; }
     .nm-modal { width:95vw !important; }
@@ -1123,10 +1125,6 @@
       <a class="nav-item active" data-view="dashboard" href="#" onclick="switchView('dashboard');return false;">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
         Dashboard
-      </a>
-      <a class="nav-item" data-view="intelligence" href="#" onclick="switchView('intelligence');return false;">
-        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        Intelligence
       </a>
       <a class="nav-item" data-view="contacts" href="#" onclick="switchView('contacts');return false;">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -1266,6 +1264,44 @@
           <div class="dash-card">
             <div class="dash-card-title">Assignee Activity</div>
             <div id="dAssigneeChart" class="assignee-chart"></div>
+          </div>
+        </div>
+
+        <!-- DATA COVERAGE + COUNTRY (from Intelligence) -->
+        <div class="dash-intel-row">
+          <div class="dash-card">
+            <div class="dash-card-title">Data Coverage</div>
+            <div class="intel-stat-row">
+              <div class="intel-stat">
+                <div class="intel-stat-label">With Email</div>
+                <div class="intel-stat-val" id="iEmail">—</div>
+                <div class="intel-stat-pct" id="iEmailPct">of total</div>
+              </div>
+              <div class="intel-stat">
+                <div class="intel-stat-label">With LinkedIn</div>
+                <div class="intel-stat-val" id="iLinkedin">—</div>
+                <div class="intel-stat-pct" id="iLinkedinPct">of total</div>
+              </div>
+              <div class="intel-stat">
+                <div class="intel-stat-label">With Phone</div>
+                <div class="intel-stat-val" id="iPhone">—</div>
+                <div class="intel-stat-pct" id="iPhonePct">of total</div>
+              </div>
+              <div class="intel-stat">
+                <div class="intel-stat-label">Named Contact</div>
+                <div class="intel-stat-val" id="iContact">—</div>
+                <div class="intel-stat-pct" id="iContactPct">of total</div>
+              </div>
+              <div class="intel-stat">
+                <div class="intel-stat-label">Fully Covered</div>
+                <div class="intel-stat-val" id="iFull">—</div>
+                <div class="intel-stat-pct">email + li + name</div>
+              </div>
+            </div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-title">By Country</div>
+            <div id="intelCountryRows"></div>
           </div>
         </div>
 
@@ -1910,57 +1946,6 @@ ianentila27@gmail.com</div>
     </div><!-- /.viewContacts -->
 
     <!-- ── INTELLIGENCE VIEW ── -->
-    <div class="view-panel" data-view="intelligence" id="viewIntelligence">
-      <div class="view-header">
-        <div class="view-header-title">Intelligence</div>
-        <div class="view-header-sub">Lead database analytics, computed from all records</div>
-      </div>
-      <div class="intel-body">
-        <div class="intel-stat-row">
-          <div class="intel-stat accent">
-            <div class="intel-stat-label">Total Leads</div>
-            <div class="intel-stat-val" id="iTotal">176</div>
-            <div class="intel-stat-pct">all records</div>
-          </div>
-          <div class="intel-stat">
-            <div class="intel-stat-label">With Email</div>
-            <div class="intel-stat-val" id="iEmail">—</div>
-            <div class="intel-stat-pct" id="iEmailPct">of total</div>
-          </div>
-          <div class="intel-stat">
-            <div class="intel-stat-label">With LinkedIn</div>
-            <div class="intel-stat-val" id="iLinkedin">—</div>
-            <div class="intel-stat-pct" id="iLinkedinPct">of total</div>
-          </div>
-          <div class="intel-stat">
-            <div class="intel-stat-label">With Phone</div>
-            <div class="intel-stat-val" id="iPhone">—</div>
-            <div class="intel-stat-pct" id="iPhonePct">of total</div>
-          </div>
-          <div class="intel-stat">
-            <div class="intel-stat-label">Named Contact</div>
-            <div class="intel-stat-val" id="iContact">—</div>
-            <div class="intel-stat-pct" id="iContactPct">of total</div>
-          </div>
-          <div class="intel-stat">
-            <div class="intel-stat-label">Fully Covered</div>
-            <div class="intel-stat-val" id="iFull">—</div>
-            <div class="intel-stat-pct" id="iFullPct">email + li + name</div>
-          </div>
-        </div>
-        <div class="intel-tables">
-          <div class="intel-table-card">
-            <div class="intel-table-title">By Industry</div>
-            <div id="intelIndustryRows"></div>
-          </div>
-          <div class="intel-table-card">
-            <div class="intel-table-title">By Country</div>
-            <div id="intelCountryRows"></div>
-          </div>
-        </div>
-      </div>
-    </div><!-- /.viewIntelligence -->
-
     <!-- ── OUTREACH VIEW ── -->
     <div class="view-panel" data-view="outreach" id="viewOutreach">
       <div class="view-header">
@@ -4117,7 +4102,6 @@ function switchView(view) {
     n.classList.toggle('active', n.dataset.view === view)
   );
   if (view === 'dashboard') renderDashboard();
-  if (view === 'intelligence') renderIntelligence();
   if (view === 'outreach') {
     renderPmCards(document.querySelector('.pm-pill.active')?.dataset.industry || 'dental');
     if (!plRendered) renderPitchLib();
@@ -4224,10 +4208,12 @@ function renderDashboard() {
     <div class="dss-row"><span class="dss-label">Local storage</span><span class="dss-badge ok">active</span></div>
     <div class="dss-row"><span class="dss-label">Last save</span><span class="dss-badge ok">${document.getElementById('saveText')?.textContent||'—'}</span></div>
   `;
+
+  renderCoverage();
 }
 
-/* ─────────────── INTELLIGENCE ─────────────── */
-function renderIntelligence() {
+/* ─────────────── DATA COVERAGE (merged into Dashboard) ─────────────── */
+function renderCoverage() {
   const total    = LEADS.length;
   const withEmail    = LEADS.filter(l => l.email).length;
   const withLinkedin = LEADS.filter(l => l.linkedin).length;
@@ -4237,7 +4223,6 @@ function renderIntelligence() {
 
   const pct = (n) => Math.round(n / total * 100) + '%';
 
-  document.getElementById('iTotal').textContent    = total;
   document.getElementById('iEmail').textContent    = withEmail;
   document.getElementById('iEmailPct').textContent = pct(withEmail) + ' of total';
   document.getElementById('iLinkedin').textContent    = withLinkedin;
@@ -4248,26 +4233,18 @@ function renderIntelligence() {
   document.getElementById('iContactPct').textContent = pct(withContact) + ' of total';
   document.getElementById('iFull').textContent    = withFull;
 
-  function countBy(key) {
-    return LEADS.reduce((acc, l) => { acc[l[key]] = (acc[l[key]] || 0) + 1; return acc; }, {});
-  }
+  const countryCounts = LEADS.reduce((acc, l) => { acc[l.country] = (acc[l.country] || 0) + 1; return acc; }, {});
+  const sorted = Object.entries(countryCounts).sort((a,b) => b[1] - a[1]);
+  const max = sorted[0]?.[1] || 1;
+  document.getElementById('intelCountryRows').innerHTML = sorted.map(([label, count]) =>
+    `<div class="intel-row">
+      <div class="intel-row-label">${label}</div>
+      <div class="intel-row-bar-wrap"><div class="intel-row-bar" style="width:${Math.round(count/max*100)}%"></div></div>
+      <div class="intel-row-count">${count}</div>
+    </div>`
+  ).join('');
 
-  function renderRows(containerId, countObj) {
-    const sorted = Object.entries(countObj).sort((a,b) => b[1] - a[1]);
-    const max = sorted[0]?.[1] || 1;
-    document.getElementById(containerId).innerHTML = sorted.map(([label, count]) =>
-      `<div class="intel-row">
-        <div class="intel-row-label">${label}</div>
-        <div class="intel-row-bar-wrap"><div class="intel-row-bar" style="width:${Math.round(count/max*100)}%"></div></div>
-        <div class="intel-row-count">${count}</div>
-      </div>`
-    ).join('');
-  }
-
-  renderRows('intelIndustryRows', countBy('industry'));
-  renderRows('intelCountryRows', countBy('country'));
   document.getElementById('settingsTotal').textContent = total;
-
 }
 
 
