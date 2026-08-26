@@ -281,6 +281,20 @@
   .mail-link:hover { background:rgba(0,255,174,.1); border-color:var(--green); color:var(--green); }
   .no-data { color:var(--muted2); font-size:11px; }
 
+  /* ── LINKEDIN + CONVERSATION CELL ── */
+  .li-cell { display:flex; align-items:center; gap:5px; }
+  .convo-btn {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:6px; border:1px solid var(--border2);
+    background:transparent; color:var(--muted); cursor:pointer; transition:all .2s; flex-shrink:0; padding:0;
+  }
+  .convo-btn:hover { background:rgba(0,255,174,.1); border-color:var(--green); color:var(--green); }
+  .convo-btn.has-val { border-color:rgba(0,255,174,.4); color:var(--green); background:rgba(0,255,174,.06); }
+
+  /* ── NEWLY ADDED LEAD FLASH ── */
+  @keyframes rowFlash { 0% { background:rgba(0,255,174,.22); } 100% { background:transparent; } }
+  tr.row-flash td { animation:rowFlash 1.6s ease; }
+
   .status-sel {
     appearance:none; border:none; border-radius:5px; padding:3px 22px 3px 8px;
     font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:500;
@@ -1327,10 +1341,16 @@
           <div class="view-header-title">Contacts &amp; Outreach</div>
           <div class="view-header-sub">All leads · Manage status, notes, and outreach activity</div>
         </div>
-        <button class="btn btn-primary btn-new-outreach" onclick="openNewOutreachModal()">
-          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          New Outreach
-        </button>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-ghost btn-add-lead" onclick="openAddLeadModal()">
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Lead
+          </button>
+          <button class="btn btn-primary btn-new-outreach" onclick="openNewOutreachModal()">
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Outreach
+          </button>
+        </div>
       </div>
       <div class="table-section">
         <div class="table-toolbar">
@@ -2411,6 +2431,126 @@ ianentila27@gmail.com</div>
   </div>
 </div>
 
+<!-- ADD LEAD MODAL -->
+<div id="addLeadModal" class="nm-backdrop" onclick="if(event.target===this)closeAddLeadModal()">
+  <div class="nm-modal" role="dialog" aria-modal="true" style="width:clamp(420px,50vw,640px)">
+    <div class="nm-header">
+      <div class="nm-title">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Lead
+      </div>
+      <button class="nm-close" onclick="closeAddLeadModal()" aria-label="Close">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="nm-body">
+      <div class="nm-field">
+        <label class="nm-label">LinkedIn Profile URL *</label>
+        <input class="nm-input" type="url" id="alLinkedin" placeholder="https://www.linkedin.com/in/…">
+      </div>
+      <div class="nm-row nm-row-2">
+        <div class="nm-field">
+          <label class="nm-label">Company *</label>
+          <input class="nm-input" type="text" id="alCompany" placeholder="Company name">
+        </div>
+        <div class="nm-field">
+          <label class="nm-label">Contact Name</label>
+          <input class="nm-input" type="text" id="alContact" placeholder="e.g. Jane Smith">
+        </div>
+      </div>
+      <div class="nm-row nm-row-2">
+        <div class="nm-field">
+          <label class="nm-label">Industry</label>
+          <select class="nm-select" id="alIndustry">
+            <option value="Dental">Dental</option>
+            <option value="MedSpa">MedSpa</option>
+            <option value="Marketing Agency" selected>Marketing Agency</option>
+            <option value="Real Estate Tech">Real Estate Tech</option>
+            <option value="Ecommerce / DTC">Ecommerce / DTC</option>
+            <option value="Chiropractic">Chiropractic</option>
+            <option value="Wellness">Wellness</option>
+            <option value="Plastic Surgery">Plastic Surgery</option>
+            <option value="Cosmetic Dentistry">Cosmetic Dentistry</option>
+            <option value="Orthodontics">Orthodontics</option>
+            <option value="Aesthetics">Aesthetics</option>
+          </select>
+        </div>
+        <div class="nm-field">
+          <label class="nm-label">Country</label>
+          <select class="nm-select" id="alCountry">
+            <option value="US" selected>US</option>
+            <option value="Australia">Australia</option>
+            <option value="Canada">Canada</option>
+            <option value="Philippines">Philippines</option>
+          </select>
+        </div>
+      </div>
+      <div class="nm-row nm-row-2">
+        <div class="nm-field">
+          <label class="nm-label">Position / Title</label>
+          <input class="nm-input" type="text" id="alTitle" placeholder="e.g. Founder / Owner">
+        </div>
+        <div class="nm-field">
+          <label class="nm-label">Email</label>
+          <input class="nm-input" type="email" id="alEmail" placeholder="name@company.com">
+        </div>
+      </div>
+      <div class="nm-row nm-row-2">
+        <div class="nm-field">
+          <label class="nm-label">Phone</label>
+          <input class="nm-input" type="text" id="alPhone" placeholder="+1 (555) 555-5555">
+        </div>
+        <div class="nm-field">
+          <label class="nm-label">Website</label>
+          <input class="nm-input" type="text" id="alWebsite" placeholder="https://…">
+        </div>
+      </div>
+      <div class="nm-field">
+        <label class="nm-label">Address</label>
+        <input class="nm-input" type="text" id="alAddress" placeholder="City, State/Country">
+      </div>
+    </div>
+    <div class="nm-footer">
+      <button class="nm-btn nm-btn-ghost" onclick="closeAddLeadModal()">Cancel</button>
+      <button class="nm-btn nm-btn-primary" onclick="saveNewLead()">
+        <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Lead
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- CONVERSATION MODAL -->
+<div id="convoModal" class="nm-backdrop" onclick="if(event.target===this)closeConvoModal()">
+  <div class="nm-modal" role="dialog" aria-modal="true" style="width:clamp(420px,50vw,640px)">
+    <div class="nm-header">
+      <div class="nm-title">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span id="convoModalTitle">Conversation</span>
+      </div>
+      <button class="nm-close" onclick="closeConvoModal()" aria-label="Close">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="nm-body">
+      <div class="nm-field" id="convoModalLinkedinField">
+        <label class="nm-label">LinkedIn Profile</label>
+        <a id="convoModalLinkedin" href="#" target="_blank" style="font-size:11px;color:var(--green);word-break:break-all;text-decoration:none;"></a>
+      </div>
+      <div class="nm-field">
+        <label class="nm-label">Conversation Log</label>
+        <textarea class="nm-textarea" id="convoText" placeholder="Paste your LinkedIn conversation here…" rows="14" style="min-height:280px;font-size:11.5px;line-height:1.6;"></textarea>
+      </div>
+    </div>
+    <div class="nm-footer">
+      <span id="convoSavedHint" style="font-size:10px;color:var(--green);margin-right:auto;font-family:'JetBrains Mono',monospace;"></span>
+      <button class="nm-btn nm-btn-secondary" onclick="copyConvoText()">Copy</button>
+      <button class="nm-btn nm-btn-ghost" onclick="closeConvoModal()">Close</button>
+      <button class="nm-btn nm-btn-primary" onclick="saveConvoText()">Save</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -2659,11 +2799,12 @@ function ensureStateDefaults() {
   if (!state || typeof state !== 'object' || Array.isArray(state)) state = {};
   LEADS.forEach(l => {
     const k = String(l.id);
-    if (!state[k] || typeof state[k] !== 'object') state[k] = {status:'new', notes:'', done:false, outreach:''};
-    if (!state[k].status)                state[k].status   = 'new';
-    if (state[k].notes === undefined)    state[k].notes    = '';
-    if (state[k].done === undefined)     state[k].done     = false;
-    if (state[k].outreach === undefined) state[k].outreach = '';
+    if (!state[k] || typeof state[k] !== 'object') state[k] = {status:'new', notes:'', done:false, outreach:'', conversation:''};
+    if (!state[k].status)                   state[k].status       = 'new';
+    if (state[k].notes === undefined)       state[k].notes        = '';
+    if (state[k].done === undefined)        state[k].done         = false;
+    if (state[k].outreach === undefined)    state[k].outreach     = '';
+    if (state[k].conversation === undefined) state[k].conversation = '';
   });
 }
 
@@ -2680,10 +2821,11 @@ function mergeStates(local, remote) {
     const lo = local[k]  || {};
     const re = remote[k] || {};
     out[k] = {
-      status:   pickStatus(lo.status, re.status),
-      notes:    lo.notes    || re.notes    || '',
-      done:     lo.done     || re.done     || false,
-      outreach: lo.outreach || re.outreach || ''
+      status:       pickStatus(lo.status, re.status),
+      notes:        lo.notes        || re.notes        || '',
+      done:         lo.done         || re.done         || false,
+      outreach:     lo.outreach     || re.outreach     || '',
+      conversation: lo.conversation || re.conversation || ''
     };
   });
   return out;
@@ -2949,7 +3091,161 @@ function persist() {
     .catch(e => { console.warn('Firestore write failed', e); setSyncStatus(false, 'offline'); });
 }
 
+/* ─────────────── CUSTOM LEADS (+ Add Lead) ─────────────── */
+let customLeads = [];
+const CUSTOM_KEY = 'customLeads_v1';
+const CUSTOM_LEADS_DOC = db.doc('agla/customLeads');
+
+function seedCustomLeadsFromLocalStorage() {
+  try {
+    const raw = localStorage.getItem(CUSTOM_KEY);
+    if (raw) customLeads = JSON.parse(raw) || [];
+  } catch(e) { customLeads = []; }
+  customLeads.forEach(l => { if (!LEADS.some(x => x.id === l.id)) LEADS.push(l); });
+}
+
+function subscribeCustomLeads() {
+  CUSTOM_LEADS_DOC.onSnapshot(doc => {
+    if (!doc.exists) return;
+    const remote = doc.data().leads || [];
+    let changed = false;
+    remote.forEach(l => {
+      if (!customLeads.some(x => x.id === l.id)) { customLeads.push(l); changed = true; }
+      if (!LEADS.some(x => x.id === l.id))       { LEADS.push(l); changed = true; }
+    });
+    if (changed) {
+      try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(customLeads)); } catch(e) {}
+      ensureStateDefaults();
+      render();
+      try { renderDashboard(); } catch(e) {}
+    }
+  }, err => console.warn('customLeads listener error', err));
+}
+
+function persistCustomLeads() {
+  try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(customLeads)); } catch(e) {}
+  CUSTOM_LEADS_DOC.set({ leads: customLeads }).catch(e => console.warn('customLeads push failed', e));
+}
+
+function openAddLeadModal() {
+  ['alLinkedin','alCompany','alContact','alTitle','alEmail','alPhone','alWebsite','alAddress'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  document.getElementById('alIndustry').value = 'Marketing Agency';
+  document.getElementById('alCountry').value = 'US';
+  document.getElementById('addLeadModal').classList.add('open');
+  setTimeout(() => document.getElementById('alLinkedin').focus(), 50);
+}
+
+function closeAddLeadModal() {
+  document.getElementById('addLeadModal').classList.remove('open');
+}
+
+function saveNewLead() {
+  const linkedin = document.getElementById('alLinkedin').value.trim();
+  const company  = document.getElementById('alCompany').value.trim();
+  if (!linkedin) { showToast('LinkedIn URL is required'); document.getElementById('alLinkedin').focus(); return; }
+  if (!company)  { showToast('Company name is required'); document.getElementById('alCompany').focus(); return; }
+
+  const maxId = LEADS.reduce((m, l) => Math.max(m, l.id), 0);
+  const lead = {
+    id: maxId + 1,
+    company,
+    industry: document.getElementById('alIndustry').value,
+    country:  document.getElementById('alCountry').value,
+    contact:  document.getElementById('alContact').value.trim(),
+    title:    document.getElementById('alTitle').value.trim(),
+    website:  document.getElementById('alWebsite').value.trim(),
+    phone:    document.getElementById('alPhone').value.trim(),
+    linkedin,
+    email:    document.getElementById('alEmail').value.trim(),
+    address:  document.getElementById('alAddress').value.trim()
+  };
+
+  LEADS.push(lead);
+  customLeads.push(lead);
+  persistCustomLeads();
+  ensureStateDefaults();
+  persist();
+
+  // clear filters so the new lead is guaranteed to be visible
+  document.getElementById('searchInput').value    = '';
+  document.getElementById('filterIndustry').value = '';
+  document.getElementById('filterCountry').value  = '';
+  document.getElementById('filterStatus').value   = '';
+
+  render();
+  closeAddLeadModal();
+  showToast(`✓ ${company} added to leads`);
+
+  setTimeout(() => {
+    const row = document.querySelector(`#tbody tr[data-id="${lead.id}"]`);
+    if (row) {
+      row.scrollIntoView({behavior:'smooth', block:'nearest'});
+      row.classList.add('row-flash');
+      setTimeout(() => row.classList.remove('row-flash'), 1600);
+    }
+  }, 60);
+}
+
+/* ─────────────── CONVERSATION CHATBOX ─────────────── */
+let convoActiveId = null;
+
+function openConvoModal(id) {
+  const lead = LEADS.find(l => String(l.id) === String(id));
+  if (!lead) return;
+  convoActiveId = String(id);
+
+  document.getElementById('convoModalTitle').textContent = `Conversation — ${lead.company}`;
+
+  const linkField = document.getElementById('convoModalLinkedinField');
+  const linkEl    = document.getElementById('convoModalLinkedin');
+  if (lead.linkedin) {
+    linkEl.href = lead.linkedin;
+    linkEl.textContent = lead.linkedin;
+    linkField.style.display = '';
+  } else {
+    linkField.style.display = 'none';
+  }
+
+  const s = state[convoActiveId] || {};
+  document.getElementById('convoText').value = s.conversation || '';
+  document.getElementById('convoSavedHint').textContent = '';
+  document.getElementById('convoModal').classList.add('open');
+  setTimeout(() => document.getElementById('convoText').focus(), 50);
+}
+
+function closeConvoModal() {
+  document.getElementById('convoModal').classList.remove('open');
+  convoActiveId = null;
+}
+
+function saveConvoText() {
+  if (!convoActiveId) return;
+  const val = document.getElementById('convoText').value;
+  if (!state[convoActiveId]) state[convoActiveId] = {status:'new', notes:'', done:false, outreach:'', conversation:''};
+  state[convoActiveId].conversation = val;
+  persist();
+
+  const btn = document.querySelector(`.convo-btn[data-id="${convoActiveId}"]`);
+  if (btn) {
+    const has = !!val.trim();
+    btn.classList.toggle('has-val', has);
+    btn.title = has ? 'View / edit conversation' : 'Paste LinkedIn conversation';
+  }
+  document.getElementById('convoSavedHint').textContent = 'Saved ✓';
+  showToast('Conversation saved');
+}
+
+function copyConvoText() {
+  const ta = document.getElementById('convoText');
+  navigator.clipboard.writeText(ta.value).then(() => {
+    showToast('Conversation copied to clipboard');
+  }).catch(() => showToast('Copy failed — select manually'));
+}
+
 function initApp() {
+  seedCustomLeadsFromLocalStorage();
   // Reset all filters — browser restores form values on soft refresh which can hide all rows
   const _si = document.getElementById('searchInput');
   const _fi = document.getElementById('filterIndustry');
@@ -2982,8 +3278,8 @@ function initApp() {
   showSaved();
   // Auth first, then start ALL Firestore listeners (rules require request.auth != null)
   auth.signInAnonymously()
-    .then(() => { initAiKeys(); loadState(); })
-    .catch(() => { initAiKeys(); loadState(); });
+    .then(() => { initAiKeys(); loadState(); subscribeCustomLeads(); })
+    .catch(() => { initAiKeys(); loadState(); subscribeCustomLeads(); });
 }
 
 // save on tab close / refresh
@@ -3133,7 +3429,7 @@ function render() {
 
   leads.forEach(l => {
     const k  = String(l.id);
-    const s  = state[k] || { status:'new', notes:'', done:false };
+    const s  = state[k] || { status:'new', notes:'', done:false, outreach:'', conversation:'' };
     const tr = document.createElement('tr');
     tr.dataset.id = k;
     tr.className  = `row-${s.status}${s.done ? ' done-row' : ''}`;
@@ -3151,7 +3447,7 @@ function render() {
          </a>`
       : `<span style="font-family:'Geist',sans-serif;font-size:13px;font-weight:500">${esc(l.company)}</span>`;
 
-    const liCell = l.linkedin
+    const liLink = l.linkedin
       ? `<a href="${l.linkedin}" target="_blank" class="li-link" title="LinkedIn">
            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
@@ -3159,6 +3455,11 @@ function render() {
            </svg>
          </a>`
       : `<span class="no-data">—</span>`;
+    const hasConvo = !!(s.conversation && s.conversation.trim());
+    const convoBtn = `<button class="convo-btn${hasConvo ? ' has-val' : ''}" data-action="convo" data-id="${k}" title="${hasConvo ? 'View / edit conversation' : 'Paste LinkedIn conversation'}">
+           <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+         </button>`;
+    const liCell = `<div class="li-cell">${liLink}${convoBtn}</div>`;
 
     const mailCell = l.email
       ? `<a href="mailto:${l.email}" class="mail-link" title="${l.email}">
@@ -3232,6 +3533,12 @@ document.getElementById('tbody').addEventListener('click', e => {
     genCo.value = lead.company;
     autofillFromLead(lead.company);
     showToast('Loaded in generator ✓');
+    return;
+  }
+  // conversation chatbox button
+  const convoTrigger = e.target.closest('[data-action="convo"]');
+  if (convoTrigger) {
+    openConvoModal(convoTrigger.dataset.id);
     return;
   }
   // ignore clicks on other interactive controls
@@ -3318,12 +3625,12 @@ document.getElementById('btnReset').addEventListener('click', () => {
 /* ─────────────── EXPORT CSV ─────────────── */
 document.getElementById('btnExport').addEventListener('click', () => {
   const leads   = getFiltered();
-  const headers = ['ID','Company','Industry','Country','Contact Name','Position','Website','Phone','LinkedIn','Email','Address','Status','Outreach By','Notes','Done'];
+  const headers = ['ID','Company','Industry','Country','Contact Name','Position','Website','Phone','LinkedIn','Email','Address','Status','Outreach By','Notes','Conversation','Done'];
   const rows    = leads.map(l => {
     const s = state[String(l.id)];
     return [l.id, l.company, l.industry, l.country, l.contact, l.title,
             l.website, l.phone, l.linkedin, l.email, l.address,
-            s.status, s.outreach || '', s.notes, s.done ? 'Yes' : 'No']
+            s.status, s.outreach || '', s.notes, s.conversation || '', s.done ? 'Yes' : 'No']
       .map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(',');
   });
 
