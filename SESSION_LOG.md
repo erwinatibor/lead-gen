@@ -66,7 +66,13 @@ Running record of every dev session on this app — what was built and where we 
 
 ---
 
+## Session 7 — Add Lead + Conversation Chatbox
+- Added a "+ Add Lead" button next to "New Outreach" in the Contacts & Outreach header, opening a modal to add a new lead by pasting a LinkedIn profile URL (required) plus company, contact, industry, country, title, email, phone, website, address.
+- New leads push into the in-memory `LEADS` array and persist via a new `customLeads` mechanism: `customLeads_v1` in localStorage + a new `agla/customLeads` Firestore doc, synced the same way `leadState` already is (local-first seed on load, `onSnapshot` for cross-device sync).
+- Added a per-lead conversation chatbox: a chat-icon button next to the LinkedIn link in each row opens a modal with a large textarea to paste/copy a LinkedIn DM thread. Saved to `state[id].conversation`, so it rides the existing Firestore/localStorage sync, merge, and CSV export logic alongside notes/status/done/outreach.
+- Verified end-to-end with a headless-browser driver (add lead → row appears → paste conversation → save → reload page → both lead and conversation persist intact).
+
 ## Where to Pick Up Next
 - Dashboard now houses all analytics: KPIs, funnel, industry/country breakdowns, coverage stats, assignee activity, progress, system status.
-- Contacts & Outreach view has the leads table + New Outreach modal.
-- Possible next: per-lead outreach history view, bulk outreach actions, campaign grouping view.
+- Contacts & Outreach view has the leads table + New Outreach modal + Add Lead modal + per-lead conversation chatbox.
+- Possible next: per-lead outreach history view, bulk outreach actions, campaign grouping view, surfacing conversation snippets on the Dashboard.
